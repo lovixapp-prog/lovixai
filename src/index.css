@@ -1196,7 +1196,7 @@ html.light {
   }
 
   .tool-select-control {
-    @apply inline-flex h-6 w-auto min-w-[62px] max-w-[92px] shrink-0 items-center justify-start gap-1 rounded-md px-1.5 py-0 text-[10px] font-semibold transition-all duration-150;
+    @apply inline-flex h-8 w-auto min-w-[84px] max-w-[126px] shrink-0 items-center justify-start gap-1.5 rounded-xl px-2.5 py-0 text-xs font-semibold transition-all duration-150;
     border: 1px solid hsl(var(--border) / 0.75);
     background: hsl(var(--muted) / 0.48);
     color: hsl(var(--foreground));
@@ -1222,12 +1222,12 @@ html.light {
   }
 
   .tool-input-row {
-    @apply flex min-w-0 flex-1 flex-wrap items-center gap-1;
+    @apply flex min-w-0 flex-1 flex-wrap items-center gap-1.5;
   }
 
   .tool-upload-btn,
   .tool-assets-btn {
-    @apply inline-flex h-6 shrink-0 items-center gap-1 rounded-md border px-1.5 text-[10px] font-bold transition-all duration-150;
+    @apply inline-flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition-all duration-150;
   }
 
   .tool-upload-btn {
@@ -1306,8 +1306,8 @@ html.light {
 
   @media (max-width: 640px) {
     .tool-select-control {
-      min-width: 58px;
-      max-width: 84px;
+      min-width: 76px;
+      max-width: 108px;
     }
 
     .settings-pill {

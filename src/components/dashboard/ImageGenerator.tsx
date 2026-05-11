@@ -45,8 +45,8 @@ interface ActiveGeneration {
 
 const styles = [
   { id: "none", label: "Default", description: "Natural AI interpretation" },
-  { id: "photorealistic", label: "Photo", description: "Ultra realistic photography" },
-  { id: "artistic", label: "Artistic", description: "Painterly and expressive" },
+  { id: "photorealistic", label: "Real", description: "Ultra realistic photography" },
+  { id: "artistic", label: "Cartoon", description: "Painterly and expressive" },
   { id: "anime", label: "Anime", description: "Japanese animation style" },
   { id: "3d", label: "3D", description: "Cinematic CGI quality" },
 ];
@@ -383,7 +383,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
           placeholder={referenceImage ? "Describe how to edit this image…" : "Describe your image… (or drag & drop to edit)"}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="w-full min-h-[100px] sm:min-h-[120px] p-4 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
+          className="w-full min-h-[78px] sm:min-h-[92px] p-4 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
           onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleGenerate(); }}
         />
 
@@ -392,9 +392,6 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
           <div className="tool-input-row">
             <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" />
             <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
-            <ToolSelect icon="solar:medal-ribbon-star-bold" value={renderQuality} onValueChange={(value) => setRenderQuality(value as "standard" | "studio" | "ultra")} options={imageSelectOptions.renderQuality} ariaLabel="Quality" />
-            <ToolSelect icon="solar:gallery-minimalistic-bold" value={String(imageCount)} onValueChange={(value) => setImageCount(Number(value) as 1 | 2 | 4)} options={imageSelectOptions.imageCount} ariaLabel="Image count" />
-            <ToolSelect icon="solar:camera-bold" value={cameraPreset} onValueChange={(value) => setCameraPreset(value as "auto" | "product" | "portrait" | "editorial")} options={imageSelectOptions.cameraPreset} ariaLabel="Camera preset" />
             <div className="w-px h-4 bg-border mx-0.5" />
             <label className="tool-upload-btn cursor-pointer" title="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />

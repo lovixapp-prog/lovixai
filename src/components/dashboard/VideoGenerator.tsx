@@ -318,7 +318,7 @@ const VideoGenerator = ({
           placeholder={referenceImage ? "Describe the motion and scene…" : "Describe the video you want to create… (or drag & drop a reference image)"}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="w-full min-h-[100px] sm:min-h-[130px] p-4 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
+          className="w-full min-h-[78px] sm:min-h-[92px] p-4 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleGenerate();
           }}
@@ -329,10 +329,6 @@ const VideoGenerator = ({
           <div className="tool-input-row">
             <ToolSelect icon="solar:clock-circle-bold" value={String(seconds)} onValueChange={(value) => setSeconds(Number(value) as 4 | 8 | 12)} options={videoSelectOptions.seconds} ariaLabel="Duration" />
             <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "16:9" | "9:16")} options={videoSelectOptions.aspectRatio} ariaLabel="Format" />
-            <ToolSelect icon="solar:medal-ribbon-star-bold" value={quality} onValueChange={(value) => setQuality(value as "hd" | "4k")} options={videoSelectOptions.quality} ariaLabel="Quality" />
-            <ToolSelect icon="solar:clapperboard-play-bold" value={modelPreset} onValueChange={(value) => setModelPreset(value as "cinema" | "ugc" | "product" | "social")} options={videoSelectOptions.modelPreset} ariaLabel="Preset" />
-            <ToolSelect icon="solar:camera-bold" value={cameraMove} onValueChange={(value) => setCameraMove(value as "auto" | "push" | "orbit" | "handheld")} options={videoSelectOptions.cameraMove} ariaLabel="Camera movement" />
-            <ToolSelect icon="solar:tuning-2-bold" value={motionStrength} onValueChange={(value) => setMotionStrength(value as "subtle" | "balanced" | "dynamic")} options={videoSelectOptions.motionStrength} ariaLabel="Motion strength" />
             <div className="w-px h-4 bg-border mx-0.5" />
 
             <label className="tool-upload-btn cursor-pointer" title="Upload reference image">
