@@ -70,7 +70,7 @@ const Index = () => {
       {/* ══════════════════════════════════════════
           HERO
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
 
         {/* Video background */}
         <div className="absolute inset-0 z-0">
@@ -80,97 +80,51 @@ const Index = () => {
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/20 to-background/95" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/25 via-transparent to-background/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/42 via-background/18 to-background/96" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/82 via-background/38 to-background/72" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(90deg, hsl(var(--background) / 0.94) 0%, hsl(var(--background) / 0.76) 38%, hsl(var(--background) / 0.22) 68%, transparent 100%)",
+            }}
+          />
         </div>
 
-        {/* Aurora orbs */}
-        <div
-          className="aurora-blob-xl w-[700px] h-[500px] -top-32 -left-48 z-0"
-          style={{ background: "hsl(var(--violet))" }}
-        />
-        <div
-          className="aurora-blob-xl w-[600px] h-[400px] -bottom-20 -right-40 z-0"
-          style={{ background: "hsl(var(--cyan))", animationDelay: "6s" }}
-        />
-        <div
-          className="aurora-blob w-[400px] h-[300px] top-1/4 -right-20 z-0"
-          style={{ background: "hsl(var(--primary))", animationDelay: "3s" }}
-        />
-
         {/* Dot grid overlay */}
-        <div className="absolute inset-0 z-0 grid-dot-bg opacity-30" />
+        <div className="absolute inset-0 z-0 grid-dot-bg opacity-20" />
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="max-w-5xl mx-auto space-y-8 animate-fade-in-up">
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="max-w-3xl space-y-7 animate-fade-in-up">
 
-            {/* Live badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border backdrop-blur-sm"
-              style={{
-                background: "hsl(var(--background)/0.35)",
-                borderColor: "hsl(var(--border)/0.5)",
-              }}
-            >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">
-                Powered by Lovix AI Engine
-              </span>
-            </div>
+            <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-12 w-auto sm:h-14" />
 
-            {/* Main headline */}
-            <h1 className="font-display font-bold leading-[0.95] tracking-tight drop-shadow-2xl">
-              <span
-                className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white"
-                style={{ letterSpacing: "-0.025em" }}
-              >
-                LOVIX AI
-              </span>
-              <span
-                className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl gradient-text-aurora mt-1"
-                style={{ letterSpacing: "-0.025em" }}
-              >
-                Does It All
-              </span>
+            <h1 className="font-display text-5xl font-bold leading-[0.95] text-white drop-shadow-2xl sm:text-6xl lg:text-7xl">
+              AI content studio for videos, images and UGC ads
             </h1>
 
             {/* Sub */}
-            <p className="text-lg sm:text-xl md:text-2xl text-white/85 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-              Generate stunning 4K videos, images &amp; motion with AI.
-              <br className="hidden sm:block" />
-              The future of creative content — free to start.
+            <p className="max-w-2xl text-base font-medium leading-7 text-white/82 drop-shadow-lg sm:text-lg">
+              Describe the campaign. LOVIX turns it into creative assets, editable plans and production-ready outputs.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-              <Link to="/auth?mode=signup" className="btn-hero-primary gap-2">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link to="/auth?mode=signup" className="btn-hero-primary w-full justify-center gap-2 sm:w-auto">
                 <Play className="w-4 h-4 relative z-10" />
-                <span className="relative z-10">Start Creating Free</span>
+                <span className="relative z-10">Try LOVIX free</span>
               </Link>
-              <Link to="/video-model" className="btn-hero-secondary gap-2">
-                Explore Models
+              <Link to="/dashboard" className="btn-hero-secondary w-full justify-center gap-2 sm:w-auto">
+                Open app
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
-            {/* Stats bar */}
-            <div
-              className="inline-flex flex-wrap items-center justify-center gap-6 sm:gap-10 px-8 py-4 rounded-2xl mx-auto backdrop-blur-sm border mt-8"
-              style={{
-                background: "hsl(var(--background)/0.38)",
-                borderColor: "hsl(var(--border)/0.4)",
-              }}
-            >
-              {[
-                { value: "10M+", label: "Videos Generated" },
-                { value: "500K+", label: "Active Creators" },
-                { value: "4K", label: "Max Resolution" },
-                { value: "<5min", label: "Generation Time" },
-              ].map((s, i) => (
-                <div key={i} className="text-center">
-                  <div className="font-display text-2xl font-bold text-foreground">{s.value}</div>
-                  <div className="text-muted-foreground text-xs mt-0.5">{s.label}</div>
-                </div>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {["No credit card", "150 free credits", "Video + Image + UGC"].map(item => (
+                <span key={item} className="rounded-full border border-white/12 bg-background/38 px-3 py-1.5 text-xs font-semibold text-white/78 backdrop-blur">
+                  {item}
+                </span>
               ))}
             </div>
           </div>

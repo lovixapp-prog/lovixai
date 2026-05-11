@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import {
   MessageSquare, Coins, LogOut,
-  Menu, Crown, Settings,
-  X, ChevronRight,
+  Crown, Settings,
+  ChevronRight,
   ChevronLeft, PanelLeft, Plus, Trash2, ChevronDown, Paperclip,
   Sun, Moon,
 } from 'lucide-react';
@@ -162,7 +162,6 @@ const AnimatedIcon = ({ icon, className = 'w-4 h-4' }: { icon: string; className
 
 const ChatDashboard = () => {
   const [sidebarPinned, setSidebarPinned] = useState(true);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState<'create' | 'workspace' | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [toolsExpanded, setToolsExpanded] = useState(false);
@@ -217,14 +216,12 @@ const ChatDashboard = () => {
   const handleNewChat = useCallback(() => {
     createNewChat();
     setActiveTab('chat');
-    setMobileSidebarOpen(false);
     setMobileMenu(null);
   }, [createNewChat]);
 
   const handleLoadChat = useCallback((chatId: string) => {
     loadChat(chatId);
     setActiveTab('chat');
-    setMobileSidebarOpen(false);
     setMobileMenu(null);
   }, [loadChat]);
 
@@ -266,7 +263,6 @@ const ChatDashboard = () => {
 
   const handleTabChange = (id: ActiveTab) => {
     setActiveTab(id);
-    setMobileSidebarOpen(false);
     setMobileMenu(null);
   };
 
@@ -382,21 +378,23 @@ const ChatDashboard = () => {
               </button>
               {workspaceExpanded && (
                 <nav className="space-y-1">
-                  <button
-                    onClick={() => navigate('/settings')}
-                    className="w-full rounded-xl border border-sidebar-border/70 bg-sidebar-accent/35 px-3 py-2 text-left transition-all hover:border-primary/25 hover:bg-sidebar-accent"
-                  >
-                    <span className="flex items-center gap-2.5">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-sidebar-border bg-background text-[10px] font-bold text-foreground">
-                        {getInitials()}
+                  {mobile && (
+                    <button
+                      onClick={() => navigate('/settings')}
+                      className="w-full rounded-xl border border-sidebar-border/70 bg-sidebar-accent/35 px-3 py-2 text-left transition-all hover:border-primary/25 hover:bg-sidebar-accent"
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full border border-sidebar-border bg-background text-[10px] font-bold text-foreground">
+                          {getInitials()}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-xs font-semibold text-foreground">{profile?.full_name || 'Settings'}</span>
+                          <span className="block truncate text-[10px] text-muted-foreground">Account settings</span>
+                        </span>
+                        <Settings className="h-3.5 w-3.5 text-muted-foreground" />
                       </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-xs font-semibold text-foreground">{profile?.full_name || 'Settings'}</span>
-                        <span className="block truncate text-[10px] text-muted-foreground">Account settings</span>
-                      </span>
-                      <Settings className="h-3.5 w-3.5 text-muted-foreground" />
-                    </span>
-                  </button>
+                    </button>
+                  )}
                   {WORKSPACE_ITEMS.map(item => {
                     const isActive = activeTab === item.id;
                     return (
@@ -417,10 +415,10 @@ const ChatDashboard = () => {
                       </button>
                     );
                   })}
-                  <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive">
+                  {mobile && <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive">
                     <LogOut className="h-3.5 w-3.5" />
                     <span>Sign Out</span>
-                  </button>
+                  </button>}
                 </nav>
               )}
             </section>
@@ -789,7 +787,7 @@ const ChatDashboard = () => {
         <div className={`border-t border-sidebar-border ${sidebarPinned ? 'p-3' : 'p-2'}`}>
           {sidebarPinned ? (
             <>
-              <div className="flex items-center gap-2 mb-2 px-1">
+              <button onClick={() => navigate('/settings')} className="mb-2 flex w-full items-center gap-2 rounded-xl px-1 py-1 text-left transition-colors hover:bg-sidebar-accent/45">
                 <div className="w-6 h-6 rounded-full bg-sidebar-accent border border-sidebar-border flex items-center justify-center flex-shrink-0">
                   <span className="text-foreground font-semibold text-[10px]">{getInitials()}</span>
                 </div>
@@ -797,7 +795,8 @@ const ChatDashboard = () => {
                   <p className="text-foreground font-medium text-xs truncate">{profile?.full_name || 'User'}</p>
                   <p className="text-[9px] text-muted-foreground truncate">{user?.email}</p>
                 </div>
-              </div>
+                <Settings className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
               <div className="space-y-1">
                 <div className="flex items-center justify-between rounded-xl border border-sidebar-border bg-sidebar-accent/35 px-2.5 py-2">
                   <span className="flex items-center gap-2 text-[11px] font-semibold text-muted-foreground">
@@ -806,6 +805,9 @@ const ChatDashboard = () => {
                   </span>
                   <Switch checked={!isDark} onCheckedChange={toggleTheme} aria-label="Toggle light mode" className="h-5 w-9 data-[state=checked]:bg-primary" />
                 </div>
+                <button onClick={handleSignOut} className="w-full flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-[11px] text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors">
+                  <LogOut className="w-3 h-3" />Sign Out
+                </button>
               </div>
             </>
           ) : (
@@ -820,48 +822,6 @@ const ChatDashboard = () => {
           )}
         </div>
       </aside>
-
-      {/* ── Mobile Sidebar ──────────────────────────────────────────── */}
-      {mobileSidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)} />
-          <aside className="relative z-10 w-72 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
-            <div className="flex items-center justify-between px-4 h-13 border-b border-sidebar-border" style={{ height: 52 }}>
-              <Link to="/" className="flex items-center gap-2">
-                <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-7 w-auto" />
-              </Link>
-              <button onClick={() => setMobileSidebarOpen(false)} className="p-2 rounded-xl hover:bg-muted transition-colors">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            {hasSubscription && (
-              <div className="px-3 pt-2 pb-0.5">
-                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-primary/10 border border-primary/20">
-                  <Crown className="w-3 h-3 text-primary" />
-                  <span className="text-primary font-semibold text-xs">{subscription.plan}</span>
-                  <span className="ml-auto text-primary text-[10px] font-mono font-bold">∞</span>
-                </div>
-              </div>
-            )}
-            <SidebarContent mobile />
-            <div className="p-3 border-t border-sidebar-border space-y-0.5 mt-auto">
-              <button onClick={() => { navigate('/settings'); setMobileSidebarOpen(false); }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors">
-                <Settings className="w-3.5 h-3.5" />Settings
-              </button>
-              <button onClick={toggleTheme}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors">
-                {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-                {isDark ? 'Light Mode' : 'Dark Mode'}
-              </button>
-              <button onClick={handleSignOut}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-destructive hover:bg-destructive/10 transition-colors">
-                <LogOut className="w-3.5 h-3.5" />Sign Out
-              </button>
-            </div>
-          </aside>
-        </div>
-      )}
 
       {/* ── Main ────────────────────────────────────────────────────── */}
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
@@ -997,7 +957,7 @@ function DashboardHome({
       <section className="hidden overflow-hidden rounded-2xl border border-border/70 bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-[0_16px_48px_hsl(var(--primary)/0.10)] xl:block">
         <div className="grid grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
           <button onClick={() => onOpen('chat')} className="relative min-h-[220px] overflow-hidden text-left">
-            <video src="/videos/showcase-video.mp4" className="h-full w-full object-cover opacity-80 transition-transform duration-700 hover:scale-105" autoPlay muted loop playsInline />
+            <video src="/videos/hero-video.mp4" className="h-full w-full object-cover opacity-80 transition-transform duration-700 hover:scale-105" autoPlay muted loop playsInline />
             <div className="absolute inset-0 bg-gradient-to-r from-background/15 to-card" />
             <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-background/75 text-primary backdrop-blur">
               <AnimatedIconify icon="solar:chat-round-video-bold-duotone" className="h-7 w-7" pulse />
@@ -1039,26 +999,43 @@ function DashboardHome({
                 <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-primary">Open chat <ChevronRight className="h-4 w-4" /></span>
               </div>
               <div className="relative overflow-hidden">
-                <video src="/videos/showcase-video.mp4" className="h-full w-full object-cover opacity-80" autoPlay muted loop playsInline />
+                <video src="/videos/hero-video.mp4" className="h-full w-full object-cover opacity-80" autoPlay muted loop playsInline />
                 <div className="absolute inset-0 bg-gradient-to-l from-transparent to-card/45" />
               </div>
             </div>
           </button>
 
-          {TOOL_ITEMS.map(tool => (
-            <button
-              key={tool.id}
-              onClick={() => onOpen(tool.id)}
-              className={`group relative flex min-h-[116px] flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br ${tool.navAccent} p-3 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_12px_32px_hsl(var(--primary)/0.12)] sm:min-h-[128px]`}
-            >
-              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-              <span className={`flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-background/45 ${tool.color} shadow-[0_0_18px_hsl(var(--primary)/0.08)]`}>
-                <AnimatedIconify icon={tool.navIcon} className="h-6 w-6" />
-              </span>
-              <span className="font-display text-sm font-bold sm:text-base">{tool.label}</span>
-              {tool.badge && <span className="absolute right-2 top-2 rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold text-primary">{tool.badge}</span>}
-            </button>
-          ))}
+          {TOOL_ITEMS.map((tool, index) => {
+            const isVideoPreview = tool.preview.endsWith('.mp4');
+            const isLastOddMobile = index === TOOL_ITEMS.length - 1;
+            const cardGrid = isLastOddMobile
+              ? 'grid-cols-[minmax(0,1fr)_42%] xl:grid-cols-[minmax(0,1fr)_88px]'
+              : 'grid-cols-[minmax(0,1fr)_74px] xl:grid-cols-[minmax(0,1fr)_88px]';
+            return (
+              <button
+                key={tool.id}
+                onClick={() => onOpen(tool.id)}
+                className={`group relative grid min-h-[118px] ${cardGrid} overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br ${tool.navAccent} text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_12px_32px_hsl(var(--primary)/0.12)] sm:min-h-[128px] ${isLastOddMobile ? 'col-span-2 xl:col-span-1' : ''}`}
+              >
+                <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                <div className="relative z-10 flex min-w-0 flex-col justify-center gap-2 p-3">
+                  <span className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-background/45 ${tool.color} shadow-[0_0_18px_hsl(var(--primary)/0.08)]`}>
+                    <AnimatedIconify icon={tool.navIcon} className="h-5 w-5" />
+                  </span>
+                  <span className="truncate font-display text-sm font-bold sm:text-base">{tool.label}</span>
+                </div>
+                <div className="relative min-h-full overflow-hidden">
+                  {isVideoPreview ? (
+                    <video src={tool.preview} className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105" autoPlay muted loop playsInline />
+                  ) : (
+                    <img src={tool.preview} alt="" className="h-full w-full object-cover opacity-85 transition-transform duration-500 group-hover:scale-105" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/10 to-background/25" />
+                </div>
+                {tool.badge && <span className="absolute right-2 top-2 rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold text-primary backdrop-blur">{tool.badge}</span>}
+              </button>
+            );
+          })}
         </div>
       </section>
     </div>
