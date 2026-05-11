@@ -723,7 +723,7 @@ const ChatDashboard = () => {
       <aside className={`
         hidden lg:flex flex-col flex-shrink-0 h-screen sticky top-0 z-40
         transition-all duration-300 ease-in-out overflow-hidden
-        bg-sidebar border-r border-sidebar-border
+        ios-glass-shell border-r border-sidebar-border
         ${sidebarPinned ? 'w-64' : 'w-[60px]'}
       `}>
 
@@ -827,7 +827,7 @@ const ChatDashboard = () => {
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
 
         {/* Mobile header */}
-        <header className="lg:hidden flex items-center justify-between px-4 py-2.5 border-b border-border bg-sidebar/80 backdrop-blur-sm sticky top-0 z-30" style={{ height: 52 }}>
+        <header className="dashboard-mobile-header ios-glass-shell lg:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-30" style={{ height: 52 }}>
           <Link to="/" className="flex items-center gap-2">
             <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-7 w-auto" />
           </Link>
@@ -880,7 +880,7 @@ const ChatDashboard = () => {
       {mobileMenu && (
         <>
           <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setMobileMenu(null)} />
-          <div className="fixed bottom-16 left-0 right-0 z-50 lg:hidden mx-4 mb-2 rounded-2xl bg-sidebar border border-sidebar-border shadow-2xl overflow-hidden">
+          <div className="dashboard-mobile-menu fixed bottom-16 left-0 right-0 z-50 lg:hidden mx-4 mb-2 overflow-hidden rounded-2xl border border-sidebar-border">
             <div className="border-b border-sidebar-border/70 px-4 py-3">
               <p className="text-xs font-semibold text-foreground">{mobileMenu === 'create' ? 'Create tools' : 'Workspace'}</p>
               <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
@@ -1008,29 +1008,26 @@ function DashboardHome({
           {TOOL_ITEMS.map((tool, index) => {
             const isVideoPreview = tool.preview.endsWith('.mp4');
             const isLastOddMobile = index === TOOL_ITEMS.length - 1;
-            const cardGrid = isLastOddMobile
-              ? 'grid-cols-[minmax(0,1fr)_42%] xl:grid-cols-[minmax(0,1fr)_88px]'
-              : 'grid-cols-[minmax(0,1fr)_74px] xl:grid-cols-[minmax(0,1fr)_88px]';
             return (
               <button
                 key={tool.id}
                 onClick={() => onOpen(tool.id)}
-                className={`group relative grid min-h-[118px] ${cardGrid} overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br ${tool.navAccent} text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_12px_32px_hsl(var(--primary)/0.12)] sm:min-h-[128px] ${isLastOddMobile ? 'col-span-2 xl:col-span-1' : ''}`}
+                className={`group relative min-h-[132px] overflow-hidden rounded-xl border border-border/70 bg-card text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_12px_32px_hsl(var(--primary)/0.16)] sm:min-h-[144px] xl:min-h-[132px] ${isLastOddMobile ? 'col-span-2 xl:col-span-1' : ''}`}
               >
                 <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                <div className="relative z-10 flex min-w-0 flex-col justify-center gap-2 p-3">
-                  <span className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-background/45 ${tool.color} shadow-[0_0_18px_hsl(var(--primary)/0.08)]`}>
+                {isVideoPreview ? (
+                  <video src={tool.preview} className="absolute inset-0 h-full w-full object-cover opacity-88 transition-transform duration-700 group-hover:scale-105" autoPlay muted loop playsInline />
+                ) : (
+                  <img src={tool.preview} alt="" className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105" />
+                )}
+                <div className={`absolute inset-0 bg-gradient-to-br ${tool.navAccent} opacity-65 mix-blend-multiply`} />
+                <div className="absolute inset-0 bg-gradient-to-r from-background/92 via-background/58 to-background/8" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/72 via-transparent to-transparent" />
+                <div className="relative z-10 flex h-full min-w-0 flex-col justify-end gap-2 p-3.5">
+                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl border border-white/12 bg-background/55 ${tool.color} shadow-[0_10px_24px_hsl(var(--background)/0.28)] backdrop-blur-md`}>
                     <AnimatedIconify icon={tool.navIcon} className="h-5 w-5" />
                   </span>
-                  <span className="truncate font-display text-sm font-bold sm:text-base">{tool.label}</span>
-                </div>
-                <div className="relative min-h-full overflow-hidden">
-                  {isVideoPreview ? (
-                    <video src={tool.preview} className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105" autoPlay muted loop playsInline />
-                  ) : (
-                    <img src={tool.preview} alt="" className="h-full w-full object-cover opacity-85 transition-transform duration-500 group-hover:scale-105" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/10 to-background/25" />
+                  <span className="max-w-[72%] truncate font-display text-base font-bold text-foreground drop-shadow sm:text-lg xl:max-w-full xl:text-base">{tool.label}</span>
                 </div>
                 {tool.badge && <span className="absolute right-2 top-2 rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold text-primary backdrop-blur">{tool.badge}</span>}
               </button>

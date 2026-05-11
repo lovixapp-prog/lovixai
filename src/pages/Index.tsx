@@ -97,8 +97,6 @@ const Index = () => {
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-3xl space-y-7 animate-fade-in-up">
 
-            <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-12 w-auto sm:h-14" />
-
             <h1 className="font-display text-5xl font-bold leading-[0.95] text-white drop-shadow-2xl sm:text-6xl lg:text-7xl">
               AI content studio for videos, images and UGC ads
             </h1>

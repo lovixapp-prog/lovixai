@@ -43,25 +43,10 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "glass-strong shadow-[0_1px_0_hsl(var(--border)/0.3),0_8px_32px_hsl(var(--background)/0.5)]"
-          : "bg-background/40 backdrop-blur-xl border-b border-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 pointer-events-none px-0 transition-all duration-500"
     >
-      {/* Gradient bottom line */}
-      <div
-        className={`absolute bottom-0 left-0 right-0 h-px transition-opacity duration-500 ${
-          scrolled ? "opacity-60" : "opacity-0"
-        }`}
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, hsl(var(--violet)/0.6), hsl(var(--primary)/0.5), hsl(var(--cyan)/0.4), transparent)",
-        }}
-      />
-
-      <div className="container mx-auto px-4 lg:px-6">
-        <div className="flex items-center justify-between h-16 lg:h-[68px]">
+      <div className={`site-nav-floating ios-glass-shell pointer-events-auto transition-all duration-500 ${scrolled ? "shadow-[0_18px_58px_hsl(var(--background)/0.42)]" : ""}`}>
+        <div className="flex items-center justify-between h-14 px-3 sm:px-4 lg:h-[60px] lg:px-5">
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group shrink-0">
@@ -75,7 +60,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1 rounded-full border border-white/8 bg-background/18 px-1 py-1 shadow-inner">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -84,8 +69,8 @@ const Navbar = () => {
                   to={link.path}
                   className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "text-foreground bg-white/5"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                      ? "text-foreground bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/7"
                   }`}
                 >
                   {link.name}
@@ -151,14 +136,13 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-full border border-white/10 bg-background/18 text-muted-foreground shadow-inner transition-colors hover:text-foreground hover:bg-white/8"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-      </div>
 
       {/* Mobile Menu */}
       {isOpen && (
@@ -212,6 +196,7 @@ const Navbar = () => {
           </div>
         </div>
       )}
+      </div>
     </nav>
   );
 };
