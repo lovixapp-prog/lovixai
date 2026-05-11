@@ -10,6 +10,7 @@ import {
   Sun, Moon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import AnimatedIconify from '@/components/ui/animated-iconify';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -140,6 +141,7 @@ const MAIN_NAV_ITEMS = [
 const WORKSPACE_ITEMS = [
   { icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab, color: 'text-fuchsia-400', accent: 'from-fuchsia-500/25 to-pink-500/10', ring: 'border-fuchsia-400/25' },
   { icon: 'solar:plug-circle-bold-duotone', label: 'Connectors', id: 'connectors' as ActiveTab, color: 'text-sky-400', accent: 'from-sky-500/25 to-cyan-500/10', ring: 'border-sky-400/25' },
+  { icon: 'solar:file-text-bold-duotone', label: 'Files', id: 'files' as ActiveTab, color: 'text-emerald-400', accent: 'from-emerald-500/25 to-teal-500/10', ring: 'border-emerald-400/25' },
   { icon: 'solar:bolt-circle-bold-duotone', label: 'Credits', id: 'credits' as ActiveTab, color: 'text-amber-400', accent: 'from-amber-500/25 to-orange-500/10', ring: 'border-amber-400/25' },
 ];
 
@@ -164,6 +166,7 @@ const ChatDashboard = () => {
   const [mobileMenu, setMobileMenu] = useState<'create' | 'workspace' | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [toolsExpanded, setToolsExpanded] = useState(false);
+  const [workspaceExpanded, setWorkspaceExpanded] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -370,29 +373,56 @@ const ChatDashboard = () => {
             </section>
 
             <section>
-              <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest px-2 block mb-1.5">Workspace</span>
-              <nav className="space-y-1">
-                {WORKSPACE_ITEMS.map(item => {
-                  const isActive = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => handleTabChange(item.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-xs font-medium ${
-                        isActive ? `border ${item.ring} bg-gradient-to-r ${item.accent} text-foreground` : `border border-transparent bg-gradient-to-r ${item.accent} text-foreground/80 hover:border-primary/20 hover:text-foreground`
-                      }`}
-                    >
-                      <AnimatedIconify icon={item.icon} className={`w-4 h-4 ${item.color}`} />
-                      <span className="flex-1 text-left">{item.label}</span>
-                      {item.id === 'credits' && (
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                          hasSubscription ? 'bg-primary/15 text-primary' : credits > 0 ? 'bg-primary/15 text-primary' : 'bg-destructive/15 text-destructive'
-                        }`}>{hasSubscription ? '∞' : credits}</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </nav>
+              <button
+                onClick={() => setWorkspaceExpanded(open => !open)}
+                className="mb-1.5 flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-muted-foreground transition-colors hover:bg-sidebar-accent/40 hover:text-foreground"
+              >
+                <span className="text-[9px] font-semibold uppercase tracking-widest">Workspace</span>
+                <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${workspaceExpanded ? 'rotate-180' : ''}`} />
+              </button>
+              {workspaceExpanded && (
+                <nav className="space-y-1">
+                  <button
+                    onClick={() => navigate('/settings')}
+                    className="w-full rounded-xl border border-sidebar-border/70 bg-sidebar-accent/35 px-3 py-2 text-left transition-all hover:border-primary/25 hover:bg-sidebar-accent"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-sidebar-border bg-background text-[10px] font-bold text-foreground">
+                        {getInitials()}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-xs font-semibold text-foreground">{profile?.full_name || 'Settings'}</span>
+                        <span className="block truncate text-[10px] text-muted-foreground">Account settings</span>
+                      </span>
+                      <Settings className="h-3.5 w-3.5 text-muted-foreground" />
+                    </span>
+                  </button>
+                  {WORKSPACE_ITEMS.map(item => {
+                    const isActive = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => handleTabChange(item.id)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-xs font-medium ${
+                          isActive ? `border ${item.ring} bg-gradient-to-r ${item.accent} text-foreground` : `border border-transparent bg-gradient-to-r ${item.accent} text-foreground/80 hover:border-primary/20 hover:text-foreground`
+                        }`}
+                      >
+                        <AnimatedIconify icon={item.icon} className={`w-4 h-4 ${item.color}`} />
+                        <span className="flex-1 text-left">{item.label}</span>
+                        {item.id === 'credits' && (
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                            hasSubscription ? 'bg-primary/15 text-primary' : credits > 0 ? 'bg-primary/15 text-primary' : 'bg-destructive/15 text-destructive'
+                          }`}>{hasSubscription ? '∞' : credits}</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                  <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive">
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </nav>
+              )}
             </section>
 
             {recentChats.length > 0 && activeTab === 'chat' && (
@@ -703,9 +733,9 @@ const ChatDashboard = () => {
         <div className={`flex items-center border-b border-sidebar-border flex-shrink-0 ${sidebarPinned ? 'px-3 h-13 gap-2' : 'px-0 h-13 justify-center'}`}
           style={{ height: 52 }}>
           <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-            <img src="/logo.svg" alt="LOVIX" width="28" height="28" className="w-7 h-7 flex-shrink-0 transition-transform duration-300 group-hover:scale-105" />
+            <img src={sidebarPinned ? "/logo-wordmark.svg" : "/logo.svg"} alt="LOVIX AI" width={sidebarPinned ? 120 : 28} height="28" className={`${sidebarPinned ? 'h-7 w-auto' : 'w-7 h-7'} flex-shrink-0 transition-transform duration-300 group-hover:scale-105`} />
             {sidebarPinned && (
-              <span className="font-display text-sm font-bold gradient-text-aurora whitespace-nowrap">LOVIX AI</span>
+              <span className="sr-only">LOVIX AI</span>
             )}
           </Link>
           {sidebarPinned && (
@@ -768,17 +798,14 @@ const ChatDashboard = () => {
                   <p className="text-[9px] text-muted-foreground truncate">{user?.email}</p>
                 </div>
               </div>
-              <div className="space-y-0.5">
-                <button onClick={() => navigate('/settings')} className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors">
-                  <Settings className="w-3 h-3" />Settings
-                </button>
-                <button onClick={toggleTheme} className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors">
-                  {isDark ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
-                  {isDark ? 'Light Mode' : 'Dark Mode'}
-                </button>
-                <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors">
-                  <LogOut className="w-3 h-3" />Sign Out
-                </button>
+              <div className="space-y-1">
+                <div className="flex items-center justify-between rounded-xl border border-sidebar-border bg-sidebar-accent/35 px-2.5 py-2">
+                  <span className="flex items-center gap-2 text-[11px] font-semibold text-muted-foreground">
+                    {isDark ? <Moon className="w-3 h-3" /> : <Sun className="w-3 h-3" />}
+                    Light
+                  </span>
+                  <Switch checked={!isDark} onCheckedChange={toggleTheme} aria-label="Toggle light mode" className="h-5 w-9 data-[state=checked]:bg-primary" />
+                </div>
               </div>
             </>
           ) : (
@@ -786,14 +813,8 @@ const ChatDashboard = () => {
               <div className="w-6 h-6 rounded-full bg-sidebar-accent border border-sidebar-border flex items-center justify-center" title={profile?.full_name || user?.email || ''}>
                 <span className="text-foreground font-semibold text-[9px]">{getInitials()}</span>
               </div>
-              <button onClick={() => navigate('/settings')} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors" title="Settings">
-                <Settings className="w-3 h-3" />
-              </button>
               <button onClick={toggleTheme} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors" title={isDark ? 'Light Mode' : 'Dark Mode'}>
                 {isDark ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
-              </button>
-              <button onClick={handleSignOut} className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors" title="Sign Out">
-                <LogOut className="w-3 h-3" />
               </button>
             </div>
           )}
@@ -807,8 +828,7 @@ const ChatDashboard = () => {
           <aside className="relative z-10 w-72 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
             <div className="flex items-center justify-between px-4 h-13 border-b border-sidebar-border" style={{ height: 52 }}>
               <Link to="/" className="flex items-center gap-2">
-                <img src="/logo.svg" alt="LOVIX" width="26" height="26" className="w-[26px] h-[26px]" />
-                <span className="font-display text-sm font-bold gradient-text-aurora">LOVIX AI</span>
+                <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-7 w-auto" />
               </Link>
               <button onClick={() => setMobileSidebarOpen(false)} className="p-2 rounded-xl hover:bg-muted transition-colors">
                 <X className="w-4 h-4" />
@@ -848,13 +868,9 @@ const ChatDashboard = () => {
 
         {/* Mobile header */}
         <header className="lg:hidden flex items-center justify-between px-4 py-2.5 border-b border-border bg-sidebar/80 backdrop-blur-sm sticky top-0 z-30" style={{ height: 52 }}>
-          <button onClick={() => setMobileSidebarOpen(true)} className="p-2 rounded-xl hover:bg-muted transition-colors">
-            <Menu className="w-5 h-5" />
-          </button>
-          <div className="flex items-center gap-1.5">
-            <div className="star-icon" style={{ width: 12, height: 12 }}><MagicStar className="w-3 h-3" /></div>
-            <span className="font-display font-bold text-sm gradient-text-aurora">LOVIX AI</span>
-          </div>
+          <Link to="/" className="flex items-center gap-2">
+            <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-7 w-auto" />
+          </Link>
           <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${
             hasSubscription ? 'bg-primary/15 text-primary' : credits > 0 ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'
           }`}>
@@ -909,27 +925,52 @@ const ChatDashboard = () => {
               <p className="text-xs font-semibold text-foreground">{mobileMenu === 'create' ? 'Create tools' : 'Workspace'}</p>
               <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
             </div>
-            <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2' : 'space-y-1'}`}>
-              {(mobileMenu === 'create' ? TOOL_ITEMS : WORKSPACE_ITEMS).map(item => {
+            <div className="p-3 space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                {(mobileMenu === 'create' ? TOOL_ITEMS : WORKSPACE_ITEMS).map(item => {
                 const isActive = activeTab === item.id;
                 return (
                   <button key={item.id} onClick={() => handleTabChange(item.id)}
-                    className={`${mobileMenu === 'create' ? 'h-[76px] rounded-xl p-2' : 'w-full rounded-xl px-3 py-2.5'} group relative overflow-hidden flex gap-2.5 transition-all duration-200 text-sm font-medium ${
+                    className={`group relative flex h-[76px] gap-2.5 overflow-hidden rounded-xl p-2 transition-all duration-200 text-sm font-medium ${
                       isActive
                         ? `border ${'ring' in item ? item.ring : 'border-primary/25'} bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-foreground shadow-[0_0_20px_hsl(var(--primary)/0.16)]`
                         : `border border-sidebar-border/70 bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-sidebar-foreground hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[0_0_16px_hsl(var(--primary)/0.12)]`
                     }`}>
-                    {mobileMenu === 'create' && <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />}
-                    <span className={`${mobileMenu === 'create' ? 'flex h-full w-full flex-col items-center justify-center gap-1.5' : 'contents'}`}>
-                      <span className={`${mobileMenu === 'create' ? 'h-9 w-9 rounded-xl bg-background/35 ring-1 ring-white/10' : 'h-7 w-7 rounded-xl bg-background/25'} flex items-center justify-center ${'color' in item ? item.color : ''}`}>
-                        <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className={mobileMenu === 'create' ? 'w-5 h-5' : 'w-4 h-4'} />
+                    <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                    <span className="flex h-full w-full flex-col items-center justify-center gap-1.5">
+                      <span className={`flex h-9 w-9 items-center justify-center rounded-xl bg-background/35 ring-1 ring-white/10 ${'color' in item ? item.color : ''}`}>
+                        <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className="h-5 w-5" />
                       </span>
-                      <span className={`${mobileMenu === 'create' ? 'text-[12px] font-bold text-center' : ''} w-full min-w-0 truncate`}>{item.label}</span>
+                      <span className="w-full min-w-0 truncate text-center text-[12px] font-bold">{item.label}</span>
                     </span>
                     {'badge' in item && item.badge && <span className="absolute right-1.5 top-1.5 text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
                   </button>
                 );
-              })}
+                })}
+              </div>
+              {mobileMenu === 'workspace' && (
+                <div className="space-y-1 border-t border-sidebar-border/70 pt-2">
+                  <button onClick={() => { navigate('/settings'); setMobileMenu(null); }} className="flex w-full items-center gap-2.5 rounded-xl border border-sidebar-border/70 bg-sidebar-accent/35 px-3 py-2.5 text-left text-sm font-medium text-sidebar-foreground transition-colors hover:border-primary/25 hover:bg-sidebar-accent">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full border border-sidebar-border bg-background text-[10px] font-bold text-foreground">{getInitials()}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate">Settings</span>
+                      <span className="block truncate text-[10px] text-muted-foreground">{user?.email}</span>
+                    </span>
+                    <Settings className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                  <div className="flex w-full items-center justify-between rounded-xl border border-sidebar-border/70 bg-sidebar-accent/25 px-3 py-2.5 text-sm font-medium text-sidebar-foreground">
+                    <span className="flex items-center gap-2">
+                      {isDark ? <Moon className="h-4 w-4 text-muted-foreground" /> : <Sun className="h-4 w-4 text-primary" />}
+                      Light mode
+                    </span>
+                    <Switch checked={!isDark} onCheckedChange={toggleTheme} aria-label="Toggle light mode" className="h-5 w-9 data-[state=checked]:bg-primary" />
+                  </div>
+                  <button onClick={handleSignOut} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10">
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </>
@@ -951,166 +992,72 @@ function DashboardHome({
   hasSubscription: boolean;
   onOpen: (id: ActiveTab) => void;
 }) {
-  const firstName = userName?.split(' ')[0] || 'Creator';
-
   return (
-    <div className="space-y-6 sm:space-y-8">
-      <section className="relative overflow-hidden rounded-2xl border border-border/60 bg-card">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,hsl(var(--primary)/0.18),transparent_34%),radial-gradient(circle_at_86%_18%,hsl(var(--cyan)/0.12),transparent_30%)]" />
-        <div className="relative z-10 p-5 sm:p-7 lg:p-8">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <AnimatedIconify icon="solar:stars-bold-duotone" className="h-4 w-4" />
-                LOVIX dashboard
-              </div>
-              <h1 className="font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                Welcome back, {firstName}
-              </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
-                Pick a creative tool, connect a channel, or jump back into chat. Everything is arranged for quick mobile creation first.
-              </p>
+    <div className="space-y-4 sm:space-y-5">
+      <section className="hidden overflow-hidden rounded-2xl border border-border/70 bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-[0_16px_48px_hsl(var(--primary)/0.10)] xl:block">
+        <div className="grid grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
+          <button onClick={() => onOpen('chat')} className="relative min-h-[220px] overflow-hidden text-left">
+            <video src="/videos/showcase-video.mp4" className="h-full w-full object-cover opacity-80 transition-transform duration-700 hover:scale-105" autoPlay muted loop playsInline />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/15 to-card" />
+            <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-background/75 text-primary backdrop-blur">
+              <AnimatedIconify icon="solar:chat-round-video-bold-duotone" className="h-7 w-7" pulse />
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:flex">
-              <button onClick={() => onOpen('chat')} className="group rounded-2xl border border-border/70 bg-background/45 px-4 py-3 text-left transition-all hover:border-primary/35 hover:bg-primary/5">
-                <AnimatedIconify icon="solar:chat-round-dots-bold-duotone" className="mb-2 h-6 w-6 text-primary" />
-                <p className="text-xs text-muted-foreground">AI chat</p>
-                <p className="text-sm font-semibold">Create by prompt</p>
-              </button>
-              <button onClick={() => onOpen('credits')} className="group rounded-2xl border border-border/70 bg-background/45 px-4 py-3 text-left transition-all hover:border-primary/35 hover:bg-primary/5">
-                <AnimatedIconify icon="solar:bolt-circle-bold-duotone" className="mb-2 h-6 w-6 text-amber-400" />
-                <p className="text-xs text-muted-foreground">Credits</p>
-                <p className="text-sm font-semibold">{hasSubscription ? 'Unlimited' : credits}</p>
-              </button>
+          </button>
+          <div className="flex flex-col justify-center p-6">
+            <div className="mb-3 flex flex-wrap gap-2">
+              {['Marketing agent', 'UGC planner', 'Editable plan'].map(badge => (
+                <span key={badge} className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">{badge}</span>
+              ))}
             </div>
+            <h2 className="font-display text-2xl font-bold">AI chat agent for content strategy</h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
+              Build campaign plans, video concepts, UGC scripts, influencer briefs and production steps before opening the right creative tool.
+            </p>
+            <button onClick={() => onOpen('chat')} className="mt-5 inline-flex w-fit items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-transform active:scale-[0.98]">
+              Open AI Agent <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </section>
 
       <section>
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div>
-            <h2 className="font-display text-xl font-bold sm:text-2xl">Creative Tools</h2>
-            <p className="text-sm text-muted-foreground">Tap a card to open the full workflow.</p>
-          </div>
-          <button onClick={() => onOpen('connectors')} className="hidden rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:inline-flex">
-            Connectors
-          </button>
-        </div>
-
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
-          {TOOL_ITEMS.map((tool, index) => {
-            const isVideoPreview = tool.preview.endsWith('.mp4');
-            return (
-              <button
-                key={tool.id}
-                onClick={() => onOpen(tool.id)}
-                className="group overflow-hidden rounded-xl border border-border/70 bg-card text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_12px_36px_hsl(var(--primary)/0.12)]"
-              >
-                <div className={`relative aspect-video overflow-hidden bg-gradient-to-br ${tool.accent}`}>
-                  {isVideoPreview ? (
-                    <video src={tool.preview} className="h-full w-full object-cover opacity-75 transition-transform duration-500 group-hover:scale-105" autoPlay muted loop playsInline />
-                  ) : (
-                    <img src={tool.preview} alt="" className="h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
-                  <div className={`absolute left-2.5 top-2.5 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-background/70 backdrop-blur ${tool.color}`}>
-                    <AnimatedIcon icon={tool.icon} className="h-5 w-5" />
+          <button
+            onClick={() => onOpen('chat')}
+            className="group col-span-2 min-h-[132px] overflow-hidden rounded-xl border border-primary/25 bg-card text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:shadow-[0_14px_40px_hsl(var(--primary)/0.14)] xl:hidden"
+          >
+            <div className="grid h-full grid-cols-[1fr_0.85fr]">
+              <div className="flex flex-col justify-between p-4">
+                <div>
+                  <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2 py-1 text-[10px] font-bold text-primary">
+                    <AnimatedIconify icon="solar:chat-round-video-bold-duotone" className="h-3.5 w-3.5" />
+                    AI Agent
                   </div>
-                  <div className="absolute bottom-2.5 right-2.5 rounded-full border border-white/10 bg-background/70 px-2 py-0.5 text-[10px] font-semibold text-foreground/80 backdrop-blur">
-                    Tool {index + 1}
-                  </div>
+                  <h3 className="font-display text-lg font-bold leading-tight">Chat marketing agent</h3>
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">Brief, plan, UGC scripts and campaign assets from one prompt.</p>
                 </div>
-                <div className="p-3 sm:p-3.5">
-                  <div className="mb-1.5 flex items-center gap-1.5">
-                    <h3 className="font-display text-sm font-bold sm:text-base">{tool.label}</h3>
-                    {tool.badge && <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">{tool.badge}</span>}
-                  </div>
-                  <p className="line-clamp-2 min-h-[34px] text-xs leading-[17px] text-muted-foreground sm:min-h-[38px] sm:text-[13px] sm:leading-[19px]">{tool.description}</p>
-                  <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
-                    Open tool <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="space-y-3">
-        <div>
-          <h2 className="font-display text-xl font-bold sm:text-2xl">Tool intros</h2>
-          <p className="text-sm text-muted-foreground">Ogni tool parte da un esempio pratico, pronto da aprire e adattare.</p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-          {TOOL_ITEMS.map(tool => {
-            const isVideoPreview = tool.preview.endsWith('.mp4');
-            return (
-              <article key={`intro-${tool.id}`} className="group overflow-hidden rounded-2xl border border-border/70 bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-[0_16px_48px_hsl(var(--primary)/0.10)]">
-                <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-                  <button onClick={() => onOpen(tool.id)} className="relative aspect-video overflow-hidden bg-muted text-left sm:aspect-auto sm:min-h-[220px]">
-                    {isVideoPreview ? (
-                      <video src={tool.preview} className="h-full w-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" autoPlay muted loop playsInline />
-                    ) : (
-                      <img src={tool.preview} alt="" className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/15 to-transparent sm:bg-gradient-to-r" />
-                    <div className={`absolute left-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-background/75 backdrop-blur ${tool.color}`}>
-                      <AnimatedIconify icon={tool.icon} className="h-6 w-6" pulse />
-                    </div>
-                  </button>
-
-                  <div className="flex min-h-[220px] flex-col p-4 sm:p-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">{tool.label}</p>
-                        <h3 className="mt-1 font-display text-lg font-bold text-foreground sm:text-xl">{tool.exampleTitle}</h3>
-                      </div>
-                      {tool.badge && <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">{tool.badge}</span>}
-                    </div>
-
-                    <div className={`mt-4 rounded-2xl border border-border/60 bg-gradient-to-br ${tool.accent} p-3`}>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Example prompt</p>
-                      <p className="mt-2 text-sm leading-6 text-foreground/90">{tool.examplePrompt}</p>
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-3 gap-2">
-                      {tool.workflow.map(step => (
-                        <div key={step} className="rounded-xl border border-border/55 bg-background/45 px-2 py-2 text-center">
-                          <p className="truncate text-[11px] font-semibold text-muted-foreground">{step}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <button onClick={() => onOpen(tool.id)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-transform active:scale-[0.98] sm:mt-auto">
-                      <AnimatedIconify icon={tool.icon} className="h-4 w-4" />
-                      Open {tool.label}
-                    </button>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-border/70 bg-card p-4 sm:p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="font-display text-lg font-bold">Connectors</h2>
-            <p className="text-sm text-muted-foreground">Publish and automate across platforms.</p>
-          </div>
-          <button onClick={() => onOpen('connectors')} className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">
-            View all
-          </button>
-        </div>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-9">
-          {CONNECTOR_ITEMS.slice(0, 9).map(connector => (
-            <div key={connector.name} className="group flex aspect-square flex-col items-center justify-center rounded-2xl border border-border/60 bg-background/45 p-2 transition-all hover:border-primary/35 hover:bg-primary/5">
-              <AnimatedIconify icon={connector.icon} className="h-7 w-7" />
-              <span className="mt-2 max-w-full truncate text-[11px] font-semibold">{connector.name}</span>
+                <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-primary">Open chat <ChevronRight className="h-4 w-4" /></span>
+              </div>
+              <div className="relative overflow-hidden">
+                <video src="/videos/showcase-video.mp4" className="h-full w-full object-cover opacity-80" autoPlay muted loop playsInline />
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-card/45" />
+              </div>
             </div>
+          </button>
+
+          {TOOL_ITEMS.map(tool => (
+            <button
+              key={tool.id}
+              onClick={() => onOpen(tool.id)}
+              className={`group relative flex min-h-[116px] flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br ${tool.navAccent} p-3 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_12px_32px_hsl(var(--primary)/0.12)] sm:min-h-[128px]`}
+            >
+              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+              <span className={`flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-background/45 ${tool.color} shadow-[0_0_18px_hsl(var(--primary)/0.08)]`}>
+                <AnimatedIconify icon={tool.navIcon} className="h-6 w-6" />
+              </span>
+              <span className="font-display text-sm font-bold sm:text-base">{tool.label}</span>
+              {tool.badge && <span className="absolute right-2 top-2 rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold text-primary">{tool.badge}</span>}
+            </button>
           ))}
         </div>
       </section>

@@ -379,7 +379,7 @@ const Dashboard = () => {
         <div className={`flex items-center border-b border-sidebar-border flex-shrink-0 ${sidebarPinned ? 'px-4 h-16 gap-3' : 'px-0 h-16 justify-center'}`}>
           <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0">
             <div className="relative flex-shrink-0">
-              <img src="/logo.svg" alt="LOVIX" width="34" height="34" className="w-[34px] h-[34px] transition-transform duration-300 group-hover:scale-105" />
+              <img src="/logo-wordmark.svg" alt="LOVIX AI" width="132" height="34" className="h-8 w-auto transition-transform duration-300 group-hover:scale-105" />
             </div>
             {sidebarPinned && (
               <span className="font-display text-lg font-bold gradient-text-aurora whitespace-nowrap">LOVIX</span>
@@ -522,7 +522,7 @@ const Dashboard = () => {
           <aside className="relative z-10 w-72 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
             <div className="flex items-center justify-between px-4 h-16 border-b border-sidebar-border">
               <Link to="/" className="flex items-center gap-2.5">
-                <img src="/logo.svg" alt="LOVIX" width="32" height="32" className="w-8 h-8" />
+                <img src="/logo-wordmark.svg" alt="LOVIX AI" width="132" height="34" className="h-8 w-auto" />
                 <span className="font-display text-lg font-bold gradient-text-aurora">LOVIX</span>
               </Link>
               <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-xl hover:bg-muted transition-colors">

@@ -16,11 +16,11 @@ const navLinks = [
 const LovixLogo = () => (
   <div className="relative flex-shrink-0">
     <img
-      src="/logo.svg"
+      src="/logo-wordmark.svg"
       alt="LOVIX logo"
-      width="32"
+      width="128"
       height="32"
-      className="w-8 h-8"
+      className="h-8 w-auto"
     />
   </div>
 );
@@ -72,9 +72,6 @@ const Navbar = () => {
                 style={{ background: "radial-gradient(hsl(var(--primary)), transparent)" }}
               />
             </div>
-            <span className="font-display text-xl font-bold gradient-text-aurora">
-              LOVIX
-            </span>
           </Link>
 
           {/* Desktop Navigation */}

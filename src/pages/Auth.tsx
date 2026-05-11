@@ -133,8 +133,7 @@ const Auth = () => {
           <div className="w-full max-w-md space-y-8 animate-fade-in-up text-center">
             {/* Logo */}
             <Link to={isDesktopApp ? "/auth" : "/"} className="flex items-center gap-2 group justify-center">
-              <img src="/logo.svg" alt="LOVIX" className="w-10 h-10" />
-              <span className="font-display text-2xl font-bold gradient-text">LOVIX</span>
+              <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-11 w-auto" />
             </Link>
 
             {/* Mail icon */}
@@ -219,8 +218,7 @@ const Auth = () => {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8 animate-fade-in-up">
           <Link to={isDesktopApp ? "/auth" : "/"} className="flex items-center gap-2 group">
-            <img src="/logo.svg" alt="LOVIX" className="w-10 h-10" />
-            <span className="font-display text-2xl font-bold gradient-text">LOVIX</span>
+            <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-11 w-auto" />
           </Link>
 
           <div className="space-y-2">
