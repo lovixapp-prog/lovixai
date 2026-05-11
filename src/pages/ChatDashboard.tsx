@@ -732,7 +732,8 @@ const ChatDashboard = () => {
         <div className={`flex items-center border-b border-sidebar-border flex-shrink-0 ${sidebarPinned ? 'px-3 h-13 gap-2' : 'px-0 h-13 justify-center'}`}
           style={{ height: 52 }}>
           <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-            <img src={sidebarPinned ? "/logo-wordmark.svg" : "/logo.svg"} alt="LOVIX AI" width={sidebarPinned ? 120 : 28} height="28" className={`${sidebarPinned ? 'h-7 w-auto' : 'w-7 h-7'} flex-shrink-0 transition-transform duration-300 group-hover:scale-105`} />
+            <img src="/logo.png" alt="LOVIX AI" width="28" height="28" className="h-7 w-7 flex-shrink-0 object-contain transition-transform duration-300 group-hover:scale-105" />
+            {sidebarPinned && <span className="font-display text-base font-extrabold text-primary">Lovix AI</span>}
             {sidebarPinned && (
               <span className="sr-only">LOVIX AI</span>
             )}
@@ -830,7 +831,8 @@ const ChatDashboard = () => {
         {/* Mobile header */}
         <header className="dashboard-mobile-header ios-glass-shell lg:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-30" style={{ height: 52 }}>
           <Link to="/" className="flex items-center gap-2">
-            <img src="/logo-wordmark.svg" alt="LOVIX AI" className="h-7 w-auto" />
+            <img src="/logo.png" alt="LOVIX AI" className="h-8 w-8 object-contain" />
+            <span className="font-display text-base font-extrabold text-primary">Lovix AI</span>
           </Link>
           <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${
             hasSubscription ? 'bg-primary/15 text-primary' : credits > 0 ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'

@@ -52,6 +52,9 @@ const VideoGenerator = ({
   const [seconds, setSeconds] = useState<4 | 8 | 12>(4);
   const [aspectRatio, setAspectRatio] = useState<"1:1" | "16:9" | "9:16">("16:9");
   const [quality, setQuality] = useState<"hd" | "4k">("hd");
+  const [modelPreset, setModelPreset] = useState<"cinema" | "ugc" | "product" | "social">("cinema");
+  const [cameraMove, setCameraMove] = useState<"auto" | "push" | "orbit" | "handheld">("auto");
+  const [motionStrength, setMotionStrength] = useState<"subtle" | "balanced" | "dynamic">("balanced");
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [referenceImageFile, setReferenceImageFile] = useState<File | null>(null);
   const [isResizing, setIsResizing] = useState(false);
@@ -132,13 +135,13 @@ const VideoGenerator = ({
         finally { setIsResizing(false); }
       }
       const data = await callAPI<{ success: boolean; generationId?: string; creditsUsed?: number; error?: string }>("generate-video", {
-        prompt, seconds, aspectRatio, quality, referenceImageUrl: finalReferenceUrl,
+        prompt, seconds, aspectRatio, quality, modelPreset, cameraMove, motionStrength, referenceImageUrl: finalReferenceUrl,
       });
       if (!data.success) throw new Error(data.error || "Failed to start");
       setActiveGeneration({
         id: data.generationId, type: "video", status: "pending", prompt,
         result_url: null, error_message: null, created_at: new Date().toISOString(),
-        settings: { seconds, aspectRatio, quality },
+        settings: { seconds, aspectRatio, quality, modelPreset, cameraMove, motionStrength },
       });
       toast({ title: "Video generation started!", description: `${data.creditsUsed} credits used.` });
       pollVideoStatus(data.generationId);
@@ -291,6 +294,47 @@ const VideoGenerator = ({
               <button key={q} onClick={() => setQuality(q)} className={`settings-pill uppercase ${quality === q ? 'active' : ''}`}>
                 <AnimatedIconify icon="solar:medal-ribbon-star-bold-duotone" className="w-3.5 h-3.5 text-pink-400" />
                 {q}
+              </button>
+            ))}
+
+            <div className="w-px h-4 bg-border mx-0.5" />
+
+            {([
+              ["cinema", "Cinema", "solar:clapperboard-play-bold-duotone"],
+              ["ugc", "UGC", "solar:user-speak-rounded-bold-duotone"],
+              ["product", "Product", "solar:box-bold-duotone"],
+              ["social", "Social", "solar:hashtag-circle-bold-duotone"],
+            ] as const).map(([id, label, icon]) => (
+              <button key={id} onClick={() => setModelPreset(id)} className={`settings-pill ${modelPreset === id ? 'active' : ''}`}>
+                <AnimatedIconify icon={icon} className="w-3.5 h-3.5 text-sky-400" />
+                <span className="hidden sm:inline">{label}</span>
+              </button>
+            ))}
+
+            <div className="w-px h-4 bg-border mx-0.5 hidden sm:block" />
+
+            {([
+              ["auto", "Auto", "solar:magic-stick-3-bold-duotone"],
+              ["push", "Push", "solar:forward-2-bold-duotone"],
+              ["orbit", "Orbit", "solar:refresh-circle-bold-duotone"],
+              ["handheld", "Handheld", "solar:camera-bold-duotone"],
+            ] as const).map(([id, label, icon]) => (
+              <button key={id} onClick={() => setCameraMove(id)} className={`settings-pill ${cameraMove === id ? 'active' : ''}`}>
+                <AnimatedIconify icon={icon} className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden sm:inline">{label}</span>
+              </button>
+            ))}
+
+            <div className="w-px h-4 bg-border mx-0.5 hidden sm:block" />
+
+            {([
+              ["subtle", "Subtle", "solar:minimize-square-3-bold-duotone"],
+              ["balanced", "Balanced", "solar:tuning-2-bold-duotone"],
+              ["dynamic", "Dynamic", "solar:bolt-bold-duotone"],
+            ] as const).map(([id, label, icon]) => (
+              <button key={id} onClick={() => setMotionStrength(id)} className={`settings-pill ${motionStrength === id ? 'active' : ''}`}>
+                <AnimatedIconify icon={icon} className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden sm:inline">{label}</span>
               </button>
             ))}
           </div>

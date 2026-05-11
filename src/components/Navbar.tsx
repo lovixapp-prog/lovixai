@@ -14,14 +14,15 @@ const navLinks = [
 ];
 
 const LovixLogo = () => (
-  <div className="relative flex-shrink-0">
+  <div className="relative flex flex-shrink-0 items-center gap-2">
     <img
-      src="/logo-wordmark.svg"
+      src="/logo.png"
       alt="LOVIX logo"
-      width="128"
-      height="32"
-      className="h-8 w-auto"
+      width="36"
+      height="36"
+      className="h-8 w-8 object-contain"
     />
+    <span className="font-display text-base font-extrabold tracking-tight text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.35)]">Lovix AI</span>
   </div>
 );
 

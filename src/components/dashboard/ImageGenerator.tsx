@@ -55,6 +55,10 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
   const [isGenerating, setIsGenerating] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState("none");
+  const [aspectRatio, setAspectRatio] = useState<"1:1" | "3:4" | "9:16" | "16:9">("1:1");
+  const [renderQuality, setRenderQuality] = useState<"standard" | "studio" | "ultra">("studio");
+  const [imageCount, setImageCount] = useState<1 | 2 | 4>(1);
+  const [cameraPreset, setCameraPreset] = useState<"auto" | "product" | "portrait" | "editorial">("auto");
   const [activeGeneration, setActiveGeneration] = useState<ActiveGeneration | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
@@ -62,7 +66,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
   const { toast } = useToast();
   const { user } = useAuth();
 
-  const creditsCost = 50;
+  const creditsCost = 50 * imageCount;
   
   // Check if user can generate based on credits or subscription
   const canGenerate = hasSubscription || availableCredits >= creditsCost;
@@ -214,11 +218,11 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
         result_url: null,
         error_message: null,
         created_at: new Date().toISOString(),
-        settings: { style: selectedStyle, isEdit: !!referenceImage },
+        settings: { style: selectedStyle, aspectRatio, renderQuality, imageCount, cameraPreset, isEdit: !!referenceImage },
       });
 
       const data = await callAPI<{ success: boolean; imageUrl?: string; generationId?: string; creditsUsed?: number; error?: string }>("generate-image", {
-        prompt, style: selectedStyle, imageUrl: referenceImage || undefined,
+        prompt, style: selectedStyle, aspectRatio, quality: renderQuality, imageCount, cameraPreset, imageUrl: referenceImage || undefined,
       });
 
       if (!data.success) {
@@ -318,6 +322,41 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
             >
               <AnimatedIconify icon={icon} className={`w-3.5 h-3.5 ${color}`} />
               {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-1.5 px-4 pt-2 flex-wrap">
+          {(["1:1", "3:4", "9:16", "16:9"] as const).map((r) => (
+            <button key={r} onClick={() => setAspectRatio(r)} className={`settings-pill ${aspectRatio === r ? 'active' : ''}`}>
+              <AnimatedIconify icon={r === "9:16" ? "solar:smartphone-bold-duotone" : r === "16:9" ? "solar:monitor-bold-duotone" : "solar:crop-minimalistic-bold-duotone"} className="w-3.5 h-3.5 text-emerald-400" />
+              {r}
+            </button>
+          ))}
+          <div className="w-px h-4 bg-border mx-0.5" />
+          {(["standard", "studio", "ultra"] as const).map((q) => (
+            <button key={q} onClick={() => setRenderQuality(q)} className={`settings-pill capitalize ${renderQuality === q ? 'active' : ''}`}>
+              <AnimatedIconify icon={q === "ultra" ? "solar:crown-star-bold-duotone" : "solar:medal-ribbon-star-bold-duotone"} className="w-3.5 h-3.5 text-pink-400" />
+              {q}
+            </button>
+          ))}
+          <div className="w-px h-4 bg-border mx-0.5 hidden sm:block" />
+          {([1, 2, 4] as const).map((n) => (
+            <button key={n} onClick={() => setImageCount(n)} className={`settings-pill ${imageCount === n ? 'active' : ''}`}>
+              <AnimatedIconify icon="solar:gallery-minimalistic-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+              {n}x
+            </button>
+          ))}
+          <div className="w-px h-4 bg-border mx-0.5 hidden sm:block" />
+          {([
+            ["auto", "Auto", "solar:magic-stick-3-bold-duotone"],
+            ["product", "Product", "solar:box-bold-duotone"],
+            ["portrait", "Portrait", "solar:user-id-bold-duotone"],
+            ["editorial", "Editorial", "solar:camera-bold-duotone"],
+          ] as const).map(([id, label, icon]) => (
+            <button key={id} onClick={() => setCameraPreset(id)} className={`settings-pill ${cameraPreset === id ? 'active' : ''}`}>
+              <AnimatedIconify icon={icon} className="w-3.5 h-3.5 text-violet-400" />
+              <span className="hidden sm:inline">{label}</span>
             </button>
           ))}
         </div>

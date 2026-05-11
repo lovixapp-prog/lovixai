@@ -71,7 +71,10 @@ const Footer = () => {
           {/* Brand col */}
           <div className="lg:col-span-1 space-y-5">
             <Link to="/" className="flex items-center gap-2.5 group w-fit">
-              <img src="/logo-wordmark.svg" alt="LOVIX logo" width="132" height="34" className="h-8 w-auto flex-shrink-0" />
+              <span className="flex items-center gap-2">
+                <img src="/logo.png" alt="LOVIX logo" width="34" height="34" className="h-8 w-8 flex-shrink-0 object-contain" />
+                <span className="font-display text-lg font-extrabold text-primary">Lovix AI</span>
+              </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-[220px]">
               Next-generation AI creative platform for video, image, and motion generation.

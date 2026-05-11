@@ -786,8 +786,22 @@ html.light {
   }
 
   .mobile-nav-item {
-    @apply flex flex-col items-center gap-0.5 py-2 px-2 flex-1 transition-all duration-200 relative;
+    @apply grid place-items-center gap-0 py-2 px-2 flex-1 transition-all duration-200 relative;
     min-height: 56px;
+    grid-template-rows: 28px 16px;
+    align-content: center;
+  }
+
+  .mobile-nav-item > svg,
+  .mobile-nav-item > span:first-child {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .mobile-nav-item > span:last-child {
+    align-self: start;
+    line-height: 1;
+    min-height: 12px;
   }
 
   .mobile-nav-item-active {

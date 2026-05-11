@@ -9,16 +9,16 @@ const downloads = [
     platform: "Windows",
     subtitle: "For Windows 10 and 11",
     href: "/api/track-download?platform=win",
-    icon: "logos:microsoft-windows",
-    deviceIcon: "fluent:desktop-24-color",
+    icon: "logos:microsoft-windows-icon",
+    deviceIcon: "logos:microsoft-windows-icon",
     accent: "from-sky-500/22 to-cyan-500/8",
   },
   {
     platform: "macOS",
     subtitle: "For Apple Silicon and Intel",
     href: "/api/track-download?platform=mac",
-    icon: "logos:apple",
-    deviceIcon: "fluent:laptop-24-color",
+    icon: "simple-icons:apple",
+    deviceIcon: "simple-icons:apple",
     accent: "from-violet-500/22 to-fuchsia-500/8",
   },
 ];
@@ -69,11 +69,11 @@ const DesktopDownload = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-background/40">
-                      <Icon icon={item.deviceIcon} className="h-8 w-8" />
+                      <Icon icon={item.deviceIcon} className={`h-8 w-8 ${item.platform === "macOS" ? "text-foreground" : ""}`} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <Icon icon={item.icon} className="h-5 w-5" />
+                        <Icon icon={item.icon} className={`h-5 w-5 ${item.platform === "macOS" ? "text-foreground" : ""}`} />
                         <h2 className="text-xl font-bold text-foreground">{item.platform}</h2>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">{item.subtitle}</p>

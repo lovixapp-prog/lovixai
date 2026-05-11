@@ -15,7 +15,7 @@ const SEOHead = ({
   description,
   keywords,
   canonicalPath,
-  ogImage = "https://lovix.app/logo.svg",
+  ogImage = "https://lovix.app/logo.png",
   ogType = "website",
   noIndex = false,
 }: SEOHeadProps) => {

@@ -232,27 +232,27 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       accept={accept}
       maxSize={maxSize}
       onError={(msg) => toast({ title: "Upload error", description: msg, variant: "destructive" })}
-      className="rounded-2xl border-2 border-dashed border-border bg-card hover:border-primary/50 transition-all duration-200 cursor-pointer"
+      className="min-h-[170px] rounded-2xl border-2 border-dashed border-border bg-card hover:border-primary/50 transition-all duration-200 cursor-pointer"
       dropMessage="Drop here"
     >
       {preview || (
-        <div className="p-6 text-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+        <div className="p-3 sm:p-6 text-center space-y-3 sm:space-y-4">
+          <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
             {icon}
           </div>
           <div>
             <p className="font-semibold text-foreground text-sm">{title}</p>
-            <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
+            <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">{subtitle}</p>
           </div>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
             <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors text-xs font-medium">
               <input type="file" accept={accept.join(',')} onChange={(e) => e.target.files?.[0] && onDrop(e.target.files[0])} className="hidden" />
               <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
-              Upload
+              <span className="hidden sm:inline">Upload</span>
             </label>
             <button onClick={() => onPickerOpen()} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs font-medium">
               <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
-              Assets
+              <span className="hidden sm:inline">Assets</span>
             </button>
           </div>
         </div>
@@ -279,7 +279,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
 
   const ImagePreviewContent = (previewUrl: string, onPickerOpen: () => void) => (
     <div className="p-3 space-y-3">
-      <img src={previewUrl} alt="Character" className="w-full aspect-video rounded-xl object-contain bg-muted/50" />
+      <img src={previewUrl} alt="Character" className="w-full aspect-video rounded-xl object-cover bg-muted/50" />
       <div className="flex items-center justify-center gap-2">
         <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
           <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImageFileDrop(e.target.files[0])} className="hidden" />
@@ -336,7 +336,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div className="space-y-1.5">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">1. Motion reference video</p>
               <UploadZone
@@ -413,7 +413,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div className="space-y-1.5">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Video with face</p>
               <UploadZone
@@ -435,45 +435,45 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                 accept={["audio/*", ".mp3", ".wav", ".m4a"]}
                 maxSize={20 * 1024 * 1024}
                 onError={(msg) => toast({ title: "Upload error", description: msg, variant: "destructive" })}
-                className="rounded-2xl border-2 border-dashed border-border bg-card hover:border-primary/50 transition-all duration-200"
+                className="min-h-[170px] rounded-2xl border-2 border-dashed border-border bg-card hover:border-primary/50 transition-all duration-200"
                 dropMessage="Drop audio here"
               >
                 {audioName ? (
-                  <div className="p-6 text-center space-y-3">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto">
+                  <div className="p-3 sm:p-6 text-center space-y-3">
+                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto">
                       <AnimatedIconify icon="solar:music-note-3-bold-duotone" className="w-7 h-7 text-primary" />
                     </div>
                     <p className="font-medium text-foreground text-sm truncate px-4">{audioName}</p>
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
                       <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
                         <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
-                        Change
+                        <span className="hidden sm:inline">Change</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
-                        Assets
+                        <span className="hidden sm:inline">Assets</span>
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-6 text-center space-y-4">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                  <div className="p-3 sm:p-6 text-center space-y-3 sm:space-y-4">
+                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
                       <AnimatedIconify icon="solar:music-note-3-bold-duotone" className="w-7 h-7 text-primary" />
                     </div>
                     <div>
                       <p className="font-semibold text-foreground text-sm">Audio file</p>
-                      <p className="text-xs text-muted-foreground mt-1">MP3, WAV, M4A — max 20MB</p>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">MP3, WAV, M4A — max 20MB</p>
                     </div>
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
                       <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors text-xs font-medium">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
                         <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
-                        Upload
+                        <span className="hidden sm:inline">Upload</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
-                        Assets
+                        <span className="hidden sm:inline">Assets</span>
                       </button>
                     </div>
                   </div>
