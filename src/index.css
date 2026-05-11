@@ -648,6 +648,32 @@ html.light {
     @apply text-[10px] tracking-widest font-semibold border-primary/30 text-primary/80;
   }
 
+  @media (max-width: 640px) {
+    .creation-card {
+      @apply rounded-xl;
+    }
+
+    .creation-card-info {
+      @apply p-2.5;
+    }
+
+    .creation-type-icon {
+      @apply hidden;
+    }
+
+    .creation-type-badge {
+      @apply text-[8px] tracking-wide px-1.5;
+    }
+
+    .creation-action-btn {
+      @apply h-9 w-9;
+    }
+
+    .creation-action-primary {
+      @apply h-10 w-10;
+    }
+  }
+
   .creation-motion-badge {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
     background: hsl(var(--primary) / 0.2);
@@ -1170,7 +1196,7 @@ html.light {
   }
 
   .tool-select-control {
-    @apply inline-flex h-8 w-auto min-w-[104px] max-w-[150px] items-center justify-start gap-1.5 rounded-xl px-2.5 py-1 text-xs font-semibold transition-all duration-150;
+    @apply inline-flex h-9 w-auto min-w-[112px] max-w-[168px] items-center justify-start gap-1.5 rounded-xl px-2.5 py-1 text-xs font-semibold transition-all duration-150;
     border: 1px solid hsl(var(--border) / 0.75);
     background: hsl(var(--muted) / 0.48);
     color: hsl(var(--foreground));
@@ -1193,6 +1219,70 @@ html.light {
 
   .tool-select-menu {
     @apply rounded-xl border-border bg-popover/95 p-1 shadow-xl backdrop-blur-xl;
+  }
+
+  .format-glyph {
+    @apply shrink-0 rounded-[4px];
+    display: inline-block;
+    border: 1.5px solid hsl(var(--primary) / 0.95);
+    background: hsl(var(--primary) / 0.12);
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.06);
+  }
+
+  .format-glyph-square {
+    width: 15px;
+    height: 15px;
+  }
+
+  .format-glyph-wide {
+    width: 20px;
+    height: 12px;
+  }
+
+  .format-glyph-vertical {
+    width: 12px;
+    height: 20px;
+  }
+
+  .quality-switch {
+    @apply inline-flex h-9 items-center gap-2 rounded-xl border px-2.5 text-muted-foreground transition-all duration-200;
+    border-color: hsl(var(--border) / 0.72);
+    background: hsl(var(--muted) / 0.48);
+  }
+
+  .quality-switch-on {
+    color: hsl(var(--primary));
+    border-color: hsl(var(--primary) / 0.42);
+    background: hsl(var(--primary) / 0.12);
+  }
+
+  .quality-switch-track {
+    @apply relative block h-5 w-9 rounded-full transition-colors duration-200;
+    background: hsl(var(--muted-foreground) / 0.24);
+  }
+
+  .quality-switch-on .quality-switch-track {
+    background: hsl(var(--primary) / 0.9);
+  }
+
+  .quality-switch-thumb {
+    @apply absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200;
+  }
+
+  .quality-switch-on .quality-switch-thumb {
+    transform: translateX(1rem);
+  }
+
+  @media (max-width: 640px) {
+    .tool-select-control {
+      flex: 1 1 calc(50% - 0.25rem);
+      min-width: min(138px, calc(50vw - 1.25rem));
+      max-width: none;
+    }
+
+    .settings-pill {
+      @apply h-9 rounded-xl px-2.5;
+    }
   }
 
   /* ============================================

@@ -43,13 +43,9 @@ interface ActiveGeneration {
 type MotionMode = "motion-transfer" | "lip-sync";
 
 const motionSelectOptions = {
-  quality: [
-    { value: "standard", label: "Standard" },
-    { value: "pro", label: "Pro" },
-  ],
   orientation: [
-    { value: "video", label: "Follows video" },
-    { value: "image", label: "Follows image" },
+    { value: "video", label: "Match video movement" },
+    { value: "image", label: "Keep image direction" },
   ],
 };
 
@@ -288,11 +284,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
             <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors text-xs font-medium">
               <input type="file" accept={accept.join(',')} onChange={(e) => e.target.files?.[0] && onDrop(e.target.files[0])} className="hidden" />
               <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Upload</span>
+              <span>Upload</span>
             </label>
             <button onClick={() => onPickerOpen()} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs font-medium">
               <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Assets</span>
+              <span>Assets</span>
             </button>
           </div>
         </div>
@@ -418,13 +414,13 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Character orientation</span>
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Character direction</span>
             <ToolSelect
               icon="solar:route-bold"
               value={characterOrientation}
               onValueChange={(value) => setCharacterOrientation(value as "video" | "image")}
               options={motionSelectOptions.orientation}
-              ariaLabel="Character orientation"
+              ariaLabel="Character direction"
             />
           </div>
         </TabsContent>
@@ -473,11 +469,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                       <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
                         <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-                        <span className="hidden sm:inline">Change</span>
+                        <span>Change</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-                        <span className="hidden sm:inline">Assets</span>
+                        <span>Assets</span>
                       </button>
                     </div>
                   </div>
@@ -494,11 +490,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                       <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors text-xs font-medium">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
                         <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-                        <span className="hidden sm:inline">Upload</span>
+                        <span>Upload</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-                        <span className="hidden sm:inline">Assets</span>
+                        <span>Assets</span>
                       </button>
                     </div>
                   </div>
@@ -512,13 +508,17 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       {/* Toolbar */}
       <div className="rounded-2xl border border-border bg-card p-4 space-y-4">
         <div className="flex flex-wrap items-center gap-3">
-          <ToolSelect
-            icon="solar:shield-star-bold"
-            value={quality}
-            onValueChange={(value) => setQuality(value as "standard" | "pro")}
-            options={motionSelectOptions.quality}
-            ariaLabel="Motion quality"
-          />
+          <button
+            type="button"
+            onClick={() => setQuality(quality === "pro" ? "standard" : "pro")}
+            className={`quality-switch ${quality === "pro" ? "quality-switch-on" : ""}`}
+            aria-pressed={quality === "pro"}
+          >
+            <span className="quality-switch-track">
+              <span className="quality-switch-thumb" />
+            </span>
+            <span className="text-xs font-semibold">{quality === "pro" ? "Pro quality" : "Standard"}</span>
+          </button>
 
           {/* Keep sound — only motion-transfer */}
           {motionMode === "motion-transfer" && (

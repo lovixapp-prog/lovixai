@@ -70,7 +70,7 @@ const Index = () => {
       {/* ══════════════════════════════════════════
           HERO
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+      <section className="relative -mt-16 flex min-h-[92vh] items-center overflow-hidden pt-16 lg:-mt-20 lg:pt-20">
 
         {/* Video background */}
         <div className="absolute inset-0 z-0">

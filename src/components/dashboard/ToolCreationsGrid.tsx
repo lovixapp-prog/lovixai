@@ -218,10 +218,16 @@ const ToolCreationsGrid = ({ userId, type, maxItems = 6, onViewAll }: ToolCreati
                   }`}
                   muted
                   playsInline
-                  preload="metadata"
-                  onLoadedData={(e) => {
+                  preload="auto"
+                  onLoadedMetadata={(e) => {
                     const video = e.currentTarget;
-                    video.currentTime = 0.1;
+                    try {
+                      video.currentTime = Math.min(0.2, video.duration || 0.2);
+                    } catch {
+                      handleVideoLoaded(creation.id);
+                    }
+                  }}
+                  onLoadedData={() => {
                     handleVideoLoaded(creation.id);
                   }}
                   onError={() => {

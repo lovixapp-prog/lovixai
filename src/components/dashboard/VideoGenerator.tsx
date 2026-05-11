@@ -37,14 +37,14 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 const videoSelectOptions = {
   seconds: [
-    { value: "4", label: "4s" },
-    { value: "8", label: "8s" },
-    { value: "12", label: "12s" },
+    { value: "4", label: "4 sec" },
+    { value: "8", label: "8 sec" },
+    { value: "12", label: "12 sec" },
   ],
   aspectRatio: [
-    { value: "1:1", label: "Square" },
-    { value: "16:9", label: "Wide" },
-    { value: "9:16", label: "Vertical" },
+    { value: "1:1", label: "1:1 Square" },
+    { value: "16:9", label: "16:9 Wide" },
+    { value: "9:16", label: "9:16 Vertical" },
   ],
   quality: [
     { value: "hd", label: "HD" },
@@ -75,16 +75,18 @@ const ToolSelect = ({
   onValueChange,
   options,
   ariaLabel,
+  glyph,
 }: {
   icon: string;
   value: string;
   onValueChange: (value: string) => void;
   options: { value: string; label: string }[];
   ariaLabel: string;
+  glyph?: React.ReactNode;
 }) => (
   <Select value={value} onValueChange={onValueChange}>
     <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
-      <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />
+      {glyph || <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />}
       <SelectValue />
     </SelectTrigger>
     <SelectContent className="tool-select-menu">
@@ -95,6 +97,15 @@ const ToolSelect = ({
       ))}
     </SelectContent>
   </Select>
+);
+
+const FormatGlyph = ({ ratio }: { ratio: string }) => (
+  <span
+    className={`format-glyph ${
+      ratio === "9:16" ? "format-glyph-vertical" : ratio === "1:1" ? "format-glyph-square" : "format-glyph-wide"
+    }`}
+    aria-hidden="true"
+  />
 );
 
 const MagicStar = ({ className = "w-5 h-5" }: { className?: string }) => (
@@ -333,7 +344,7 @@ const VideoGenerator = ({
             <div className="w-px h-4 bg-border mx-0.5" />
 
             <ToolSelect icon="solar:clock-circle-bold" value={String(seconds)} onValueChange={(value) => setSeconds(Number(value) as 4 | 8 | 12)} options={videoSelectOptions.seconds} ariaLabel="Duration" />
-            <ToolSelect icon="solar:crop-minimalistic-bold" value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "16:9" | "9:16")} options={videoSelectOptions.aspectRatio} ariaLabel="Format" />
+            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "16:9" | "9:16")} options={videoSelectOptions.aspectRatio} ariaLabel="Format" />
             <ToolSelect icon="solar:medal-ribbon-star-bold" value={quality} onValueChange={(value) => setQuality(value as "hd" | "4k")} options={videoSelectOptions.quality} ariaLabel="Quality" />
             <ToolSelect icon="solar:clapperboard-play-bold" value={modelPreset} onValueChange={(value) => setModelPreset(value as "cinema" | "ugc" | "product" | "social")} options={videoSelectOptions.modelPreset} ariaLabel="Preset" />
             <ToolSelect icon="solar:camera-bold" value={cameraMove} onValueChange={(value) => setCameraMove(value as "auto" | "push" | "orbit" | "handheld")} options={videoSelectOptions.cameraMove} ariaLabel="Camera movement" />

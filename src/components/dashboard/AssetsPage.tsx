@@ -330,6 +330,15 @@ const AssetsPage = ({ userId }: AssetsPageProps) => {
                   className="w-full h-full object-cover"
                   muted
                   playsInline
+                  preload="auto"
+                  onLoadedMetadata={(e) => {
+                    const video = e.currentTarget;
+                    try {
+                      video.currentTime = Math.min(0.2, video.duration || 0.2);
+                    } catch {
+                      // Browser may block seeking on some remote videos; the play icon fallback still communicates the asset type.
+                    }
+                  }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-muted">
@@ -401,9 +410,21 @@ const AssetsPage = ({ userId }: AssetsPageProps) => {
                     className="w-full h-full object-cover"
                   />
                 ) : asset.type === "video" ? (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Video className="w-6 h-6 text-muted-foreground" />
-                  </div>
+                  <video
+                    src={asset.url}
+                    className="w-full h-full object-cover"
+                    muted
+                    playsInline
+                    preload="auto"
+                    onLoadedMetadata={(e) => {
+                      const video = e.currentTarget;
+                      try {
+                        video.currentTime = Math.min(0.2, video.duration || 0.2);
+                      } catch {
+                        // Keep the thumbnail area stable if metadata seek is unavailable.
+                      }
+                    }}
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <Music className="w-6 h-6 text-muted-foreground" />

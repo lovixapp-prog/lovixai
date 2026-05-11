@@ -54,10 +54,10 @@ const styles = [
 const imageSelectOptions = {
   styles: styles.map(({ id, label }) => ({ value: id, label })),
   aspectRatio: [
-    { value: "1:1", label: "Square" },
-    { value: "3:4", label: "Portrait" },
-    { value: "9:16", label: "Story" },
-    { value: "16:9", label: "Wide" },
+    { value: "1:1", label: "1:1 Square" },
+    { value: "3:4", label: "3:4 Portrait" },
+    { value: "9:16", label: "9:16 Story" },
+    { value: "16:9", label: "16:9 Wide" },
   ],
   renderQuality: [
     { value: "standard", label: "Standard" },
@@ -83,16 +83,18 @@ const ToolSelect = ({
   onValueChange,
   options,
   ariaLabel,
+  glyph,
 }: {
   icon: string;
   value: string;
   onValueChange: (value: string) => void;
   options: { value: string; label: string }[];
   ariaLabel: string;
+  glyph?: React.ReactNode;
 }) => (
   <Select value={value} onValueChange={onValueChange}>
     <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
-      <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />
+      {glyph || <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />}
       <SelectValue />
     </SelectTrigger>
     <SelectContent className="tool-select-menu">
@@ -103,6 +105,15 @@ const ToolSelect = ({
       ))}
     </SelectContent>
   </Select>
+);
+
+const FormatGlyph = ({ ratio }: { ratio: string }) => (
+  <span
+    className={`format-glyph ${
+      ratio === "9:16" || ratio === "3:4" ? "format-glyph-vertical" : ratio === "1:1" ? "format-glyph-square" : "format-glyph-wide"
+    }`}
+    aria-hidden="true"
+  />
 );
 
 const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription = false, onUpgradeClick }: ImageGeneratorProps) => {
@@ -369,7 +380,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
 
         <div className="flex items-center gap-1.5 px-4 pt-3 flex-wrap">
           <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" />
-          <ToolSelect icon="solar:crop-minimalistic-bold" value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
+          <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
           <ToolSelect icon="solar:medal-ribbon-star-bold" value={renderQuality} onValueChange={(value) => setRenderQuality(value as "standard" | "studio" | "ultra")} options={imageSelectOptions.renderQuality} ariaLabel="Quality" />
           <ToolSelect icon="solar:gallery-minimalistic-bold" value={String(imageCount)} onValueChange={(value) => setImageCount(Number(value) as 1 | 2 | 4)} options={imageSelectOptions.imageCount} ariaLabel="Image count" />
           <ToolSelect icon="solar:camera-bold" value={cameraPreset} onValueChange={(value) => setCameraPreset(value as "auto" | "product" | "portrait" | "editorial")} options={imageSelectOptions.cameraPreset} ariaLabel="Camera preset" />
