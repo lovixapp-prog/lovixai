@@ -158,17 +158,17 @@ function PillSelector({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="influencer-chip-grid">
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
+            "influencer-chip",
             value === o.value
-              ? "bg-primary text-primary-foreground border-primary"
-              : "bg-transparent border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+              ? "influencer-chip-active"
+              : "influencer-chip-idle"
           )}
         >
           {o.label}
@@ -188,17 +188,17 @@ function GenderPills({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="influencer-chip-grid">
       {options.map((g) => (
         <button
           key={g}
           type="button"
           onClick={() => onChange(g)}
           className={cn(
-            "flex-1 min-w-[80px] py-2 rounded-lg text-sm font-medium border transition-all",
+            "influencer-chip",
             value === g
-              ? "bg-primary text-primary-foreground border-primary"
-              : "bg-transparent border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+              ? "influencer-chip-active"
+              : "influencer-chip-idle"
           )}
         >
           {g}
@@ -521,7 +521,7 @@ const InfluencerWizard = ({
       <div className="influencer-studio-layout flex flex-col lg:flex-row gap-0 rounded-2xl overflow-hidden border border-border min-h-[420px]">
 
         {/* Canvas / Preview */}
-        <div className="flex-1 bg-[hsl(var(--background))] flex flex-col items-center justify-center p-3 sm:p-5 relative"
+        <div className="order-2 lg:order-1 flex-1 bg-[hsl(var(--background))] flex flex-col items-center justify-center p-3 sm:p-5 relative"
           style={{ backgroundImage: 'radial-gradient(hsl(var(--border)/0.25) 1px, transparent 1px)', backgroundSize: '22px 22px' }}>
           <div className="w-full max-w-[210px] sm:max-w-[260px] aspect-[3/4] rounded-2xl overflow-hidden border border-border/60 shadow-2xl relative bg-card">
             {isGenerating ? (
@@ -544,8 +544,11 @@ const InfluencerWizard = ({
             )}
           </div>
 
-          {/* Action buttons below canvas */}
-          <div className="mt-3 flex flex-col items-center gap-2 w-full max-w-[260px]">
+          {/* Preview status */}
+          <div className="mt-3 w-full max-w-[260px] rounded-xl border border-border/70 bg-card/70 px-3 py-2 text-center text-xs text-muted-foreground">
+            {generatedImage ? "Preview ready. Save or regenerate from the final step." : "Complete the fields, then generate from the final step."}
+          </div>
+          <div className="hidden">
             {!generatedImage ? (
               <button
                 onClick={handleGenerate}
@@ -586,7 +589,7 @@ const InfluencerWizard = ({
         </div>
 
         {/* Builder right panel */}
-        <div className="w-full lg:w-[340px] xl:w-[360px] bg-sidebar border-t lg:border-t-0 lg:border-l border-sidebar-border overflow-y-auto flex-shrink-0">
+        <div className="order-1 lg:order-2 w-full lg:w-[340px] xl:w-[360px] bg-sidebar border-t lg:border-t-0 lg:border-l border-sidebar-border overflow-y-auto flex-shrink-0">
           <div className="px-4 py-3 border-b border-sidebar-border sticky top-0 bg-sidebar z-10 flex items-center justify-between">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Builder</span>
             {onBack && (
@@ -596,7 +599,7 @@ const InfluencerWizard = ({
             )}
           </div>
 
-          <div className="p-3 sm:p-4 space-y-4">
+          <div className="p-3 sm:p-4 pb-24 lg:pb-4 space-y-4">
         {/* ── Left: form ── */}
         <div className="influencer-builder-form space-y-4">
           {/* Name — always shown */}
@@ -831,6 +834,51 @@ const InfluencerWizard = ({
               </div>
             </>
           )}
+
+          <div className="influencer-final-action">
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-foreground">
+                {generatedImage ? "Creator preview ready" : "Ready to generate"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {generatedImage ? "Save this creator or generate a new version." : canGenerate ? "Review the details, then create the influencer." : "Complete the required fields to unlock generation."}
+              </p>
+            </div>
+
+            {!generatedImage ? (
+              <button
+                onClick={handleGenerate}
+                disabled={!canGenerate || isGenerating || !hasEnoughCredits}
+                className="btn-generate influencer-final-cta"
+              >
+                {isGenerating ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /><span>Generating</span></>
+                ) : !hasEnoughCredits ? (
+                  <><Sparkles className="w-4 h-4" /><span>Get Credits</span></>
+                ) : (
+                  <><Sparkles className="w-4 h-4" /><span>Generate Influencer</span></>
+                )}
+              </button>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => { setGeneratedImage(null); handleGenerate(); }}
+                  disabled={isGenerating}
+                  className="influencer-secondary-action"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  <span>Regenerate</span>
+                </button>
+                <button
+                  onClick={handleAccept}
+                  className="btn-generate influencer-final-cta"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Save Creator</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
           </div>{/* end p-4 */}
         </div>{/* end builder panel */}

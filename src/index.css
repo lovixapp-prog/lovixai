@@ -1127,6 +1127,88 @@ html.light {
     background: hsl(var(--card) / 0.78);
   }
 
+  .influencer-builder-form {
+    @apply rounded-2xl;
+  }
+
+  .influencer-builder-form > .space-y-2 {
+    @apply rounded-xl border border-border/60 bg-background/45 p-2.5;
+  }
+
+  .influencer-builder-form label {
+    @apply text-xs font-bold text-foreground/85;
+  }
+
+  .influencer-builder-form input,
+  .influencer-builder-form textarea,
+  .influencer-builder-form [role="combobox"] {
+    @apply rounded-xl border-border/70 bg-card/80 text-sm shadow-none;
+  }
+
+  .influencer-builder-form input,
+  .influencer-builder-form [role="combobox"] {
+    min-height: 2.35rem;
+  }
+
+  .influencer-builder-form textarea {
+    min-height: 7rem;
+  }
+
+  .influencer-chip-grid {
+    @apply grid grid-cols-2 gap-1.5;
+  }
+
+  .influencer-chip {
+    @apply inline-flex min-h-8 min-w-0 items-center justify-center rounded-xl border px-2 text-center text-[11px] font-bold transition-all;
+  }
+
+  .influencer-chip-active {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.14);
+    color: hsl(var(--primary));
+    box-shadow: inset 0 1px 0 hsl(255 100% 100% / 0.08), 0 0 0 1px hsl(var(--primary) / 0.06);
+  }
+
+  .influencer-chip-idle {
+    border-color: hsl(var(--border) / 0.72);
+    background: hsl(var(--card) / 0.72);
+    color: hsl(var(--muted-foreground));
+  }
+
+  .influencer-chip-idle:hover {
+    border-color: hsl(var(--primary) / 0.5);
+    color: hsl(var(--foreground));
+    background: hsl(var(--primary) / 0.06);
+  }
+
+  .influencer-builder-form [data-slot="badge"],
+  .influencer-builder-form .cursor-pointer {
+    border-radius: 0.65rem;
+    font-size: 0.6875rem;
+  }
+
+  .influencer-final-action {
+    @apply sticky bottom-0 z-10 mt-2 space-y-2 rounded-2xl border p-3;
+    border-color: hsl(var(--primary) / 0.22);
+    background:
+      linear-gradient(180deg, hsl(var(--sidebar-background) / 0.92), hsl(var(--sidebar-background) / 0.98)),
+      radial-gradient(circle at 12% 0%, hsl(var(--primary) / 0.12), transparent 40%);
+    box-shadow: 0 -12px 28px hsl(0 0% 0% / 0.18), inset 0 1px 0 hsl(255 100% 100% / 0.06);
+    backdrop-filter: blur(16px);
+  }
+
+  .influencer-final-cta {
+    @apply h-10 w-full rounded-xl px-3 text-xs;
+  }
+
+  .influencer-secondary-action {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border/70 bg-card/80 px-3 text-xs font-bold text-foreground transition-colors;
+  }
+
+  .influencer-secondary-action:hover {
+    background: hsl(var(--muted) / 0.72);
+  }
+
   .influencer-content-tool .btn,
   .influencer-mini-tool .btn,
   .influencer-content-tool .grid button,
@@ -1175,6 +1257,27 @@ html.light {
     .influencer-builder-form [role="combobox"] {
       min-height: 2rem;
       font-size: 0.78rem;
+    }
+
+    .influencer-builder-form > .space-y-2 {
+      padding: 0.55rem;
+    }
+
+    .influencer-chip-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem;
+    }
+
+    .influencer-chip {
+      min-height: 1.85rem;
+      padding-inline: 0.35rem;
+      font-size: 0.67rem;
+    }
+
+    .influencer-final-action {
+      margin-left: -0.25rem;
+      margin-right: -0.25rem;
+      padding: 0.65rem;
     }
 
     .influencer-builder-form .rounded-full,
