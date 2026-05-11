@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import {
   MessageSquare, Coins, LogOut,
   Menu, Crown, Settings,
-  MoreHorizontal, X, Monitor, Download, Laptop, ChevronRight,
+  X, Monitor, Download, Laptop, ChevronRight,
   ChevronLeft, PanelLeft, Plus, Trash2, ChevronDown, Paperclip,
   Sun, Moon,
 } from 'lucide-react';
@@ -117,6 +117,21 @@ const CONNECTOR_ITEMS = [
   { name: 'Zapier', icon: 'logos:zapier-icon', status: 'Soon', tone: 'bg-orange-500/10 border-orange-400/20' },
 ];
 
+const MAIN_NAV_ITEMS = [
+  { icon: 'solar:home-smile-angle-bold-duotone', label: 'Home', id: 'home' as ActiveTab },
+  { icon: 'solar:chat-round-dots-bold-duotone', label: 'Chat', id: 'chat' as ActiveTab },
+  { icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab },
+];
+
+const WORKSPACE_ITEMS = [
+  { icon: 'solar:plug-circle-bold-duotone', label: 'Connectors', id: 'connectors' as ActiveTab },
+  { icon: 'solar:file-text-bold-duotone', label: 'Files', id: 'files' as ActiveTab },
+  { icon: 'solar:bolt-circle-bold-duotone', label: 'Credits', id: 'credits' as ActiveTab },
+];
+
+const isToolTab = (tab: ActiveTab) => TOOL_ITEMS.some(item => item.id === tab);
+const isWorkspaceTab = (tab: ActiveTab) => WORKSPACE_ITEMS.some(item => item.id === tab);
+
 const isDesktopApp = typeof window !== 'undefined' && !!(window as any).__lovixDesktop;
 
 const MagicStar = ({ className = 'w-4 h-4' }: { className?: string }) => (
@@ -130,9 +145,9 @@ const AnimatedIcon = ({ icon, className = 'w-4 h-4' }: { icon: string; className
 );
 
 const ChatDashboard = () => {
-  const [sidebarPinned, setSidebarPinned] = useState(false);
+  const [sidebarPinned, setSidebarPinned] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState<'create' | 'workspace' | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [toolsExpanded, setToolsExpanded] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -186,12 +201,14 @@ const ChatDashboard = () => {
     createNewChat();
     setActiveTab('chat');
     setMobileSidebarOpen(false);
+    setMobileMenu(null);
   }, [createNewChat]);
 
   const handleLoadChat = useCallback((chatId: string) => {
     loadChat(chatId);
     setActiveTab('chat');
     setMobileSidebarOpen(false);
+    setMobileMenu(null);
   }, [loadChat]);
 
   const handleSendMessage = useCallback(async (text: string, file?: File | null) => {
@@ -233,12 +250,177 @@ const ChatDashboard = () => {
   const handleTabChange = (id: ActiveTab) => {
     setActiveTab(id);
     setMobileSidebarOpen(false);
-    setShowMoreMenu(false);
+    setMobileMenu(null);
   };
 
   /* ─── Sidebar Content (shared desktop/mobile) ─ */
   const SidebarContent = ({ collapsed = false, mobile = false }: { collapsed?: boolean; mobile?: boolean }) => {
     const show = mobile || !collapsed;
+    const recentChats = chats.slice(0, 6);
+
+    const openMainNav = (id: ActiveTab) => {
+      if (id === 'chat' && activeChatId) loadChat(activeChatId);
+      handleTabChange(id);
+    };
+
+    return (
+      <div className={`flex flex-col flex-1 min-h-0 ${show ? 'overflow-y-auto scrollbar-none' : 'overflow-hidden'}`}>
+        <div className={`pt-3 ${show ? 'px-3' : 'px-2'}`}>
+          <button
+            onClick={handleNewChat}
+            className={`w-full flex items-center gap-2 rounded-xl transition-all duration-150 font-semibold text-xs bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_8px_22px_hsl(var(--primary)/0.22)] ${show ? 'px-3 py-2.5' : 'p-2.5 justify-center'}`}
+            title={!show ? 'New project' : undefined}
+          >
+            <Plus className="w-3.5 h-3.5 flex-shrink-0" />
+            {show && 'New project'}
+          </button>
+        </div>
+
+        {!show ? (
+          <nav className="px-2 pt-3 space-y-1">
+            {[
+              ...MAIN_NAV_ITEMS,
+              { icon: 'solar:widget-5-bold-duotone', label: 'Tools', id: (isToolTab(activeTab) ? activeTab : 'home') as ActiveTab },
+              { icon: 'solar:bolt-circle-bold-duotone', label: 'Credits', id: 'credits' as ActiveTab },
+            ].map(item => {
+              const isActive = activeTab === item.id || (item.label === 'Tools' && isToolTab(activeTab));
+              return (
+                <button
+                  key={`${item.label}-${item.id}`}
+                  onClick={() => openMainNav(item.id)}
+                  title={item.label}
+                  className={`w-full flex items-center justify-center p-2.5 rounded-xl transition-all duration-150 ${
+                    isActive ? 'bg-sidebar-accent text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                  }`}
+                >
+                  <AnimatedIconify icon={item.icon} className="w-4 h-4" />
+                </button>
+              );
+            })}
+          </nav>
+        ) : (
+          <div className="px-3 pt-4 pb-3 space-y-5">
+            <section>
+              <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest px-2 block mb-1.5">Navigate</span>
+              <nav className="space-y-1">
+                {MAIN_NAV_ITEMS.map(item => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => openMainNav(item.id)}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-xs font-medium ${
+                        isActive ? 'bg-sidebar-accent text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                      }`}
+                    >
+                      <AnimatedIconify icon={item.icon} className="w-4 h-4" />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </section>
+
+            <section>
+              <div className="flex items-center justify-between px-2 mb-2">
+                <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Create</span>
+                <button onClick={() => handleTabChange('home')} className="text-[10px] font-semibold text-primary/80 hover:text-primary">All tools</button>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5">
+                {TOOL_ITEMS.map(item => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleTabChange(item.id)}
+                      className={`relative min-h-[58px] rounded-xl border px-2.5 py-2 text-left transition-all duration-150 ${
+                        isActive
+                          ? 'border-primary/35 bg-primary/10 text-foreground shadow-[0_0_18px_hsl(var(--primary)/0.15)]'
+                          : 'border-sidebar-border/70 bg-sidebar-accent/20 text-muted-foreground hover:border-primary/20 hover:bg-sidebar-accent/50 hover:text-foreground'
+                      }`}
+                    >
+                      <AnimatedIconify icon={item.icon} className={`w-4 h-4 mb-1.5 ${isActive ? item.color : ''}`} />
+                      <span className="block text-[11px] font-semibold leading-tight">{item.label}</span>
+                      {item.badge && (
+                        <span className="absolute right-1.5 top-1.5 text-[8px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section>
+              <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest px-2 block mb-1.5">Workspace</span>
+              <nav className="space-y-1">
+                {WORKSPACE_ITEMS.map(item => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleTabChange(item.id)}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-xs font-medium ${
+                        isActive ? 'bg-sidebar-accent text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                      }`}
+                    >
+                      <AnimatedIconify icon={item.icon} className="w-4 h-4" />
+                      <span className="flex-1 text-left">{item.label}</span>
+                      {item.id === 'credits' && (
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                          hasSubscription ? 'bg-primary/15 text-primary' : credits > 0 ? 'bg-primary/15 text-primary' : 'bg-destructive/15 text-destructive'
+                        }`}>{hasSubscription ? '∞' : credits}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+            </section>
+
+            {recentChats.length > 0 && (
+              <section>
+                <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest px-2 block mb-1.5">Recent</span>
+                <nav className="space-y-1">
+                  {recentChats.map(chat => {
+                    const isActive = chat.id === activeChatId && activeTab === 'chat';
+                    return (
+                      <div
+                        key={chat.id}
+                        className={`group relative flex items-center rounded-xl transition-all duration-150 ${
+                          isActive ? 'bg-sidebar-accent text-foreground' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                        }`}
+                        onMouseEnter={() => setHoveredChatId(chat.id)}
+                        onMouseLeave={() => setHoveredChatId(null)}
+                      >
+                        {isActive && (
+                          <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.7)]" />
+                        )}
+                        <button
+                          onClick={() => handleLoadChat(chat.id)}
+                          className="flex-1 flex items-center gap-2 px-3 py-2 min-w-0 text-left"
+                        >
+                          <AnimatedIconify icon="solar:chat-line-bold-duotone" className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
+                          <span className="text-xs truncate leading-tight">{chat.title}</span>
+                        </button>
+                        {hoveredChatId === chat.id && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); deleteChat(chat.id); }}
+                            className="flex-shrink-0 p-1.5 mr-1 rounded-lg text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </nav>
+              </section>
+            )}
+          </div>
+        )}
+      </div>
+    );
+
     return (
       <div className="flex flex-col flex-1 overflow-hidden">
 
@@ -516,7 +698,7 @@ const ChatDashboard = () => {
         hidden lg:flex flex-col flex-shrink-0 h-screen sticky top-0 z-40
         transition-all duration-300 ease-in-out overflow-hidden
         bg-sidebar border-r border-sidebar-border
-        ${sidebarPinned ? 'w-56' : 'w-[60px]'}
+        ${sidebarPinned ? 'w-64' : 'w-[60px]'}
       `}>
 
         {/* Header */}
@@ -709,50 +891,43 @@ const ChatDashboard = () => {
             <span className="text-[10px] font-medium">Home</span>
           </button>
           <button onClick={() => handleTabChange('chat')} className={`mobile-nav-item ${activeTab === 'chat' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-            <MessageSquare className={`w-5 h-5 transition-transform duration-200 ${activeTab === 'chat' ? 'scale-110 text-primary' : ''}`} />
+            <AnimatedIconify icon="solar:chat-round-dots-bold-duotone" className={`w-5 h-5 ${activeTab === 'chat' ? 'scale-110 text-primary' : ''}`} />
             <span className="text-[10px] font-medium">Chat</span>
           </button>
-          {TOOL_ITEMS.slice(0, 2).map(item => {
-            const isActive = activeTab === item.id;
-            return (
-              <button key={item.id} onClick={() => handleTabChange(item.id)} className={`mobile-nav-item ${isActive ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-                <AnimatedIconify icon={item.icon} className={`w-5 h-5 ${isActive ? `scale-110 ${item.color}` : ''}`} />
-                <span className="text-[10px] font-medium">{item.label}</span>
-              </button>
-            );
-          })}
-          <button onClick={() => setShowMoreMenu(!showMoreMenu)} className={`mobile-nav-item ${['ugc', 'influencer', 'motion', 'connectors', 'creations', 'files', 'credits'].includes(activeTab) ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-            <MoreHorizontal className="w-5 h-5" />
-            <span className="text-[10px] font-medium">More</span>
+          <button onClick={() => setMobileMenu(mobileMenu === 'create' ? null : 'create')} className={`mobile-nav-item ${isToolTab(activeTab) || mobileMenu === 'create' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
+            <AnimatedIconify icon="solar:widget-5-bold-duotone" className={`w-5 h-5 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'scale-110 text-primary' : ''}`} />
+            <span className="text-[10px] font-medium">Create</span>
+          </button>
+          <button onClick={() => setMobileMenu(mobileMenu === 'workspace' ? null : 'workspace')} className={`mobile-nav-item ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
+            <AnimatedIconify icon="solar:case-round-minimalistic-bold-duotone" className={`w-5 h-5 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'scale-110 text-primary' : ''}`} />
+            <span className="text-[10px] font-medium">Workspace</span>
           </button>
         </div>
       </nav>
 
-      {/* More menu (mobile) */}
-      {showMoreMenu && (
+      {/* Mobile quick menu */}
+      {mobileMenu && (
         <>
-          <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setShowMoreMenu(false)} />
+          <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setMobileMenu(null)} />
           <div className="fixed bottom-16 left-0 right-0 z-50 lg:hidden mx-4 mb-2 rounded-2xl bg-sidebar border border-sidebar-border shadow-2xl overflow-hidden">
-            <div className="p-3 space-y-0.5">
-              {[
-                ...TOOL_ITEMS.slice(2).map(item => ({
-                  ...item,
-                  icon: <AnimatedIconify icon={item.icon} className="w-4 h-4" />,
-                })),
-                { icon: <AnimatedIconify icon="solar:gallery-favourite-bold-duotone" className="w-4 h-4" />, label: 'My Creations', id: 'creations' as ActiveTab, color: '' },
-                { icon: <AnimatedIconify icon="solar:plug-circle-bold-duotone" className="w-4 h-4" />, label: 'Connectors', id: 'connectors' as ActiveTab, color: '' },
-                { icon: <AnimatedIconify icon="solar:file-text-bold-duotone" className="w-4 h-4" />, label: 'Files', id: 'files' as ActiveTab, color: '' },
-                { icon: <AnimatedIconify icon="solar:bolt-circle-bold-duotone" className="w-4 h-4" />, label: 'Credits', id: 'credits' as ActiveTab, color: '' },
-              ].map(item => (
-                <button key={item.id} onClick={() => handleTabChange(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors text-sm font-medium ${
-                    activeTab === item.id ? 'bg-sidebar-accent text-primary' : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
-                  }`}>
-                  {item.icon}
-                  <span>{item.label}</span>
-                  {'badge' in item && item.badge && <span className="ml-auto text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
-                </button>
-              ))}
+            <div className="border-b border-sidebar-border/70 px-4 py-3">
+              <p className="text-xs font-semibold text-foreground">{mobileMenu === 'create' ? 'Create tools' : 'Workspace'}</p>
+              <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
+            </div>
+            <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2' : 'space-y-1'}`}>
+              {(mobileMenu === 'create' ? TOOL_ITEMS : [{ icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab }, ...WORKSPACE_ITEMS]).map(item => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button key={item.id} onClick={() => handleTabChange(item.id)}
+                    className={`${mobileMenu === 'create' ? 'min-h-[72px] flex-col items-start justify-between' : 'w-full'} flex gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
+                      isActive ? 'bg-sidebar-accent text-primary' : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
+                    }`}>
+                    <AnimatedIconify icon={item.icon} className={`w-5 h-5 ${'color' in item && isActive ? item.color : ''}`} />
+                    <span>{item.label}</span>
+                    {'badge' in item && item.badge && <span className="ml-auto text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </>
