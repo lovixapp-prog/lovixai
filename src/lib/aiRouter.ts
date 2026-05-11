@@ -420,7 +420,7 @@ function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<str
   };
 }
 
-type Lang = 'it' | 'es' | 'fr' | 'de' | 'pt' | 'en';
+export type Lang = 'it' | 'es' | 'fr' | 'de' | 'pt' | 'en';
 
 const LANG_MARKERS: [Lang, string[]][] = [
   ['it', ['crea', 'genera', 'generami', 'fammi', 'vorrei', 'voglio', 'puoi', 'ciao', 'grazie', 'per favore', 'immagine', 'dimmi', 'mostrami', 'fai un', 'un video', 'un immagine']],
@@ -430,10 +430,11 @@ const LANG_MARKERS: [Lang, string[]][] = [
   ['pt', ['cria', 'criar', 'gera', 'gerar', 'faça', 'quero', 'posso', 'olá', 'obrigado', 'por favor', 'imagem', 'foto', 'um vídeo', 'uma imagem']],
 ];
 
-function detectLang(text: string): Lang {
+export function detectLang(text: string): Lang {
   const lower = text.toLowerCase();
+  const tokens = lower.split(/[^\p{L}]+/u).filter(Boolean);
   for (const [lang, markers] of LANG_MARKERS) {
-    if (markers.some(m => lower.includes(m))) return lang;
+    if (markers.some(m => m.includes(' ') ? lower.includes(m) : tokens.includes(m))) return lang;
   }
   return 'en';
 }
