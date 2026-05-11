@@ -208,7 +208,7 @@ const ToolCreationsGrid = ({ userId, type, maxItems = 6, onViewAll }: ToolCreati
                 {/* Loading placeholder - always visible until video loads */}
                 {!loadedVideos.has(creation.id) && (
                   <div className="absolute inset-0 bg-muted/80 flex items-center justify-center">
-                    <Video className="w-6 h-6 text-muted-foreground/50" />
+                    <AnimatedIconify icon="solar:videocamera-record-bold-duotone" className="w-6 h-6 text-muted-foreground/50" pulse />
                   </div>
                 )}
                 <video
