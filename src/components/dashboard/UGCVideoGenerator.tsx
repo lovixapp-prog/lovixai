@@ -94,7 +94,7 @@ function calcCredits(duration: number) {
 // ── Sub-components ───────────────────────────────────────────────────
 function StepLabel({ n, label }: { n: number; label: string }) {
   return (
-    <div className="flex items-center gap-2 mb-3">
+    <div className="flex items-center gap-2">
       <span className="w-5 h-5 rounded-full bg-primary/20 text-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0">{n}</span>
       <span className="text-sm font-semibold text-foreground">{label}</span>
     </div>
@@ -105,7 +105,7 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
         active ? 'bg-primary/15 text-primary border border-primary/30' : 'text-muted-foreground hover:text-foreground'
       }`}
     >
@@ -429,7 +429,7 @@ export default function UGCVideoGenerator({
 
   // ── Render ───────────────────────────────────────────────────────────
   return (
-    <div className="space-y-6 max-w-4xl mx-auto py-4 pb-24 lg:pb-10">
+    <div className="space-y-4 max-w-5xl mx-auto py-3 pb-24 lg:pb-10">
 
       {/* ── Cinematic Hero ─────────────────────────────────── */}
       <div className="tool-hero rounded-2xl"
@@ -461,20 +461,20 @@ export default function UGCVideoGenerator({
 
       {/* ═══ STEP 1 — PRODUCT ══════════════════════════════════════════ */}
       <div className="rounded-2xl border border-border bg-card overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-border/60">
+        <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-b border-border/60">
           <StepLabel n={1} label="Product" />
-          <div className="flex gap-1">
-            <TabBtn active={productTab === 'list'} onClick={() => setProductTab('list')}>My Products</TabBtn>
+          <div className="flex gap-1 rounded-xl bg-muted/35 border border-border/70 p-1">
+            <TabBtn active={productTab === 'list'} onClick={() => setProductTab('list')}>List</TabBtn>
             <TabBtn active={productTab === 'add'} onClick={() => setProductTab('add')}>
               <span className="flex items-center gap-1"><AnimatedIconify icon="solar:add-circle-bold-duotone" className="w-3 h-3 text-primary" />New</span>
             </TabBtn>
             <TabBtn active={productTab === 'url'} onClick={() => setProductTab('url')}>
-              <span className="flex items-center gap-1"><AnimatedIconify icon="solar:link-round-angle-bold-duotone" className="w-3 h-3 text-cyan-400" />From URL</span>
+              <span className="flex items-center gap-1"><AnimatedIconify icon="solar:link-round-angle-bold-duotone" className="w-3 h-3 text-cyan-400" />URL</span>
             </TabBtn>
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-3">
           {/* ── Tab: My Products ── */}
           {productTab === 'list' && (
             <>
@@ -487,7 +487,7 @@ export default function UGCVideoGenerator({
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {products.map(p => (
                     editingProduct?.id === p.id ? (
                       // Inline edit
@@ -509,16 +509,16 @@ export default function UGCVideoGenerator({
                       <button
                         key={p.id}
                         onClick={() => setSelectedProduct(selectedProduct?.id === p.id ? null : p)}
-                        className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border transition-all group ${
+                        className={`w-full text-left flex items-center gap-2.5 p-2.5 rounded-xl border transition-all group ${
                           selectedProduct?.id === p.id
                             ? 'border-primary/50 bg-primary/8 shadow-[0_0_0_1px_hsl(var(--primary)/0.2)]'
                             : 'border-border bg-background hover:border-primary/30 hover:bg-card'
                         }`}
                       >
                         {p.image_url ? (
-                          <img src={p.image_url} alt={p.name} className="w-11 h-11 rounded-lg object-cover flex-shrink-0 border border-border/50" />
+                          <img src={p.image_url} alt={p.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-border/50" />
                         ) : (
-                          <div className="w-11 h-11 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
                             <AnimatedIconify icon="solar:shop-bold-duotone" className="w-5 h-5 text-muted-foreground" />
                           </div>
                         )}
@@ -552,40 +552,40 @@ export default function UGCVideoGenerator({
 
           {/* ── Tab: Add New ── */}
           {productTab === 'add' && (
-            <div className="space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Product name *"
                   value={newProduct.name}
                   onChange={e => setNewProduct(p => ({ ...p, name: e.target.value }))}
-                  className="bg-background border-border h-10"
+                  className="bg-background border-border h-9 text-sm"
                 />
                 <Input
                   placeholder="Price (e.g. $29.99)"
                   value={newProduct.price}
                   onChange={e => setNewProduct(p => ({ ...p, price: e.target.value }))}
-                  className="bg-background border-border h-10"
+                  className="bg-background border-border h-9 text-sm"
                 />
               </div>
               <Textarea
                 placeholder="Product description — the more detail, the better the video"
                 value={newProduct.description}
                 onChange={e => setNewProduct(p => ({ ...p, description: e.target.value }))}
-                className="bg-background border-border resize-none min-h-[80px]"
+                className="bg-background border-border resize-none min-h-[68px] text-sm"
                 rows={3}
               />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Category (skincare, tech, fitness...)"
                   value={newProduct.category}
                   onChange={e => setNewProduct(p => ({ ...p, category: e.target.value }))}
-                  className="bg-background border-border h-10"
+                  className="bg-background border-border h-9 text-sm"
                 />
                 <div className="flex gap-2">
                   <input type="file" ref={productImageInputRef} className="hidden" accept="image/*" onChange={handleProductImageUpload} />
                   <button
                     onClick={() => productImageInputRef.current?.click()}
-                    className="flex-1 flex items-center justify-center gap-2 h-10 px-3 rounded-xl border border-dashed border-border text-sm text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 h-9 px-3 rounded-xl border border-dashed border-border text-xs font-semibold text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors"
                   >
                     {productImageUploading ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /> : <AnimatedIconify icon="solar:camera-bold-duotone" className="w-4 h-4" />}
                     {newProduct.image_url ? <span className="text-emerald-400 font-medium">Image added ✓</span> : 'Add image'}
@@ -598,7 +598,7 @@ export default function UGCVideoGenerator({
               <Button
                 onClick={handleAddProduct}
                 disabled={!newProduct.name.trim() || addingProduct}
-                className="w-full h-10"
+                className="w-full h-9"
               >
                 {addingProduct ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4 mr-2" spin /> : <AnimatedIconify icon="solar:add-circle-bold-duotone" className="w-4 h-4 mr-2" />}
                 Save Product
@@ -608,8 +608,8 @@ export default function UGCVideoGenerator({
 
           {/* ── Tab: From URL ── */}
           {productTab === 'url' && (
-            <div className="space-y-4">
-              <div className="bg-muted/30 rounded-xl p-3 text-xs text-muted-foreground flex items-start gap-2">
+            <div className="space-y-3">
+              <div className="bg-muted/30 rounded-xl p-2.5 text-xs text-muted-foreground flex items-start gap-2">
                 <AnimatedIconify icon="solar:link-round-angle-bold-duotone" className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-primary" />
                 Paste a product page URL — we'll extract title, description, image and price automatically.
               </div>
@@ -619,10 +619,10 @@ export default function UGCVideoGenerator({
                   value={scrapeUrl}
                   onChange={e => setScrapeUrl(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleScrapeUrl()}
-                  className="bg-background border-border h-10 flex-1"
+                  className="bg-background border-border h-9 flex-1 text-sm"
                   type="url"
                 />
-                <Button onClick={handleScrapeUrl} disabled={!scrapeUrl.trim() || scraping} className="h-10 px-4 shrink-0">
+                <Button onClick={handleScrapeUrl} disabled={!scrapeUrl.trim() || scraping} className="h-9 px-4 shrink-0">
                   {scraping ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /> : 'Import'}
                 </Button>
               </div>
@@ -642,40 +642,40 @@ export default function UGCVideoGenerator({
 
       {/* ═══ STEP 2 — AVATAR ═══════════════════════════════════════════ */}
       <div className="rounded-2xl border border-border bg-card overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-border/60">
+        <div className="px-4 py-3 border-b border-border/60">
           <StepLabel n={2} label="Avatar / Presenter" />
-          <p className="text-xs text-muted-foreground -mt-1">Optional — upload a model or use an AI influencer. Without one, Lovix AI generates the presenter.</p>
+          <p className="text-[11px] text-muted-foreground mt-1">Optional: upload a model, select influencer, or let AI generate one.</p>
         </div>
-        <div className="p-4 space-y-4">
+        <div className="p-3 space-y-3">
 
           {/* Source selector */}
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1.5">
             <button
               onClick={() => { setAvatarSource('none'); setAvatarFile(null); setAvatarPreview(null); setAvatarUrl(null); setSelectedInfluencer(null); }}
-              className={`py-3 rounded-xl border text-center transition-all ${
+              className={`py-2 rounded-xl border text-center transition-all ${
                 avatarSource === 'none' ? 'border-primary/50 bg-primary/10' : 'border-border bg-background hover:border-border/80'
               }`}
             >
               <AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className={`w-5 h-5 mx-auto mb-1 ${avatarSource === 'none' ? 'text-primary' : 'text-muted-foreground'}`} />
-              <p className={`text-xs font-medium ${avatarSource === 'none' ? 'text-primary' : 'text-muted-foreground'}`}>AI Generate</p>
+              <p className={`text-[11px] font-semibold ${avatarSource === 'none' ? 'text-primary' : 'text-muted-foreground'}`}>AI</p>
             </button>
             <button
               onClick={() => { setAvatarSource('upload'); setSelectedInfluencer(null); setTimeout(() => avatarInputRef.current?.click(), 50); }}
-              className={`py-3 rounded-xl border text-center transition-all ${
+              className={`py-2 rounded-xl border text-center transition-all ${
                 avatarSource === 'upload' ? 'border-primary/50 bg-primary/10' : 'border-border bg-background hover:border-border/80'
               }`}
             >
               <AnimatedIconify icon="solar:upload-square-bold-duotone" className={`w-5 h-5 mx-auto mb-1 ${avatarSource === 'upload' ? 'text-primary' : 'text-muted-foreground'}`} />
-              <p className={`text-xs font-medium ${avatarSource === 'upload' ? 'text-primary' : 'text-muted-foreground'}`}>Upload Photo</p>
+              <p className={`text-[11px] font-semibold ${avatarSource === 'upload' ? 'text-primary' : 'text-muted-foreground'}`}>Upload</p>
             </button>
             <button
               onClick={() => { setAvatarSource('influencer'); setAvatarFile(null); setAvatarPreview(null); setAvatarUrl(null); }}
-              className={`py-3 rounded-xl border text-center transition-all ${
+              className={`py-2 rounded-xl border text-center transition-all ${
                 avatarSource === 'influencer' ? 'border-primary/50 bg-primary/10' : 'border-border bg-background hover:border-border/80'
               }`}
             >
               <AnimatedIconify icon="solar:user-id-bold-duotone" className={`w-5 h-5 mx-auto mb-1 ${avatarSource === 'influencer' ? 'text-primary' : 'text-muted-foreground'}`} />
-              <p className={`text-xs font-medium ${avatarSource === 'influencer' ? 'text-primary' : 'text-muted-foreground'}`}>My Influencers</p>
+              <p className={`text-[11px] font-semibold ${avatarSource === 'influencer' ? 'text-primary' : 'text-muted-foreground'}`}>Influencer</p>
             </button>
           </div>
 
@@ -750,23 +750,23 @@ export default function UGCVideoGenerator({
 
       {/* ═══ STEP 3 — SCRIPT ═══════════════════════════════════════════ */}
       <div className="rounded-2xl border border-border bg-card overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-border/60">
+        <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-border/60">
           <StepLabel n={3} label="Video Script" />
           <button
             onClick={handleOptimizeScript}
             disabled={!selectedProduct || optimizingScript}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/25 text-primary text-xs font-semibold hover:bg-primary/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-primary/10 border border-primary/25 text-primary text-[11px] font-semibold hover:bg-primary/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {optimizingScript ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-3.5 h-3.5" spin /> : <AnimatedIconify icon="solar:bolt-bold-duotone" className="w-3.5 h-3.5" />}
             AI Generate Script
           </button>
         </div>
-        <div className="p-4 space-y-3">
+        <div className="p-3 space-y-2">
           <Textarea
             placeholder={`Describe the message/concept for your video...\n\nExample: "Show excitement about how this bag transforms any outfit — highlight the quality, the colors, and call to action to visit the shop."\n\nOr click "AI Generate Script" to auto-write from your product info.`}
             value={script}
             onChange={e => setScript(e.target.value)}
-            className="border-0 bg-background border border-border rounded-xl resize-none focus-visible:ring-1 focus-visible:ring-primary/50 text-sm min-h-[120px] p-4"
+            className="border-0 bg-background border border-border rounded-xl resize-none focus-visible:ring-1 focus-visible:ring-primary/50 text-sm min-h-[92px] p-3"
             rows={4}
           />
           <div className="flex items-center justify-between text-[10px] text-muted-foreground px-1">
@@ -778,10 +778,10 @@ export default function UGCVideoGenerator({
 
       {/* ═══ STEP 4 — SETTINGS ═════════════════════════════════════════ */}
       <div className="rounded-2xl border border-border bg-card overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-border/60">
+        <div className="px-4 py-3 border-b border-border/60">
           <StepLabel n={4} label="Settings" />
         </div>
-        <div className="p-4 space-y-5">
+        <div className="p-3 space-y-4">
 
           {/* Style — compact icon chips */}
           <div>
@@ -1097,7 +1097,7 @@ export default function UGCVideoGenerator({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {history.filter(g => g.result_url && g.status === 'completed').slice(0, 4).map(g => (
               <div key={g.id} className="bg-card border border-border rounded-xl overflow-hidden group hover:border-primary/30 transition-colors">
-                <video src={g.result_url!} className="w-full aspect-video object-cover bg-black" />
+                <video src={g.result_url!} controls playsInline preload="metadata" className="w-full aspect-video object-cover bg-black" />
                 <div className="p-2 flex items-center justify-between gap-1">
                   <p className="text-[10px] text-muted-foreground truncate">
                     {(g.settings?.productName as string) || 'UGC Ad'}

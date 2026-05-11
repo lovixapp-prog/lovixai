@@ -379,6 +379,15 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
           <div className="tool-input-row">
+            <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload image" aria-label="Upload image">
+              <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+              <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
+            </label>
+            <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn w-8 justify-center" title="My Assets" aria-label="My Assets">
+              <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
+            </button>
+            <div className="w-px h-4 bg-border mx-0.5" />
+
             <div className="tool-segment-group" aria-label="Image style">
               {imageSelectOptions.styles.map((option) => (
                 <button
@@ -407,14 +416,6 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
                 </button>
               ))}
             </div>
-            <div className="w-px h-4 bg-border mx-0.5" />
-            <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload image" aria-label="Upload image">
-              <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
-              <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-            </label>
-            <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn w-8 justify-center" title="My Assets" aria-label="My Assets">
-              <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-            </button>
           </div>
 
           <div className="flex items-center gap-2 ml-auto">
