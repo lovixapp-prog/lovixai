@@ -37,14 +37,14 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 const videoSelectOptions = {
   seconds: [
-    { value: "4", label: "4 sec" },
-    { value: "8", label: "8 sec" },
-    { value: "12", label: "12 sec" },
+    { value: "4", label: "4s" },
+    { value: "8", label: "8s" },
+    { value: "12", label: "12s" },
   ],
   aspectRatio: [
-    { value: "1:1", label: "1:1 Square" },
-    { value: "16:9", label: "16:9 Wide" },
-    { value: "9:16", label: "9:16 Vertical" },
+    { value: "1:1", label: "1:1" },
+    { value: "16:9", label: "16:9" },
+    { value: "9:16", label: "9:16" },
   ],
   quality: [
     { value: "hd", label: "HD" },
@@ -57,15 +57,15 @@ const videoSelectOptions = {
     { value: "social", label: "Social" },
   ],
   cameraMove: [
-    { value: "auto", label: "Auto camera" },
-    { value: "push", label: "Push in" },
+    { value: "auto", label: "Auto" },
+    { value: "push", label: "Push" },
     { value: "orbit", label: "Orbit" },
-    { value: "handheld", label: "Handheld" },
+    { value: "handheld", label: "Hand" },
   ],
   motionStrength: [
-    { value: "subtle", label: "Subtle" },
-    { value: "balanced", label: "Balanced" },
-    { value: "dynamic", label: "Dynamic" },
+    { value: "subtle", label: "Soft" },
+    { value: "balanced", label: "Mid" },
+    { value: "dynamic", label: "Fast" },
   ],
 };
 
@@ -326,29 +326,25 @@ const VideoGenerator = ({
 
         {/* Bottom toolbar */}
         <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
-          <div className="flex items-center gap-1.5 flex-wrap">
-
-            {/* Upload ref image */}
-            <label className="settings-pill cursor-pointer" title="Upload reference image">
-              <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadReferenceImage(e.target.files[0])} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Image</span>
-            </label>
-
-            {/* Asset picker */}
-            <button onClick={() => setShowAssetPicker(true)} className="settings-pill" title="My Assets">
-              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Assets</span>
-            </button>
-
-            <div className="w-px h-4 bg-border mx-0.5" />
-
+          <div className="tool-input-row">
             <ToolSelect icon="solar:clock-circle-bold" value={String(seconds)} onValueChange={(value) => setSeconds(Number(value) as 4 | 8 | 12)} options={videoSelectOptions.seconds} ariaLabel="Duration" />
             <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "16:9" | "9:16")} options={videoSelectOptions.aspectRatio} ariaLabel="Format" />
             <ToolSelect icon="solar:medal-ribbon-star-bold" value={quality} onValueChange={(value) => setQuality(value as "hd" | "4k")} options={videoSelectOptions.quality} ariaLabel="Quality" />
             <ToolSelect icon="solar:clapperboard-play-bold" value={modelPreset} onValueChange={(value) => setModelPreset(value as "cinema" | "ugc" | "product" | "social")} options={videoSelectOptions.modelPreset} ariaLabel="Preset" />
             <ToolSelect icon="solar:camera-bold" value={cameraMove} onValueChange={(value) => setCameraMove(value as "auto" | "push" | "orbit" | "handheld")} options={videoSelectOptions.cameraMove} ariaLabel="Camera movement" />
             <ToolSelect icon="solar:tuning-2-bold" value={motionStrength} onValueChange={(value) => setMotionStrength(value as "subtle" | "balanced" | "dynamic")} options={videoSelectOptions.motionStrength} ariaLabel="Motion strength" />
+            <div className="w-px h-4 bg-border mx-0.5" />
+
+            <label className="tool-upload-btn cursor-pointer" title="Upload reference image">
+              <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadReferenceImage(e.target.files[0])} className="hidden" />
+              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+              <span>Upload</span>
+            </label>
+
+            <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn" title="My Assets">
+              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5" />
+              <span>Assets</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-2 ml-auto">

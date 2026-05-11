@@ -54,26 +54,26 @@ const styles = [
 const imageSelectOptions = {
   styles: styles.map(({ id, label }) => ({ value: id, label })),
   aspectRatio: [
-    { value: "1:1", label: "1:1 Square" },
-    { value: "3:4", label: "3:4 Portrait" },
-    { value: "9:16", label: "9:16 Story" },
-    { value: "16:9", label: "16:9 Wide" },
+    { value: "1:1", label: "1:1" },
+    { value: "3:4", label: "3:4" },
+    { value: "9:16", label: "9:16" },
+    { value: "16:9", label: "16:9" },
   ],
   renderQuality: [
-    { value: "standard", label: "Standard" },
+    { value: "standard", label: "Std" },
     { value: "studio", label: "Studio" },
     { value: "ultra", label: "Ultra" },
   ],
   imageCount: [
-    { value: "1", label: "1 image" },
-    { value: "2", label: "2 images" },
-    { value: "4", label: "4 images" },
+    { value: "1", label: "1x" },
+    { value: "2", label: "2x" },
+    { value: "4", label: "4x" },
   ],
   cameraPreset: [
-    { value: "auto", label: "Auto lens" },
+    { value: "auto", label: "Auto" },
     { value: "product", label: "Product" },
-    { value: "portrait", label: "Portrait" },
-    { value: "editorial", label: "Editorial" },
+    { value: "portrait", label: "Face" },
+    { value: "editorial", label: "Edit" },
   ],
 };
 
@@ -378,14 +378,6 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
           </div>
         )}
 
-        <div className="flex items-center gap-1.5 px-4 pt-3 flex-wrap">
-          <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" />
-          <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
-          <ToolSelect icon="solar:medal-ribbon-star-bold" value={renderQuality} onValueChange={(value) => setRenderQuality(value as "standard" | "studio" | "ultra")} options={imageSelectOptions.renderQuality} ariaLabel="Quality" />
-          <ToolSelect icon="solar:gallery-minimalistic-bold" value={String(imageCount)} onValueChange={(value) => setImageCount(Number(value) as 1 | 2 | 4)} options={imageSelectOptions.imageCount} ariaLabel="Image count" />
-          <ToolSelect icon="solar:camera-bold" value={cameraPreset} onValueChange={(value) => setCameraPreset(value as "auto" | "product" | "portrait" | "editorial")} options={imageSelectOptions.cameraPreset} ariaLabel="Camera preset" />
-        </div>
-
         {/* Textarea */}
         <textarea
           placeholder={referenceImage ? "Describe how to edit this image…" : "Describe your image… (or drag & drop to edit)"}
@@ -397,15 +389,21 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
 
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
-          <div className="flex items-center gap-1.5">
-            <label className="settings-pill cursor-pointer" title="Upload image">
+          <div className="tool-input-row">
+            <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" />
+            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
+            <ToolSelect icon="solar:medal-ribbon-star-bold" value={renderQuality} onValueChange={(value) => setRenderQuality(value as "standard" | "studio" | "ultra")} options={imageSelectOptions.renderQuality} ariaLabel="Quality" />
+            <ToolSelect icon="solar:gallery-minimalistic-bold" value={String(imageCount)} onValueChange={(value) => setImageCount(Number(value) as 1 | 2 | 4)} options={imageSelectOptions.imageCount} ariaLabel="Image count" />
+            <ToolSelect icon="solar:camera-bold" value={cameraPreset} onValueChange={(value) => setCameraPreset(value as "auto" | "product" | "portrait" | "editorial")} options={imageSelectOptions.cameraPreset} ariaLabel="Camera preset" />
+            <div className="w-px h-4 bg-border mx-0.5" />
+            <label className="tool-upload-btn cursor-pointer" title="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Upload</span>
+              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+              <span>Upload</span>
             </label>
-            <button onClick={() => setShowAssetPicker(true)} className="settings-pill" title="My Assets">
-              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Assets</span>
+            <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn" title="My Assets">
+              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5" />
+              <span>Assets</span>
             </button>
           </div>
 

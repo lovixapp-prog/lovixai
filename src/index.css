@@ -1176,7 +1176,7 @@ html.light {
   ============================================ */
 
   .settings-pill {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-150 select-none;
+    @apply inline-flex h-7 shrink-0 items-center gap-1 px-2 rounded-lg text-[11px] font-semibold cursor-pointer transition-all duration-150 select-none;
     border: 1px solid hsl(var(--border) / 0.7);
     background: hsl(var(--muted) / 0.5);
     color: hsl(var(--muted-foreground));
@@ -1196,7 +1196,7 @@ html.light {
   }
 
   .tool-select-control {
-    @apply inline-flex h-9 w-auto min-w-[112px] max-w-[168px] items-center justify-start gap-1.5 rounded-xl px-2.5 py-1 text-xs font-semibold transition-all duration-150;
+    @apply inline-flex h-6 w-auto min-w-[62px] max-w-[92px] shrink-0 items-center justify-start gap-1 rounded-md px-1.5 py-0 text-[10px] font-semibold transition-all duration-150;
     border: 1px solid hsl(var(--border) / 0.75);
     background: hsl(var(--muted) / 0.48);
     color: hsl(var(--foreground));
@@ -1214,11 +1214,42 @@ html.light {
   }
 
   .tool-select-control > span {
-    @apply min-w-0 truncate text-left;
+    @apply min-w-0 truncate text-left leading-none;
   }
 
   .tool-select-menu {
     @apply rounded-xl border-border bg-popover/95 p-1 shadow-xl backdrop-blur-xl;
+  }
+
+  .tool-input-row {
+    @apply flex min-w-0 flex-1 flex-wrap items-center gap-1;
+  }
+
+  .tool-upload-btn,
+  .tool-assets-btn {
+    @apply inline-flex h-6 shrink-0 items-center gap-1 rounded-md border px-1.5 text-[10px] font-bold transition-all duration-150;
+  }
+
+  .tool-upload-btn {
+    color: hsl(var(--primary));
+    border-color: hsl(var(--primary) / 0.38);
+    background: hsl(var(--primary) / 0.13);
+  }
+
+  .tool-upload-btn:hover {
+    background: hsl(var(--primary) / 0.2);
+    border-color: hsl(var(--primary) / 0.58);
+  }
+
+  .tool-assets-btn {
+    color: hsl(var(--violet));
+    border-color: hsl(var(--violet) / 0.38);
+    background: hsl(var(--violet) / 0.13);
+  }
+
+  .tool-assets-btn:hover {
+    background: hsl(var(--violet) / 0.2);
+    border-color: hsl(var(--violet) / 0.58);
   }
 
   .format-glyph {
@@ -1230,22 +1261,22 @@ html.light {
   }
 
   .format-glyph-square {
-    width: 15px;
-    height: 15px;
+    width: 10px;
+    height: 10px;
   }
 
   .format-glyph-wide {
-    width: 20px;
-    height: 12px;
+    width: 14px;
+    height: 8px;
   }
 
   .format-glyph-vertical {
-    width: 12px;
-    height: 20px;
+    width: 8px;
+    height: 14px;
   }
 
   .quality-switch {
-    @apply inline-flex h-9 items-center gap-2 rounded-xl border px-2.5 text-muted-foreground transition-all duration-200;
+    @apply inline-flex h-6 shrink-0 items-center gap-1 rounded-md border px-1.5 text-[10px] text-muted-foreground transition-all duration-200;
     border-color: hsl(var(--border) / 0.72);
     background: hsl(var(--muted) / 0.48);
   }
@@ -1257,7 +1288,7 @@ html.light {
   }
 
   .quality-switch-track {
-    @apply relative block h-5 w-9 rounded-full transition-colors duration-200;
+    @apply relative block h-3.5 w-6 rounded-full transition-colors duration-200;
     background: hsl(var(--muted-foreground) / 0.24);
   }
 
@@ -1266,22 +1297,21 @@ html.light {
   }
 
   .quality-switch-thumb {
-    @apply absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200;
+    @apply absolute left-0.5 top-0.5 h-2.5 w-2.5 rounded-full bg-white shadow transition-transform duration-200;
   }
 
   .quality-switch-on .quality-switch-thumb {
-    transform: translateX(1rem);
+    transform: translateX(0.65rem);
   }
 
   @media (max-width: 640px) {
     .tool-select-control {
-      flex: 1 1 calc(50% - 0.25rem);
-      min-width: min(138px, calc(50vw - 1.25rem));
-      max-width: none;
+      min-width: 58px;
+      max-width: 84px;
     }
 
     .settings-pill {
-      @apply h-9 rounded-xl px-2.5;
+      @apply h-7 rounded-lg px-2;
     }
   }
 
