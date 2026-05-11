@@ -30,6 +30,7 @@ import AIInfluencer from '@/components/dashboard/AIInfluencer';
 import UGCVideoGenerator from '@/components/dashboard/UGCVideoGenerator';
 import { subscriptionPlans } from './Pricing';
 import styleArtistic from '@/assets/style-artistic.jpg';
+import aiInfluencerPink from '@/assets/ai-influencer-pink.jpg';
 
 type ActiveTab = 'home' | 'chat' | 'video' | 'image' | 'influencer' | 'motion' | 'ugc' | 'connectors' | 'creations' | 'files' | 'credits';
 
@@ -81,7 +82,7 @@ const TOOL_ITEMS = [
     color: 'text-pink-400',
     accent: 'from-pink-500/25 to-primary/10',
     navAccent: 'from-pink-500/35 via-rose-500/12 to-primary/10',
-    preview: '/videos/showcase-video.mp4',
+    preview: aiInfluencerPink,
     description: 'Build AI personas, generate poses, and keep content visually consistent.',
     exampleTitle: 'Reusable creator persona',
     examplePrompt: 'Build a fashion creator with editorial look, consistent face, pose library, and branded social content direction.',
