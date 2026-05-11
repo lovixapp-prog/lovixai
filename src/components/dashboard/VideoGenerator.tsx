@@ -347,9 +347,22 @@ const VideoGenerator = ({
                 </button>
               ))}
             </div>
+            <button
+              onClick={handleGenerate}
+              disabled={!prompt.trim() || isGenerating || isResizing || !canGenerate}
+              className="btn-generate tool-generate-inline"
+            >
+              {isResizing ? (
+                <><AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /><span>Preparing</span></>
+              ) : isGenerating ? (
+                <><AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /><span>Generating</span></>
+              ) : (
+                <><AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className="w-4 h-4" /><span>Generate</span></>
+              )}
+            </button>
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="hidden">
             {/* Generate CTA */}
             <button
               onClick={handleGenerate}

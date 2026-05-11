@@ -416,9 +416,22 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
                 </button>
               ))}
             </div>
+            <button
+              onClick={canGenerate ? handleGenerate : onUpgradeClick}
+              disabled={isGenerating || (canGenerate && !prompt.trim())}
+              className="btn-generate tool-generate-inline"
+            >
+              {isGenerating ? (
+                <><AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /><span>{referenceImage ? "Editing" : "Generating"}</span></>
+              ) : !canGenerate ? (
+                <><AnimatedIconify icon="solar:crown-star-bold-duotone" className="w-4 h-4" /><span>Upgrade</span></>
+              ) : (
+                <><AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className="w-4 h-4" /><span>{referenceImage ? "Edit" : "Generate"}</span></>
+              )}
+            </button>
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="hidden">
             <button
               onClick={canGenerate ? handleGenerate : onUpgradeClick}
               disabled={isGenerating || (canGenerate && !prompt.trim())}
