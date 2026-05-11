@@ -124,9 +124,9 @@ const MAIN_NAV_ITEMS = [
 ];
 
 const WORKSPACE_ITEMS = [
-  { icon: 'solar:plug-circle-bold-duotone', label: 'Connectors', id: 'connectors' as ActiveTab },
-  { icon: 'solar:file-text-bold-duotone', label: 'Files', id: 'files' as ActiveTab },
-  { icon: 'solar:bolt-circle-bold-duotone', label: 'Credits', id: 'credits' as ActiveTab },
+  { icon: 'solar:plug-circle-bold-duotone', label: 'Connectors', id: 'connectors' as ActiveTab, color: 'text-sky-400', accent: 'from-sky-500/25 to-cyan-500/10', ring: 'border-sky-400/25' },
+  { icon: 'solar:file-text-bold-duotone', label: 'Files', id: 'files' as ActiveTab, color: 'text-emerald-400', accent: 'from-emerald-500/25 to-lime-500/10', ring: 'border-emerald-400/25' },
+  { icon: 'solar:bolt-circle-bold-duotone', label: 'Credits', id: 'credits' as ActiveTab, color: 'text-amber-400', accent: 'from-amber-500/25 to-orange-500/10', ring: 'border-amber-400/25' },
 ];
 
 const isToolTab = (tab: ActiveTab) => TOOL_ITEMS.some(item => item.id === tab);
@@ -290,10 +290,10 @@ const ChatDashboard = () => {
                   onClick={() => openMainNav(item.id)}
                   title={item.label}
                   className={`w-full flex items-center justify-center p-2.5 rounded-xl transition-all duration-150 ${
-                    isActive ? 'bg-sidebar-accent text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                    isActive ? 'bg-primary/15 text-primary shadow-[0_0_16px_hsl(var(--primary)/0.18)]' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
                   }`}
                 >
-                  <AnimatedIconify icon={item.icon} className="w-4 h-4" />
+                  <AnimatedIconify icon={item.icon} className={`w-4 h-4 ${item.label === 'Tools' ? 'text-violet-400' : item.label === 'Credits' ? 'text-amber-400' : ''}`} />
                 </button>
               );
             })}
@@ -335,11 +335,11 @@ const ChatDashboard = () => {
                       onClick={() => handleTabChange(item.id)}
                       className={`relative min-h-[58px] rounded-xl border px-2.5 py-2 text-left transition-all duration-150 ${
                         isActive
-                          ? 'border-primary/35 bg-primary/10 text-foreground shadow-[0_0_18px_hsl(var(--primary)/0.15)]'
-                          : 'border-sidebar-border/70 bg-sidebar-accent/20 text-muted-foreground hover:border-primary/20 hover:bg-sidebar-accent/50 hover:text-foreground'
+                          ? `border-primary/35 bg-gradient-to-br ${item.accent} text-foreground shadow-[0_0_20px_hsl(var(--primary)/0.18)]`
+                          : `border-sidebar-border/70 bg-gradient-to-br ${item.accent} text-foreground/85 hover:border-primary/25 hover:shadow-[0_0_18px_hsl(var(--primary)/0.12)]`
                       }`}
                     >
-                      <AnimatedIconify icon={item.icon} className={`w-4 h-4 mb-1.5 ${isActive ? item.color : ''}`} />
+                      <AnimatedIconify icon={item.icon} className={`w-4 h-4 mb-1.5 ${item.color}`} />
                       <span className="block text-[11px] font-semibold leading-tight">{item.label}</span>
                       {item.badge && (
                         <span className="absolute right-1.5 top-1.5 text-[8px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge}</span>
@@ -360,10 +360,10 @@ const ChatDashboard = () => {
                       key={item.id}
                       onClick={() => handleTabChange(item.id)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-xs font-medium ${
-                        isActive ? 'bg-sidebar-accent text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                        isActive ? `border ${item.ring} bg-gradient-to-r ${item.accent} text-foreground` : `border border-transparent bg-gradient-to-r ${item.accent} text-foreground/80 hover:border-primary/20 hover:text-foreground`
                       }`}
                     >
-                      <AnimatedIconify icon={item.icon} className="w-4 h-4" />
+                      <AnimatedIconify icon={item.icon} className={`w-4 h-4 ${item.color}`} />
                       <span className="flex-1 text-left">{item.label}</span>
                       {item.id === 'credits' && (
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
@@ -895,11 +895,15 @@ const ChatDashboard = () => {
             <span className="text-[10px] font-medium">Chat</span>
           </button>
           <button onClick={() => setMobileMenu(mobileMenu === 'create' ? null : 'create')} className={`mobile-nav-item ${isToolTab(activeTab) || mobileMenu === 'create' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-            <AnimatedIconify icon="solar:widget-5-bold-duotone" className={`w-5 h-5 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'scale-110 text-primary' : ''}`} />
+            <span className={`rounded-xl p-1 transition-all duration-200 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'bg-violet-500/20 shadow-[0_0_14px_rgba(168,85,247,0.28)]' : 'bg-violet-500/10'}`}>
+              <AnimatedIconify icon="solar:widget-5-bold-duotone" className={`w-4 h-4 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'scale-110 text-violet-400' : 'text-violet-300'}`} />
+            </span>
             <span className="text-[10px] font-medium">Create</span>
           </button>
           <button onClick={() => setMobileMenu(mobileMenu === 'workspace' ? null : 'workspace')} className={`mobile-nav-item ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-            <AnimatedIconify icon="solar:case-round-minimalistic-bold-duotone" className={`w-5 h-5 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'scale-110 text-primary' : ''}`} />
+            <span className={`rounded-xl p-1 transition-all duration-200 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'bg-amber-500/20 shadow-[0_0_14px_rgba(245,158,11,0.26)]' : 'bg-amber-500/10'}`}>
+              <AnimatedIconify icon="solar:case-round-minimalistic-bold-duotone" className={`w-4 h-4 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'scale-110 text-amber-400' : 'text-amber-300'}`} />
+            </span>
             <span className="text-[10px] font-medium">Workspace</span>
           </button>
         </div>
@@ -915,14 +919,16 @@ const ChatDashboard = () => {
               <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
             </div>
             <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2' : 'space-y-1'}`}>
-              {(mobileMenu === 'create' ? TOOL_ITEMS : [{ icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab }, ...WORKSPACE_ITEMS]).map(item => {
+              {(mobileMenu === 'create' ? TOOL_ITEMS : [{ icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab, color: 'text-fuchsia-400', accent: 'from-fuchsia-500/25 to-pink-500/10', ring: 'border-fuchsia-400/25' }, ...WORKSPACE_ITEMS]).map(item => {
                 const isActive = activeTab === item.id;
                 return (
                   <button key={item.id} onClick={() => handleTabChange(item.id)}
                     className={`${mobileMenu === 'create' ? 'min-h-[72px] flex-col items-start justify-between' : 'w-full'} flex gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
-                      isActive ? 'bg-sidebar-accent text-primary' : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
+                      isActive
+                        ? `border ${'ring' in item ? item.ring : 'border-primary/25'} bg-gradient-to-br ${'accent' in item ? item.accent : ''} text-foreground shadow-[0_0_18px_hsl(var(--primary)/0.14)]`
+                        : `border border-sidebar-border/70 bg-gradient-to-br ${'accent' in item ? item.accent : ''} text-sidebar-foreground hover:border-primary/20 hover:shadow-[0_0_16px_hsl(var(--primary)/0.1)]`
                     }`}>
-                    <AnimatedIconify icon={item.icon} className={`w-5 h-5 ${'color' in item && isActive ? item.color : ''}`} />
+                    <AnimatedIconify icon={item.icon} className={`w-5 h-5 ${'color' in item ? item.color : ''}`} />
                     <span>{item.label}</span>
                     {'badge' in item && item.badge && <span className="ml-auto text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
                   </button>
