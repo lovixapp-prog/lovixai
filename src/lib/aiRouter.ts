@@ -325,56 +325,101 @@ function extractAudience(text: string): string {
   return 'Cold social audience that needs a sharp hook, fast proof, and a clear next action';
 }
 
+function extractAudienceIt(text: string): string {
+  const lower = text.toLowerCase();
+  if (lower.includes('tiktok') || lower.includes('reel') || lower.includes('short')) return 'Pubblico social-first su TikTok, Reels e Shorts';
+  if (lower.includes('b2b') || lower.includes('saas')) return 'Buyer B2B che hanno bisogno di un motivo rapido e credibile per fidarsi';
+  if (lower.includes('skincare') || lower.includes('beauty')) return 'Clienti beauty interessati a prova, trasformazione e autenticità';
+  if (lower.includes('fitness')) return 'Clienti fitness motivati da risultati visibili e demo pratiche';
+  return 'Pubblico freddo sui social che ha bisogno di hook forte, prova rapida e una CTA chiara';
+}
+
 function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<string, unknown>): MarketingPlan {
   const lower = text.toLowerCase();
+  const lang = detectLang(text);
+  const isIt = lang === 'it';
   const isUgc = intent === 'ugc' || lower.includes('ugc') || lower.includes('prodotto') || lower.includes('product');
   const isVertical = String(settings.aspectRatio ?? '').includes('9:16') || lower.includes('tiktok') || lower.includes('reel');
   const duration = isUgc
-    ? (lower.includes('lungo') || lower.includes('long') ? '45-60s UGC concept, split into punchy scenes' : '20-30s UGC ad')
-    : (lower.includes('lungo') || lower.includes('long') ? '30-45s cinematic concept' : `${settings.seconds ?? 8}s AI video`);
+    ? (lower.includes('lungo') || lower.includes('long')
+        ? (isIt ? 'Concept UGC 45-60s, diviso in scene brevi e forti' : '45-60s UGC concept, split into punchy scenes')
+        : (isIt ? 'UGC ad 20-30s' : '20-30s UGC ad'))
+    : (lower.includes('lungo') || lower.includes('long')
+        ? (isIt ? 'Concept cinematografico 30-45s' : '30-45s cinematic concept')
+        : `${settings.seconds ?? 8}s ${isIt ? 'video AI' : 'AI video'}`);
 
-  const title = isUgc ? 'UGC Marketing Action Plan' : intent === 'motion' ? 'Motion Content Action Plan' : 'Creative Video Action Plan';
-  const format = isVertical ? '9:16 vertical social format' : `${settings.aspectRatio ?? '16:9'} campaign format`;
+  const title = isUgc
+    ? (isIt ? 'Piano d\'azione marketing UGC' : 'UGC Marketing Action Plan')
+    : intent === 'motion'
+      ? (isIt ? 'Piano d\'azione contenuto motion' : 'Motion Content Action Plan')
+      : (isIt ? 'Piano d\'azione video creativo' : 'Creative Video Action Plan');
+  const format = isVertical
+    ? (isIt ? 'Formato social verticale 9:16' : '9:16 vertical social format')
+    : `${settings.aspectRatio ?? '16:9'} ${isIt ? 'formato campagna' : 'campaign format'}`;
   const hook = isUgc
-    ? 'Open with a pattern interrupt: a creator shows the problem before naming the product.'
-    : 'Open with one impossible or visually surprising frame, then reveal the concept in motion.';
+    ? (isIt ? 'Apri con un pattern interrupt: il creator mostra il problema prima di nominare il prodotto.' : 'Open with a pattern interrupt: a creator shows the problem before naming the product.')
+    : (isIt ? 'Apri con un frame impossibile o sorprendente, poi rivela il concetto in movimento.' : 'Open with one impossible or visually surprising frame, then reveal the concept in motion.');
 
   const scriptOutline = isUgc
-    ? [
+    ? (isIt ? [
+        '0-3s: hook problema/confessione per fermare lo scroll',
+        '3-10s: il prodotto entra naturalmente nella routine del creator',
+        '10-22s: prova, demo, trasformazione o confronto',
+        '22-30s: CTA chiara con un beneficio ripetuto in parole semplici',
+      ] : [
         '0-3s: scroll-stopping problem or confession hook',
         '3-10s: product appears naturally inside the creator routine',
         '10-22s: proof, demo, transformation, or comparison',
         '22-30s: clear CTA with one benefit repeated in simple words',
-      ]
-    : [
+      ])
+    : (isIt ? [
+        'Apertura: shock visivo o reveal cinematografico',
+        'Sviluppo: 2-3 momenti collegati che spiegano l’idea senza sovraccaricare',
+        'Picco: trasformazione visual/motion più memorabile',
+        'Chiusura: momento logo/prodotto/CTA con spazio negativo pulito',
+      ] : [
         'Opening: visual shock or cinematic reveal',
         'Build: 2-3 connected beats that explain the idea without overloading the viewer',
         'Peak: the most memorable motion/visual transformation',
         'Close: logo/product/CTA moment with clean negative space',
-      ];
+      ]);
 
   const shotList = isUgc
-    ? [
+    ? (isIt ? [
+        { title: 'Hook', detail: 'Inquadratura creator ravvicinata, handheld, contatto visivo diretto e caption veloci.' },
+        { title: 'Prova prodotto', detail: 'Mostra il prodotto in uso con un dettaglio tattile che il pubblico capisce subito.' },
+        { title: 'Risultato', detail: 'Mostra after-state, social proof o payoff emotivo in un visual pulito.' },
+        { title: 'Frame CTA', detail: 'Chiudi con hero shot del prodotto e una frase d’azione breve.' },
+      ] : [
         { title: 'Hook Shot', detail: 'Close, handheld creator framing with direct eye contact and fast caption energy.' },
         { title: 'Product Proof', detail: 'Show the product in use, with one tactile detail viewers can instantly understand.' },
         { title: 'Outcome Scene', detail: 'Show the after-state, social proof, or emotional payoff in one clean visual.' },
         { title: 'CTA Frame', detail: 'End with a simple product hero shot and a short action line.' },
-      ]
-    : [
+      ])
+    : (isIt ? [
+        { title: 'Frame iniziale', detail: 'Definisci mondo, soggetto, luce e mood nel primo secondo.' },
+        { title: 'Beat motion', detail: 'Usa movimento camera o trasformazione del soggetto per dare vita all’idea.' },
+        { title: 'Momento signature', detail: 'Crea un beat visivo strano, memorabile e condivisibile.' },
+        { title: 'Frame finale', detail: 'Chiudi con una composizione hero pulita pronta per i social.' },
+      ] : [
         { title: 'Establishing Frame', detail: 'Define world, subject, lighting, and mood in the first second.' },
         { title: 'Motion Beat', detail: 'Use camera motion or subject transformation to make the idea feel alive.' },
         { title: 'Signature Moment', detail: 'Create one strange, memorable, shareable visual beat.' },
         { title: 'Final Frame', detail: 'Resolve with a clean hero composition ready for social posting.' },
-      ];
+      ]);
 
   const finalPrompt = [
     text.trim(),
-    `Format: ${format}.`,
-    `Duration: ${duration}.`,
-    `Creative direction: ${isUgc ? 'authentic creator-led UGC ad, high-retention pacing, natural product proof' : 'cinematic marketing video, premium lighting, strong visual continuity'}.`,
-    `Hook: ${hook}`,
-    `Shot plan: ${shotList.map(s => `${s.title} - ${s.detail}`).join(' | ')}`,
-    'Keep pacing clear, avoid clutter, make the final frame usable as a campaign asset.',
+    `${isIt ? 'Formato' : 'Format'}: ${format}.`,
+    `${isIt ? 'Durata' : 'Duration'}: ${duration}.`,
+    `${isIt ? 'Direzione creativa' : 'Creative direction'}: ${isUgc
+      ? (isIt ? 'UGC ad autentico guidato da creator, ritmo ad alta retention, prova prodotto naturale' : 'authentic creator-led UGC ad, high-retention pacing, natural product proof')
+      : (isIt ? 'video marketing cinematografico, luce premium, forte continuità visiva' : 'cinematic marketing video, premium lighting, strong visual continuity')}.`,
+    `${isIt ? 'Hook' : 'Hook'}: ${hook}`,
+    `${isIt ? 'Piano scene' : 'Shot plan'}: ${shotList.map(s => `${s.title} - ${s.detail}`).join(' | ')}`,
+    isIt
+      ? 'Mantieni ritmo chiaro, evita confusione visiva e rendi il frame finale usabile come asset di campagna.'
+      : 'Keep pacing clear, avoid clutter, make the final frame usable as a campaign asset.',
   ].join(' ');
 
   const ugcBrief = isUgc ? {
@@ -386,36 +431,36 @@ function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<str
     aspectRatio: isVertical ? '9:16' as const : '16:9' as const,
     durationSeconds: lower.includes('60') || lower.includes('lungo') || lower.includes('long') ? '60' as const : lower.includes('45') ? '45' as const : lower.includes('15') ? '15' as const : '30' as const,
     visualStyle: lower.includes('cinematic') || lower.includes('cinematograf') ? 'cinematic' as const : lower.includes('premium') || lower.includes('luxury') ? 'premium' as const : lower.includes('social') ? 'social' as const : 'authentic' as const,
-    language: detectLang(text) === 'it' ? 'Italiano' : 'English',
+    language: isIt ? 'Italiano' : 'English',
     callToAction: lower.includes('download') || lower.includes('scarica') ? 'Download now' : lower.includes('demo') ? 'Book a demo' : 'Shop now',
   } : undefined;
 
   return {
     title,
     summary: isUgc
-      ? 'I will turn this into a structured UGC concept with hook, proof, scenes, CTA, and generation-ready direction.'
-      : 'I will turn this complex idea into a controlled creative sequence before generating anything.',
+      ? (isIt ? 'Trasformo la richiesta in un concept UGC strutturato con hook, prova, scene, CTA e direzione pronta per la generazione.' : 'I will turn this into a structured UGC concept with hook, proof, scenes, CTA, and generation-ready direction.')
+      : (isIt ? 'Trasformo questa idea complessa in una sequenza creativa controllata prima di generare.' : 'I will turn this complex idea into a controlled creative sequence before generating anything.'),
     strategy: isUgc
-      ? 'Marketing angle: problem -> product proof -> believable transformation -> direct CTA.'
-      : 'Creative angle: one strong visual idea, controlled pacing, and a final frame that feels intentional.',
-    deliverable: isUgc ? 'UGC ad concept + generation prompt' : 'AI video concept + generation prompt',
+      ? (isIt ? 'Angolo marketing: problema -> prova prodotto -> trasformazione credibile -> CTA diretta.' : 'Marketing angle: problem -> product proof -> believable transformation -> direct CTA.')
+      : (isIt ? 'Angolo creativo: una forte idea visiva, ritmo controllato e frame finale intenzionale.' : 'Creative angle: one strong visual idea, controlled pacing, and a final frame that feels intentional.'),
+    deliverable: isUgc ? (isIt ? 'Concept UGC ad + prompt di generazione' : 'UGC ad concept + generation prompt') : (isIt ? 'Concept video AI + prompt di generazione' : 'AI video concept + generation prompt'),
     format,
     duration,
-    audience: extractAudience(text),
+    audience: isIt ? extractAudienceIt(text) : extractAudience(text),
     hook,
     scriptOutline,
     shotList,
     productionNotes: [
-      'Keep scenes readable on mobile with large subjects and simple backgrounds.',
-      'Use captions or visual beats every 2-3 seconds for retention.',
-      'Preserve one consistent visual style from first frame to final CTA.',
+      isIt ? 'Mantieni le scene leggibili su mobile con soggetti grandi e sfondi semplici.' : 'Keep scenes readable on mobile with large subjects and simple backgrounds.',
+      isIt ? 'Usa caption o beat visivi ogni 2-3 secondi per la retention.' : 'Use captions or visual beats every 2-3 seconds for retention.',
+      isIt ? 'Preserva uno stile visivo coerente dal primo frame alla CTA finale.' : 'Preserve one consistent visual style from first frame to final CTA.',
     ],
     finalPrompt,
     riskNotes: [
-      'If product details are missing, I will ask for them before UGC generation.',
-      'Very long concepts should be generated as multiple shorter scenes for better quality.',
+      isIt ? 'Se mancano dettagli prodotto, li chiederò prima della generazione UGC.' : 'If product details are missing, I will ask for them before UGC generation.',
+      isIt ? 'I concept molto lunghi funzionano meglio come più scene brevi per qualità superiore.' : 'Very long concepts should be generated as multiple shorter scenes for better quality.',
     ],
-    estimatedCredits: isUgc ? '~225-450 credits depending on duration' : '~5-10 credits depending on duration and quality',
+    estimatedCredits: isUgc ? (isIt ? '~225-450 crediti in base alla durata' : '~225-450 credits depending on duration') : (isIt ? '~5-10 crediti in base a durata e qualità' : '~5-10 credits depending on duration and quality'),
     ugcBrief,
   };
 }
