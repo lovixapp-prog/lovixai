@@ -20,6 +20,7 @@ import ToolCreationsGrid from "./ToolCreationsGrid";
 import AssetPicker from "./AssetPicker";
 import DropZone from "./DropZone";
 import AnimatedIconify from "@/components/ui/animated-iconify";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface MotionControlProps {
   onCreditsUpdate: () => void;
@@ -40,6 +41,45 @@ interface ActiveGeneration {
 }
 
 type MotionMode = "motion-transfer" | "lip-sync";
+
+const motionSelectOptions = {
+  quality: [
+    { value: "standard", label: "Standard" },
+    { value: "pro", label: "Pro" },
+  ],
+  orientation: [
+    { value: "video", label: "Follows video" },
+    { value: "image", label: "Follows image" },
+  ],
+};
+
+const ToolSelect = ({
+  icon,
+  value,
+  onValueChange,
+  options,
+  ariaLabel,
+}: {
+  icon: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  options: { value: string; label: string }[];
+  ariaLabel: string;
+}) => (
+  <Select value={value} onValueChange={onValueChange}>
+    <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
+      <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent className="tool-select-menu">
+      {options.map((option) => (
+        <SelectItem key={option.value} value={option.value}>
+          {option.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+);
 
 const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription = false, onUpgradeClick }: MotionControlProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -247,11 +287,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
             <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors text-xs font-medium">
               <input type="file" accept={accept.join(',')} onChange={(e) => e.target.files?.[0] && onDrop(e.target.files[0])} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
               <span className="hidden sm:inline">Upload</span>
             </label>
             <button onClick={() => onPickerOpen()} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs font-medium">
-              <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
+              <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
               <span className="hidden sm:inline">Assets</span>
             </button>
           </div>
@@ -266,11 +306,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       <div className="flex items-center justify-center gap-2">
         <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
           <input type="file" accept="video/*,.mp4,.webm" onChange={(e) => e.target.files?.[0] && handleVideoFileDrop(e.target.files[0])} className="hidden" />
-          <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+          <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
           Change
         </label>
         <button onClick={onPickerOpen} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
-          <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
+          <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
           Assets
         </button>
       </div>
@@ -283,11 +323,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       <div className="flex items-center justify-center gap-2">
         <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
           <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImageFileDrop(e.target.files[0])} className="hidden" />
-          <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+          <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
           Change
         </label>
         <button onClick={onPickerOpen} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
-          <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
+          <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
           Assets
         </button>
       </div>
@@ -377,30 +417,15 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
             />
           </div>
 
-          {/* Orientation */}
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Character orientation</label>
-            <div className="grid grid-cols-2 gap-2">
-              {(["video", "image"] as const).map((o) => (
-                <button
-                  key={o}
-                  onClick={() => setCharacterOrientation(o)}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    characterOrientation === o
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-card hover:border-primary/40 text-muted-foreground"
-                  }`}
-                >
-                  <p className="flex items-center gap-1.5 font-medium text-sm">
-                    <AnimatedIconify icon={o === "video" ? "solar:videocamera-record-bold-duotone" : "solar:gallery-wide-bold-duotone"} className={`w-4 h-4 ${o === "video" ? "text-violet-400" : "text-cyan-400"}`} />
-                    {o === "video" ? "Follows Video" : "Follows Image"}
-                  </p>
-                  <p className="text-[11px] mt-0.5 opacity-70">
-                    {o === "video" ? "Up to 30s — complex motions" : "Up to 10s — camera following"}
-                  </p>
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Character orientation</span>
+            <ToolSelect
+              icon="solar:route-bold"
+              value={characterOrientation}
+              onValueChange={(value) => setCharacterOrientation(value as "video" | "image")}
+              options={motionSelectOptions.orientation}
+              ariaLabel="Character orientation"
+            />
           </div>
         </TabsContent>
 
@@ -447,11 +472,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
                       <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
-                        <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+                        <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
                         <span className="hidden sm:inline">Change</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
-                        <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
+                        <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
                         <span className="hidden sm:inline">Assets</span>
                       </button>
                     </div>
@@ -468,11 +493,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
                       <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors text-xs font-medium">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
-                        <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+                        <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
                         <span className="hidden sm:inline">Upload</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors text-xs">
-                        <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
+                        <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
                         <span className="hidden sm:inline">Assets</span>
                       </button>
                     </div>
@@ -487,26 +512,13 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       {/* Toolbar */}
       <div className="rounded-2xl border border-border bg-card p-4 space-y-4">
         <div className="flex flex-wrap items-center gap-3">
-          {/* Quality */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground font-medium">Quality:</span>
-            <div className="flex items-center gap-0.5 bg-muted rounded-lg p-0.5">
-              {(["standard", "pro"] as const).map((q) => (
-                <button
-                  key={q}
-                  onClick={() => setQuality(q)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-colors ${
-                    quality === q ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <span className="inline-flex items-center gap-1">
-                    <AnimatedIconify icon={q === "pro" ? "solar:crown-star-bold-duotone" : "solar:shield-star-bold-duotone"} className={`w-3.5 h-3.5 ${q === "pro" ? "text-amber-300" : "text-cyan-300"}`} />
-                    {q === "pro" ? "Pro ✦" : "Standard"}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
+          <ToolSelect
+            icon="solar:shield-star-bold"
+            value={quality}
+            onValueChange={(value) => setQuality(value as "standard" | "pro")}
+            options={motionSelectOptions.quality}
+            ariaLabel="Motion quality"
+          />
 
           {/* Keep sound — only motion-transfer */}
           {motionMode === "motion-transfer" && (
@@ -515,7 +527,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
               <div className={`w-9 h-5 rounded-full transition-colors ${keepOriginalSound ? "bg-primary" : "bg-muted"}`}>
                 <div className={`w-4 h-4 rounded-full bg-white shadow transform transition-transform ${keepOriginalSound ? "translate-x-4" : "translate-x-0.5"} mt-0.5`} />
               </div>
-              <AnimatedIconify icon="solar:volume-loud-bold-duotone" className="w-3.5 h-3.5 text-emerald-400" />
+              <AnimatedIconify icon="solar:volume-loud-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">Keep sound</span>
             </label>
           )}
@@ -526,7 +538,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
               onClick={() => setShowAdvanced(!showAdvanced)}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs transition-colors ${showAdvanced ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"}`}
             >
-              <AnimatedIconify icon="solar:settings-minimalistic-bold-duotone" className="w-3.5 h-3.5 text-primary" />
+              <AnimatedIconify icon="solar:settings-minimalistic-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
               Advanced
             </button>
           )}

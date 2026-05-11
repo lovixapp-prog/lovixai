@@ -1169,6 +1169,32 @@ html.light {
     box-shadow: 0 0 8px hsl(var(--primary) / 0.2);
   }
 
+  .tool-select-control {
+    @apply inline-flex h-8 w-auto min-w-[104px] max-w-[150px] items-center justify-start gap-1.5 rounded-xl px-2.5 py-1 text-xs font-semibold transition-all duration-150;
+    border: 1px solid hsl(var(--border) / 0.75);
+    background: hsl(var(--muted) / 0.48);
+    color: hsl(var(--foreground));
+    box-shadow: none;
+  }
+
+  .tool-select-control:hover {
+    border-color: hsl(var(--primary) / 0.35);
+    background: hsl(var(--muted) / 0.72);
+  }
+
+  .tool-select-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.18);
+  }
+
+  .tool-select-control > span {
+    @apply min-w-0 truncate text-left;
+  }
+
+  .tool-select-menu {
+    @apply rounded-xl border-border bg-popover/95 p-1 shadow-xl backdrop-blur-xl;
+  }
+
   /* ============================================
      GENERATE BUTTON — magic CTA
   ============================================ */

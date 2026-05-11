@@ -23,6 +23,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import AnimatedIconify from "@/components/ui/animated-iconify";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ImageGeneratorProps {
   onCreditsUpdate: () => void;
@@ -43,12 +44,66 @@ interface ActiveGeneration {
 }
 
 const styles = [
-  { id: "none", label: "Default", description: "Natural AI interpretation", icon: "solar:stars-bold-duotone", color: "text-primary" },
-  { id: "photorealistic", label: "Photo", description: "Ultra realistic photography", icon: "solar:camera-bold-duotone", color: "text-cyan-400" },
-  { id: "artistic", label: "Artistic", description: "Painterly and expressive", icon: "solar:palette-bold-duotone", color: "text-pink-400" },
-  { id: "anime", label: "Anime", description: "Japanese animation style", icon: "solar:bolt-bold-duotone", color: "text-amber-400" },
-  { id: "3d", label: "3D", description: "Cinematic CGI quality", icon: "solar:box-bold-duotone", color: "text-violet-400" },
+  { id: "none", label: "Default", description: "Natural AI interpretation" },
+  { id: "photorealistic", label: "Photo", description: "Ultra realistic photography" },
+  { id: "artistic", label: "Artistic", description: "Painterly and expressive" },
+  { id: "anime", label: "Anime", description: "Japanese animation style" },
+  { id: "3d", label: "3D", description: "Cinematic CGI quality" },
 ];
+
+const imageSelectOptions = {
+  styles: styles.map(({ id, label }) => ({ value: id, label })),
+  aspectRatio: [
+    { value: "1:1", label: "Square" },
+    { value: "3:4", label: "Portrait" },
+    { value: "9:16", label: "Story" },
+    { value: "16:9", label: "Wide" },
+  ],
+  renderQuality: [
+    { value: "standard", label: "Standard" },
+    { value: "studio", label: "Studio" },
+    { value: "ultra", label: "Ultra" },
+  ],
+  imageCount: [
+    { value: "1", label: "1 image" },
+    { value: "2", label: "2 images" },
+    { value: "4", label: "4 images" },
+  ],
+  cameraPreset: [
+    { value: "auto", label: "Auto lens" },
+    { value: "product", label: "Product" },
+    { value: "portrait", label: "Portrait" },
+    { value: "editorial", label: "Editorial" },
+  ],
+};
+
+const ToolSelect = ({
+  icon,
+  value,
+  onValueChange,
+  options,
+  ariaLabel,
+}: {
+  icon: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  options: { value: string; label: string }[];
+  ariaLabel: string;
+}) => (
+  <Select value={value} onValueChange={onValueChange}>
+    <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
+      <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent className="tool-select-menu">
+      {options.map((option) => (
+        <SelectItem key={option.value} value={option.value}>
+          {option.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+);
 
 const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription = false, onUpgradeClick }: ImageGeneratorProps) => {
   const [prompt, setPrompt] = useState("");
@@ -312,53 +367,12 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
           </div>
         )}
 
-        {/* Style pills */}
         <div className="flex items-center gap-1.5 px-4 pt-3 flex-wrap">
-          {styles.map(({ id, label, icon, color }) => (
-            <button
-              key={id}
-              onClick={() => setSelectedStyle(id)}
-              className={`settings-pill ${selectedStyle === id ? 'active' : ''}`}
-            >
-              <AnimatedIconify icon={icon} className={`w-3.5 h-3.5 ${color}`} />
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-1.5 px-4 pt-2 flex-wrap">
-          {(["1:1", "3:4", "9:16", "16:9"] as const).map((r) => (
-            <button key={r} onClick={() => setAspectRatio(r)} className={`settings-pill ${aspectRatio === r ? 'active' : ''}`}>
-              <AnimatedIconify icon={r === "9:16" ? "solar:smartphone-bold-duotone" : r === "16:9" ? "solar:monitor-bold-duotone" : "solar:crop-minimalistic-bold-duotone"} className="w-3.5 h-3.5 text-emerald-400" />
-              {r}
-            </button>
-          ))}
-          <div className="w-px h-4 bg-border mx-0.5" />
-          {(["standard", "studio", "ultra"] as const).map((q) => (
-            <button key={q} onClick={() => setRenderQuality(q)} className={`settings-pill capitalize ${renderQuality === q ? 'active' : ''}`}>
-              <AnimatedIconify icon={q === "ultra" ? "solar:crown-star-bold-duotone" : "solar:medal-ribbon-star-bold-duotone"} className="w-3.5 h-3.5 text-pink-400" />
-              {q}
-            </button>
-          ))}
-          <div className="w-px h-4 bg-border mx-0.5 hidden sm:block" />
-          {([1, 2, 4] as const).map((n) => (
-            <button key={n} onClick={() => setImageCount(n)} className={`settings-pill ${imageCount === n ? 'active' : ''}`}>
-              <AnimatedIconify icon="solar:gallery-minimalistic-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
-              {n}x
-            </button>
-          ))}
-          <div className="w-px h-4 bg-border mx-0.5 hidden sm:block" />
-          {([
-            ["auto", "Auto", "solar:magic-stick-3-bold-duotone"],
-            ["product", "Product", "solar:box-bold-duotone"],
-            ["portrait", "Portrait", "solar:user-id-bold-duotone"],
-            ["editorial", "Editorial", "solar:camera-bold-duotone"],
-          ] as const).map(([id, label, icon]) => (
-            <button key={id} onClick={() => setCameraPreset(id)} className={`settings-pill ${cameraPreset === id ? 'active' : ''}`}>
-              <AnimatedIconify icon={icon} className="w-3.5 h-3.5 text-violet-400" />
-              <span className="hidden sm:inline">{label}</span>
-            </button>
-          ))}
+          <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" />
+          <ToolSelect icon="solar:crop-minimalistic-bold" value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
+          <ToolSelect icon="solar:medal-ribbon-star-bold" value={renderQuality} onValueChange={(value) => setRenderQuality(value as "standard" | "studio" | "ultra")} options={imageSelectOptions.renderQuality} ariaLabel="Quality" />
+          <ToolSelect icon="solar:gallery-minimalistic-bold" value={String(imageCount)} onValueChange={(value) => setImageCount(Number(value) as 1 | 2 | 4)} options={imageSelectOptions.imageCount} ariaLabel="Image count" />
+          <ToolSelect icon="solar:camera-bold" value={cameraPreset} onValueChange={(value) => setCameraPreset(value as "auto" | "product" | "portrait" | "editorial")} options={imageSelectOptions.cameraPreset} ariaLabel="Camera preset" />
         </div>
 
         {/* Textarea */}
@@ -375,11 +389,11 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
           <div className="flex items-center gap-1.5">
             <label className="settings-pill cursor-pointer" title="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-cyan-400" />
+              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
               <span className="hidden sm:inline">Upload</span>
             </label>
             <button onClick={() => setShowAssetPicker(true)} className="settings-pill" title="My Assets">
-              <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5 text-violet-400" />
+              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
               <span className="hidden sm:inline">Assets</span>
             </button>
           </div>
