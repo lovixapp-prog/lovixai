@@ -69,37 +69,37 @@
 
 /* ─── Light theme override ──────────────────────────────────────── */
 html.light {
-  --background: 210 20% 97%;
-  --foreground: 225 28% 10%;
+  --background: 210 24% 94%;
+  --foreground: 225 30% 8%;
   --card: 0 0% 100%;
-  --card-foreground: 225 28% 10%;
+  --card-foreground: 225 30% 8%;
   --popover: 0 0% 100%;
-  --popover-foreground: 225 28% 10%;
-  --primary: 25 95% 50%;
+  --popover-foreground: 225 30% 8%;
+  --primary: 24 96% 45%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 15% 92%;
-  --secondary-foreground: 225 28% 10%;
-  --muted: 210 15% 93%;
-  --muted-foreground: 215 14% 45%;
-  --accent: 21 90% 48%;
+  --secondary: 213 22% 88%;
+  --secondary-foreground: 225 30% 8%;
+  --muted: 213 20% 88%;
+  --muted-foreground: 218 20% 34%;
+  --accent: 21 92% 44%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 210 15% 86%;
-  --input: 210 15% 88%;
-  --ring: 25 95% 50%;
-  --surface-glass: 210 20% 95%;
+  --border: 215 19% 72%;
+  --input: 215 18% 76%;
+  --ring: 24 96% 45%;
+  --surface-glass: 210 28% 91%;
   --surface-elevated: 0 0% 100%;
-  --gradient-start: 25 95% 50%;
-  --gradient-end: 21 90% 48%;
-  --sidebar-background: 210 20% 95%;
-  --sidebar-foreground: 225 28% 10%;
-  --sidebar-primary: 25 95% 50%;
+  --gradient-start: 24 96% 45%;
+  --gradient-end: 21 92% 44%;
+  --sidebar-background: 210 25% 91%;
+  --sidebar-foreground: 225 30% 8%;
+  --sidebar-primary: 24 96% 45%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 210 15% 89%;
-  --sidebar-accent-foreground: 225 28% 10%;
-  --sidebar-border: 210 15% 84%;
-  --sidebar-ring: 25 95% 50%;
+  --sidebar-accent: 214 22% 84%;
+  --sidebar-accent-foreground: 225 30% 8%;
+  --sidebar-border: 215 19% 70%;
+  --sidebar-ring: 24 96% 45%;
 }
 
 @layer base {
@@ -110,6 +110,13 @@ html.light {
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+  }
+
+  html.light body {
+    background:
+      radial-gradient(circle at 20% 0%, hsl(var(--primary) / 0.08), transparent 28rem),
+      radial-gradient(circle at 100% 12%, hsl(var(--cyan) / 0.08), transparent 26rem),
+      hsl(var(--background));
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -140,6 +147,49 @@ html.light {
     background: hsl(var(--card) / 0.65);
     @apply rounded-2xl border border-border/40;
     box-shadow: 0 0 0 1px hsl(var(--border) / 0.18), 0 8px 32px hsl(var(--background) / 0.55);
+  }
+
+  html.light .glass {
+    background: hsl(var(--card) / 0.78);
+    border-color: hsl(var(--border) / 0.78);
+    box-shadow: 0 12px 32px hsl(215 24% 45% / 0.12);
+  }
+
+  html.light .glass-strong {
+    background: hsl(var(--card) / 0.9);
+    border-color: hsl(var(--border) / 0.88);
+    box-shadow: 0 16px 42px hsl(215 24% 45% / 0.16), inset 0 1px 0 hsl(0 0% 100% / 0.9);
+  }
+
+  html.light .glass-card {
+    background: hsl(var(--card) / 0.92);
+    border-color: hsl(var(--border) / 0.9);
+    box-shadow: 0 0 0 1px hsl(var(--border) / 0.38), 0 16px 42px hsl(215 24% 45% / 0.14);
+  }
+
+  html.light [class*="border-border"] {
+    border-color: hsl(var(--border) / 0.82);
+  }
+
+  html.light [class*="bg-card"] {
+    box-shadow: 0 10px 30px hsl(215 24% 45% / 0.08);
+  }
+
+  html.light [class*="bg-background"] {
+    border-color: hsl(var(--border) / 0.7);
+  }
+
+  html.light input,
+  html.light textarea,
+  html.light select {
+    background-color: hsl(var(--card) / 0.94);
+    border-color: hsl(var(--input) / 0.95);
+    color: hsl(var(--foreground));
+  }
+
+  html.light input::placeholder,
+  html.light textarea::placeholder {
+    color: hsl(var(--muted-foreground) / 0.72);
   }
 
   /* ============================================
@@ -666,6 +716,12 @@ html.light {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
+  html.light .mobile-bottom-nav {
+    background: hsl(var(--sidebar-background) / 0.96);
+    border-top-color: hsl(var(--sidebar-border) / 0.95);
+    box-shadow: 0 -14px 34px hsl(215 24% 45% / 0.14);
+  }
+
   .mobile-nav-item {
     @apply flex flex-col items-center gap-0.5 py-2 px-2 flex-1 transition-all duration-200 relative;
     min-height: 56px;
@@ -683,6 +739,11 @@ html.light {
     height: 2px;
     background: hsl(var(--primary));
     box-shadow: 0 0 8px hsl(var(--primary) / 0.6);
+  }
+
+  html.light .mobile-nav-item-active::before {
+    height: 3px;
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
   }
 
   /* ============================================
