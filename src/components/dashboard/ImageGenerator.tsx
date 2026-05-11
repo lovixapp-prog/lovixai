@@ -17,13 +17,7 @@ import { useDropZone } from "@/hooks/useDropZone";
 import InlineGenerationCard from "./InlineGenerationCard";
 import ToolCreationsGrid from "./ToolCreationsGrid";
 import AssetPicker from "./AssetPicker";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import AnimatedIconify from "@/components/ui/animated-iconify";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ImageGeneratorProps {
   onCreditsUpdate: () => void;
@@ -77,41 +71,6 @@ const imageSelectOptions = {
   ],
 };
 
-const ToolSelect = ({
-  icon,
-  value,
-  onValueChange,
-  options,
-  ariaLabel,
-  glyph,
-  optionGlyph,
-}: {
-  icon: string;
-  value: string;
-  onValueChange: (value: string) => void;
-  options: { value: string; label: string }[];
-  ariaLabel: string;
-  glyph?: React.ReactNode;
-  optionGlyph?: (value: string) => React.ReactNode;
-}) => (
-  <Select value={value} onValueChange={onValueChange}>
-    <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
-      {glyph || <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />}
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent className="tool-select-menu">
-      {options.map((option) => (
-        <SelectItem key={option.value} value={option.value}>
-          <span className="tool-select-option">
-            {optionGlyph?.(option.value) || <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />}
-            <span>{option.label}</span>
-          </span>
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-);
-
 const FormatGlyph = ({ ratio }: { ratio: string }) => (
   <span
     className={`format-glyph ${
@@ -152,6 +111,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
   
   // Check if user can generate based on credits or subscription
   const canGenerate = hasSubscription || availableCredits >= creditsCost;
+  const canOptimizePrompt = prompt.trim().split(/\s+/).filter(Boolean).length >= 5;
 
   const handleOptimizePrompt = async () => {
     if (!prompt.trim()) {
@@ -395,48 +355,69 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
         )}
 
         {/* Textarea */}
+        <div className="relative">
         <textarea
           placeholder={referenceImage ? "Describe how to edit this image…" : "Describe your image… (or drag & drop to edit)"}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="w-full min-h-[78px] sm:min-h-[92px] p-4 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
+          className="w-full min-h-[78px] sm:min-h-[92px] p-4 pr-16 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
           onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleGenerate(); }}
         />
+          {canOptimizePrompt && (
+            <button
+              type="button"
+              onClick={handleOptimizePrompt}
+              disabled={isOptimizing}
+              className="btn-optimize absolute bottom-3 right-3 h-8 w-8 rounded-xl p-0 flex items-center justify-center disabled:opacity-40"
+              aria-label="Enhance prompt"
+            >
+              {isOptimizing ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /> : <AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className="w-4 h-4" />}
+            </button>
+          )}
+        </div>
 
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
           <div className="tool-input-row">
-            <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" optionGlyph={(value) => <StyleGlyph style={value} />} />
-            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" optionGlyph={(value) => <FormatGlyph ratio={value} />} />
+            <div className="tool-segment-group" aria-label="Image style">
+              {imageSelectOptions.styles.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setSelectedStyle(option.value)}
+                  className={`tool-segment-btn ${selectedStyle === option.value ? "active" : ""}`}
+                  aria-pressed={selectedStyle === option.value}
+                >
+                  <StyleGlyph style={option.value} />
+                  <span>{option.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="tool-segment-group" aria-label="Image format">
+              {imageSelectOptions.aspectRatio.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setAspectRatio(option.value as "1:1" | "3:4" | "9:16" | "16:9")}
+                  className={`tool-segment-btn ${aspectRatio === option.value ? "active" : ""}`}
+                  aria-pressed={aspectRatio === option.value}
+                >
+                  <FormatGlyph ratio={option.value} />
+                  <span>{option.label}</span>
+                </button>
+              ))}
+            </div>
             <div className="w-px h-4 bg-border mx-0.5" />
-            <label className="tool-upload-btn cursor-pointer" title="Upload image">
+            <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload image" aria-label="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
               <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-              <span>Upload</span>
             </label>
-            <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn" title="My Assets">
+            <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn w-8 justify-center" title="My Assets" aria-label="My Assets">
               <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-              <span>Assets</span>
             </button>
           </div>
 
           <div className="flex items-center gap-2 ml-auto">
-            <span className="text-xs text-muted-foreground font-mono">{creditsCost} cr</span>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={handleOptimizePrompt}
-                  disabled={isOptimizing || !prompt.trim()}
-                  className="btn-optimize px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 disabled:opacity-40"
-                >
-                  {isOptimizing ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-3.5 h-3.5" spin /> : <AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className="w-3.5 h-3.5" />}
-                  <span className="hidden sm:inline">Enhance</span>
-                </button>
-              </TooltipTrigger>
-              <TooltipContent><p>AI prompt enhancement</p></TooltipContent>
-            </Tooltip>
-
             <button
               onClick={canGenerate ? handleGenerate : onUpgradeClick}
               disabled={isGenerating || (canGenerate && !prompt.trim())}

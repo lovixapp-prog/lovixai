@@ -20,7 +20,6 @@ import ToolCreationsGrid from "./ToolCreationsGrid";
 import AssetPicker from "./AssetPicker";
 import DropZone from "./DropZone";
 import AnimatedIconify from "@/components/ui/animated-iconify";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface MotionControlProps {
   onCreditsUpdate: () => void;
@@ -48,34 +47,6 @@ const motionSelectOptions = {
     { value: "image", label: "Image pose" },
   ],
 };
-
-const ToolSelect = ({
-  icon,
-  value,
-  onValueChange,
-  options,
-  ariaLabel,
-}: {
-  icon: string;
-  value: string;
-  onValueChange: (value: string) => void;
-  options: { value: string; label: string }[];
-  ariaLabel: string;
-}) => (
-  <Select value={value} onValueChange={onValueChange}>
-    <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
-      <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent className="tool-select-menu">
-      {options.map((option) => (
-        <SelectItem key={option.value} value={option.value}>
-          {option.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-);
 
 const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription = false, onUpgradeClick }: MotionControlProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -281,14 +252,12 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
             <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">{subtitle}</p>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
-            <label className="tool-upload-btn cursor-pointer">
+            <label className="tool-upload-btn w-8 justify-center cursor-pointer" aria-label="Upload file">
               <input type="file" accept={accept.join(',')} onChange={(e) => e.target.files?.[0] && onDrop(e.target.files[0])} className="hidden" />
               <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-              <span>Upload</span>
             </label>
-            <button onClick={() => onPickerOpen()} className="tool-assets-btn">
+            <button onClick={() => onPickerOpen()} className="tool-assets-btn w-8 justify-center" aria-label="Choose from assets">
               <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-              <span>Assets</span>
             </button>
           </div>
         </div>
@@ -300,14 +269,12 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
     <div className="p-3 space-y-3">
       <video src={previewUrl} className="w-full aspect-video rounded-xl object-cover" muted loop autoPlay playsInline />
       <div className="flex items-center justify-center gap-2">
-        <label className="tool-upload-btn cursor-pointer">
+        <label className="tool-upload-btn w-8 justify-center cursor-pointer" aria-label="Change video">
           <input type="file" accept="video/*,.mp4,.webm" onChange={(e) => e.target.files?.[0] && handleVideoFileDrop(e.target.files[0])} className="hidden" />
           <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-          Change
         </label>
-        <button onClick={onPickerOpen} className="tool-assets-btn">
+        <button onClick={onPickerOpen} className="tool-assets-btn w-8 justify-center" aria-label="Choose from assets">
           <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-          Assets
         </button>
       </div>
     </div>
@@ -317,14 +284,12 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
     <div className="p-3 space-y-3">
       <img src={previewUrl} alt="Character" className="w-full aspect-video rounded-xl object-cover bg-muted/50" />
       <div className="flex items-center justify-center gap-2">
-        <label className="tool-upload-btn cursor-pointer">
+        <label className="tool-upload-btn w-8 justify-center cursor-pointer" aria-label="Change image">
           <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImageFileDrop(e.target.files[0])} className="hidden" />
           <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-          Change
         </label>
-        <button onClick={onPickerOpen} className="tool-assets-btn">
+        <button onClick={onPickerOpen} className="tool-assets-btn w-8 justify-center" aria-label="Choose from assets">
           <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-          Assets
         </button>
       </div>
     </div>
@@ -456,14 +421,12 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                     </div>
                     <p className="font-medium text-foreground text-sm truncate px-4">{audioName}</p>
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
-                      <label className="tool-upload-btn cursor-pointer">
+                      <label className="tool-upload-btn w-8 justify-center cursor-pointer" aria-label="Change audio">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
                         <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Change</span>
                       </label>
-                      <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn">
+                      <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn w-8 justify-center" aria-label="Choose from assets">
                         <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Assets</span>
                       </button>
                     </div>
                   </div>
@@ -477,14 +440,12 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                       <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">MP3, WAV, M4A — max 20MB</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
-                      <label className="tool-upload-btn cursor-pointer">
+                      <label className="tool-upload-btn w-8 justify-center cursor-pointer" aria-label="Upload audio">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
                         <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Upload</span>
                       </label>
-                      <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn">
+                      <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn w-8 justify-center" aria-label="Choose from assets">
                         <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Assets</span>
                       </button>
                     </div>
                   </div>
@@ -499,13 +460,20 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       <div className="rounded-2xl border border-border bg-card p-4 space-y-4">
         <div className="tool-input-row">
           {motionMode === "motion-transfer" && (
-            <ToolSelect
-              icon="solar:route-bold"
-              value={characterOrientation}
-              onValueChange={(value) => setCharacterOrientation(value as "video" | "image")}
-              options={motionSelectOptions.orientation}
-              ariaLabel="Character direction"
-            />
+            <div className="tool-segment-group" aria-label="Character direction">
+              {motionSelectOptions.orientation.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setCharacterOrientation(option.value as "video" | "image")}
+                  className={`tool-segment-btn ${characterOrientation === option.value ? "active" : ""}`}
+                  aria-pressed={characterOrientation === option.value}
+                >
+                  <AnimatedIconify icon={option.value === "video" ? "solar:route-bold" : "solar:user-hands-bold"} className="h-3.5 w-3.5 shrink-0" />
+                  <span>{option.label}</span>
+                </button>
+              ))}
+            </div>
           )}
 
           <button
