@@ -307,7 +307,7 @@ const VideoGenerator = ({
         </div>
 
         {/* Bottom toolbar */}
-        <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
+        <div className="tool-compact-toolbar flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
           <div className="tool-input-row">
             <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload reference image" aria-label="Upload reference image">
               <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadReferenceImage(e.target.files[0])} className="hidden" />
@@ -317,9 +317,9 @@ const VideoGenerator = ({
             <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn w-8 justify-center" title="My Assets" aria-label="My Assets">
               <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
             </button>
-            <div className="w-px h-4 bg-border mx-0.5" />
+            <div className="tool-control-divider w-px h-4 bg-border mx-0.5" />
 
-            <div className="tool-segment-group" aria-label="Video duration">
+            <div className="tool-segment-group tool-duration-segments" aria-label="Video duration">
               {videoSelectOptions.seconds.map((option) => (
                 <button
                   key={option.value}
@@ -333,7 +333,7 @@ const VideoGenerator = ({
                 </button>
               ))}
             </div>
-            <div className="tool-segment-group" aria-label="Video format">
+            <div className="tool-segment-group tool-format-segments" aria-label="Video format">
               {videoSelectOptions.aspectRatio.map((option) => (
                 <button
                   key={option.value}

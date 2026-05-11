@@ -377,7 +377,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
+        <div className="tool-compact-toolbar flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
           <div className="tool-input-row">
             <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload image" aria-label="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
@@ -386,9 +386,9 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
             <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn w-8 justify-center" title="My Assets" aria-label="My Assets">
               <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
             </button>
-            <div className="w-px h-4 bg-border mx-0.5" />
+            <div className="tool-control-divider w-px h-4 bg-border mx-0.5" />
 
-            <div className="tool-segment-group" aria-label="Image style">
+            <div className="tool-segment-group tool-style-segments" aria-label="Image style">
               {imageSelectOptions.styles.map((option) => (
                 <button
                   key={option.value}
@@ -402,7 +402,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
                 </button>
               ))}
             </div>
-            <div className="tool-segment-group" aria-label="Image format">
+            <div className="tool-segment-group tool-format-segments" aria-label="Image format">
               {imageSelectOptions.aspectRatio.map((option) => (
                 <button
                   key={option.value}
