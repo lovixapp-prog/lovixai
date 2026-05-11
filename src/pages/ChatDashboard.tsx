@@ -43,10 +43,12 @@ interface Profile {
 const TOOL_ITEMS = [
   {
     icon: 'solar:videocamera-record-bold-duotone',
+    navIcon: 'line-md:play',
     label: 'Video',
     id: 'video' as ActiveTab,
     color: 'text-violet-400',
     accent: 'from-violet-500/25 to-primary/10',
+    navAccent: 'from-violet-500/35 via-fuchsia-500/12 to-primary/10',
     preview: '/videos/hero-video.mp4',
     description: 'Generate cinematic social videos from prompts or reference images.',
     exampleTitle: 'Cinematic product launch',
@@ -55,10 +57,12 @@ const TOOL_ITEMS = [
   },
   {
     icon: 'solar:gallery-wide-bold-duotone',
+    navIcon: 'line-md:image-twotone',
     label: 'Image',
     id: 'image' as ActiveTab,
     color: 'text-cyan-400',
     accent: 'from-cyan-500/25 to-primary/10',
+    navAccent: 'from-cyan-500/35 via-sky-500/12 to-primary/10',
     preview: styleArtistic,
     description: 'Create product shots, ad visuals, portraits, and campaign artwork.',
     exampleTitle: 'Campaign hero image',
@@ -67,11 +71,13 @@ const TOOL_ITEMS = [
   },
   {
     icon: 'solar:user-id-bold-duotone',
+    navIcon: 'line-md:account',
     label: 'Influencer',
     id: 'influencer' as ActiveTab,
     badge: 'NEW',
     color: 'text-pink-400',
     accent: 'from-pink-500/25 to-primary/10',
+    navAccent: 'from-pink-500/35 via-rose-500/12 to-primary/10',
     preview: '/videos/showcase-video.mp4',
     description: 'Build AI personas, generate poses, and keep content visually consistent.',
     exampleTitle: 'Reusable creator persona',
@@ -80,10 +86,12 @@ const TOOL_ITEMS = [
   },
   {
     icon: 'solar:magic-stick-3-bold-duotone',
+    navIcon: 'line-md:loading-twotone-loop',
     label: 'Motion',
     id: 'motion' as ActiveTab,
     color: 'text-emerald-400',
     accent: 'from-emerald-500/25 to-primary/10',
+    navAccent: 'from-emerald-500/35 via-teal-500/12 to-primary/10',
     preview: '/videos/motion-preview.mp4',
     description: 'Animate images, apply motion transfer, and create lip-sync clips.',
     exampleTitle: 'Animate a static visual',
@@ -92,11 +100,13 @@ const TOOL_ITEMS = [
   },
   {
     icon: 'solar:shop-bold-duotone',
+    navIcon: 'line-md:lightbulb',
     label: 'UGC Ads',
     id: 'ugc' as ActiveTab,
     badge: 'NEW',
     color: 'text-amber-400',
     accent: 'from-amber-500/25 to-primary/10',
+    navAccent: 'from-amber-500/35 via-orange-500/12 to-primary/10',
     preview: '/videos/video-model-preview.mp4',
     description: 'Turn products into short-form creator ads for paid social.',
     exampleTitle: 'UGC ad from product URL',
@@ -120,12 +130,11 @@ const CONNECTOR_ITEMS = [
 const MAIN_NAV_ITEMS = [
   { icon: 'solar:home-smile-angle-bold-duotone', label: 'Home', id: 'home' as ActiveTab },
   { icon: 'solar:chat-round-dots-bold-duotone', label: 'Chat', id: 'chat' as ActiveTab },
-  { icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab },
 ];
 
 const WORKSPACE_ITEMS = [
+  { icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab, color: 'text-fuchsia-400', accent: 'from-fuchsia-500/25 to-pink-500/10', ring: 'border-fuchsia-400/25' },
   { icon: 'solar:plug-circle-bold-duotone', label: 'Connectors', id: 'connectors' as ActiveTab, color: 'text-sky-400', accent: 'from-sky-500/25 to-cyan-500/10', ring: 'border-sky-400/25' },
-  { icon: 'solar:file-text-bold-duotone', label: 'Files', id: 'files' as ActiveTab, color: 'text-emerald-400', accent: 'from-emerald-500/25 to-lime-500/10', ring: 'border-emerald-400/25' },
   { icon: 'solar:bolt-circle-bold-duotone', label: 'Credits', id: 'credits' as ActiveTab, color: 'text-amber-400', accent: 'from-amber-500/25 to-orange-500/10', ring: 'border-amber-400/25' },
 ];
 
@@ -324,23 +333,26 @@ const ChatDashboard = () => {
             <section>
               <div className="flex items-center justify-between px-2 mb-2">
                 <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Create</span>
-                <button onClick={() => handleTabChange('home')} className="text-[10px] font-semibold text-primary/80 hover:text-primary">All tools</button>
+                <button onClick={() => handleTabChange('home')} className="text-[10px] font-semibold text-primary/80 hover:text-primary">All</button>
               </div>
-              <div className="grid grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-2 gap-2">
                 {TOOL_ITEMS.map(item => {
                   const isActive = activeTab === item.id;
                   return (
                     <button
                       key={item.id}
                       onClick={() => handleTabChange(item.id)}
-                      className={`relative min-h-[58px] rounded-xl border px-2.5 py-2 text-left transition-all duration-150 ${
+                      className={`group relative min-h-[76px] overflow-hidden rounded-2xl border px-2.5 py-2.5 text-left transition-all duration-200 ${
                         isActive
-                          ? `border-primary/35 bg-gradient-to-br ${item.accent} text-foreground shadow-[0_0_20px_hsl(var(--primary)/0.18)]`
-                          : `border-sidebar-border/70 bg-gradient-to-br ${item.accent} text-foreground/85 hover:border-primary/25 hover:shadow-[0_0_18px_hsl(var(--primary)/0.12)]`
+                          ? `border-primary/35 bg-gradient-to-br ${item.navAccent} text-foreground shadow-[0_0_22px_hsl(var(--primary)/0.2)]`
+                          : `border-sidebar-border/70 bg-gradient-to-br ${item.navAccent} text-foreground/85 hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-[0_0_18px_hsl(var(--primary)/0.14)]`
                       }`}
                     >
-                      <AnimatedIconify icon={item.icon} className={`w-4 h-4 mb-1.5 ${item.color}`} />
-                      <span className="block text-[11px] font-semibold leading-tight">{item.label}</span>
+                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                      <span className={`mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-background/35 ring-1 ring-white/10 ${item.color}`}>
+                        <AnimatedIconify icon={item.navIcon} className="w-5 h-5" />
+                      </span>
+                      <span className="block text-[11px] font-bold leading-tight">{item.label}</span>
                       {item.badge && (
                         <span className="absolute right-1.5 top-1.5 text-[8px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge}</span>
                       )}
@@ -376,43 +388,22 @@ const ChatDashboard = () => {
               </nav>
             </section>
 
-            {recentChats.length > 0 && (
+            {recentChats.length > 0 && activeTab === 'chat' && (
               <section>
                 <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest px-2 block mb-1.5">Recent</span>
                 <nav className="space-y-1">
-                  {recentChats.map(chat => {
-                    const isActive = chat.id === activeChatId && activeTab === 'chat';
-                    return (
-                      <div
-                        key={chat.id}
-                        className={`group relative flex items-center rounded-xl transition-all duration-150 ${
-                          isActive ? 'bg-sidebar-accent text-foreground' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
-                        }`}
-                        onMouseEnter={() => setHoveredChatId(chat.id)}
-                        onMouseLeave={() => setHoveredChatId(null)}
-                      >
-                        {isActive && (
-                          <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.7)]" />
-                        )}
-                        <button
-                          onClick={() => handleLoadChat(chat.id)}
-                          className="flex-1 flex items-center gap-2 px-3 py-2 min-w-0 text-left"
-                        >
-                          <AnimatedIconify icon="solar:chat-line-bold-duotone" className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
-                          <span className="text-xs truncate leading-tight">{chat.title}</span>
-                        </button>
-                        {hoveredChatId === chat.id && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); deleteChat(chat.id); }}
-                            className="flex-shrink-0 p-1.5 mr-1 rounded-lg text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {recentChats.slice(0, 3).map(chat => (
+                    <button
+                      key={chat.id}
+                      onClick={() => handleLoadChat(chat.id)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left transition-all duration-150 ${
+                        chat.id === activeChatId ? 'bg-sidebar-accent text-foreground' : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground'
+                      }`}
+                    >
+                      <AnimatedIconify icon="solar:chat-line-bold-duotone" className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
+                      <span className="text-xs truncate leading-tight">{chat.title}</span>
+                    </button>
+                  ))}
                 </nav>
               </section>
             )}
@@ -918,18 +909,21 @@ const ChatDashboard = () => {
               <p className="text-xs font-semibold text-foreground">{mobileMenu === 'create' ? 'Create tools' : 'Workspace'}</p>
               <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
             </div>
-            <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2' : 'space-y-1'}`}>
-              {(mobileMenu === 'create' ? TOOL_ITEMS : [{ icon: 'solar:gallery-favourite-bold-duotone', label: 'Creations', id: 'creations' as ActiveTab, color: 'text-fuchsia-400', accent: 'from-fuchsia-500/25 to-pink-500/10', ring: 'border-fuchsia-400/25' }, ...WORKSPACE_ITEMS]).map(item => {
+            <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2.5' : 'space-y-1'}`}>
+              {(mobileMenu === 'create' ? TOOL_ITEMS : WORKSPACE_ITEMS).map(item => {
                 const isActive = activeTab === item.id;
                 return (
                   <button key={item.id} onClick={() => handleTabChange(item.id)}
-                    className={`${mobileMenu === 'create' ? 'min-h-[72px] flex-col items-start justify-between' : 'w-full'} flex gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
+                    className={`${mobileMenu === 'create' ? 'min-h-[96px] flex-col items-start justify-between rounded-2xl' : 'w-full rounded-xl'} group relative overflow-hidden flex gap-3 px-4 py-3 transition-all duration-200 text-sm font-medium ${
                       isActive
-                        ? `border ${'ring' in item ? item.ring : 'border-primary/25'} bg-gradient-to-br ${'accent' in item ? item.accent : ''} text-foreground shadow-[0_0_18px_hsl(var(--primary)/0.14)]`
-                        : `border border-sidebar-border/70 bg-gradient-to-br ${'accent' in item ? item.accent : ''} text-sidebar-foreground hover:border-primary/20 hover:shadow-[0_0_16px_hsl(var(--primary)/0.1)]`
+                        ? `border ${'ring' in item ? item.ring : 'border-primary/25'} bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-foreground shadow-[0_0_20px_hsl(var(--primary)/0.16)]`
+                        : `border border-sidebar-border/70 bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-sidebar-foreground hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[0_0_16px_hsl(var(--primary)/0.12)]`
                     }`}>
-                    <AnimatedIconify icon={item.icon} className={`w-5 h-5 ${'color' in item ? item.color : ''}`} />
-                    <span>{item.label}</span>
+                    {mobileMenu === 'create' && <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />}
+                    <span className={`${mobileMenu === 'create' ? 'h-10 w-10 rounded-2xl bg-background/35 ring-1 ring-white/10' : 'h-7 w-7 rounded-xl bg-background/25'} flex items-center justify-center ${'color' in item ? item.color : ''}`}>
+                      <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className={mobileMenu === 'create' ? 'w-6 h-6' : 'w-4 h-4'} />
+                    </span>
+                    <span className={mobileMenu === 'create' ? 'text-[13px] font-bold' : ''}>{item.label}</span>
                     {'badge' in item && item.badge && <span className="ml-auto text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
                   </button>
                 );
