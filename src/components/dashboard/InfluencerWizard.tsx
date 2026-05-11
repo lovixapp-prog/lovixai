@@ -473,10 +473,10 @@ const InfluencerWizard = ({
   const PlaceholderIcon = TYPE_TABS.find((t) => t.value === influencerType)?.Icon ?? User;
 
   return (
-    <div className="py-2 space-y-0">
+    <div className="influencer-wizard py-1 space-y-0">
 
       {/* ── Cinematic Hero ─────────────────────────────────── */}
-      <div className="tool-hero-sm rounded-2xl mb-4">
+      <div className="tool-hero-sm influencer-wizard-hero rounded-2xl mb-3">
         <div className="tool-hero-bg" />
         <div className="tool-hero-grid" />
         <div className="relative z-10 flex flex-col items-center gap-2">
@@ -484,32 +484,32 @@ const InfluencerWizard = ({
             <div className="star-icon star-icon-lg"><MagicStar className="w-7 h-7" /></div>
             <span className="badge-aurora text-xs">AI Influencer Studio</span>
           </div>
-          <h1 className="tool-hero-title text-2xl sm:text-3xl">Design Your AI Creator</h1>
-          <p className="tool-hero-subtitle text-sm">Build a unique AI influencer with custom personality, style and appearance.</p>
+          <h1 className="tool-hero-title text-xl sm:text-3xl">Design Your AI Creator</h1>
+          <p className="tool-hero-subtitle text-xs sm:text-sm">Build a reusable creator persona for videos, motion and social content.</p>
         </div>
       </div>
 
       {/* ── Type selector ─────────────────────────────────── */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-2 mb-3">
         {TYPE_TABS.map(({ value, label, Icon, desc }) => (
           <button
             key={value}
             type="button"
             onClick={() => switchType(value)}
             className={cn(
-              "flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl border-2 transition-all text-center",
+              "flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border transition-all text-center sm:text-left min-w-0",
               influencerType === value
                 ? "border-primary bg-primary/8 shadow-[0_0_20px_hsl(var(--primary)/0.1)]"
                 : "border-border bg-card hover:border-primary/40"
             )}
           >
             <div className={cn(
-              "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+              "w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all shrink-0",
               influencerType === value ? "bg-primary text-primary-foreground shadow-[0_0_12px_hsl(var(--primary)/0.4)]" : "bg-muted text-muted-foreground"
             )}>
-              <Icon className="w-5 h-5" />
+              <Icon className="w-4 h-4" />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className={cn("font-semibold text-sm", influencerType === value && "text-primary")}>{label}</p>
               <p className="text-[10px] text-muted-foreground hidden sm:block">{desc}</p>
             </div>
@@ -518,12 +518,12 @@ const InfluencerWizard = ({
       </div>
 
       {/* ── Studio Layout: canvas + builder ─────────────────── */}
-      <div className="flex flex-col lg:flex-row gap-0 rounded-2xl overflow-hidden border border-border min-h-[520px]">
+      <div className="influencer-studio-layout flex flex-col lg:flex-row gap-0 rounded-2xl overflow-hidden border border-border min-h-[420px]">
 
         {/* Canvas / Preview */}
-        <div className="flex-1 bg-[hsl(var(--background))] flex flex-col items-center justify-center p-6 relative"
+        <div className="flex-1 bg-[hsl(var(--background))] flex flex-col items-center justify-center p-3 sm:p-5 relative"
           style={{ backgroundImage: 'radial-gradient(hsl(var(--border)/0.25) 1px, transparent 1px)', backgroundSize: '22px 22px' }}>
-          <div className="w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border border-border/60 shadow-2xl relative bg-card">
+          <div className="w-full max-w-[210px] sm:max-w-[260px] aspect-[3/4] rounded-2xl overflow-hidden border border-border/60 shadow-2xl relative bg-card">
             {isGenerating ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-card">
                 <div className="star-icon star-icon-xl animate-pulse"><MagicStar className="w-10 h-10" /></div>
@@ -545,12 +545,12 @@ const InfluencerWizard = ({
           </div>
 
           {/* Action buttons below canvas */}
-          <div className="mt-5 flex flex-col items-center gap-2 w-full max-w-[280px]">
+          <div className="mt-3 flex flex-col items-center gap-2 w-full max-w-[260px]">
             {!generatedImage ? (
               <button
                 onClick={handleGenerate}
                 disabled={!canGenerate || isGenerating || !hasEnoughCredits}
-                className="btn-generate w-full justify-center text-sm py-3"
+                className="btn-generate w-full justify-center text-xs sm:text-sm py-2.5"
               >
                 {isGenerating ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /><span>Generating…</span></>
@@ -586,7 +586,7 @@ const InfluencerWizard = ({
         </div>
 
         {/* Builder right panel */}
-        <div className="w-full lg:w-[300px] xl:w-[320px] bg-sidebar border-t lg:border-t-0 lg:border-l border-sidebar-border overflow-y-auto flex-shrink-0">
+        <div className="w-full lg:w-[340px] xl:w-[360px] bg-sidebar border-t lg:border-t-0 lg:border-l border-sidebar-border overflow-y-auto flex-shrink-0">
           <div className="px-4 py-3 border-b border-sidebar-border sticky top-0 bg-sidebar z-10 flex items-center justify-between">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Builder</span>
             {onBack && (
@@ -596,9 +596,9 @@ const InfluencerWizard = ({
             )}
           </div>
 
-          <div className="p-4 space-y-5">
+          <div className="p-3 sm:p-4 space-y-4">
         {/* ── Left: form ── */}
-        <div className="space-y-5">
+        <div className="influencer-builder-form space-y-4">
           {/* Name — always shown */}
           <div className="space-y-2">
             <Label htmlFor="name">Influencer Name</Label>

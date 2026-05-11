@@ -228,11 +228,11 @@ const InfluencerVideoTab = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="influencer-content-tool space-y-3">
       {/* Reference Preview with Status */}
-      <div className="bg-muted/50 rounded-xl p-4 flex items-center gap-4">
+      <div className="bg-muted/50 rounded-xl p-2.5 flex items-center gap-3">
         <div className="relative">
-          <div className="w-20 h-28 rounded-lg overflow-hidden border-2 border-primary/50">
+          <div className="w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden border border-primary/50">
             <img
               src={selectedPose?.image_url || influencer.avatar_image}
               alt="Reference"
@@ -243,9 +243,9 @@ const InfluencerVideoTab = ({
             <Lock className="w-3 h-3 text-primary-foreground" />
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <p className="text-sm font-medium">Reference Image</p>
-          <p className="text-xs text-muted-foreground mb-2">
+          <p className="text-xs text-muted-foreground">
             Using {selectedPose?.is_original ? 'original avatar' : 'selected pose'} for video
           </p>
           
@@ -253,15 +253,15 @@ const InfluencerVideoTab = ({
       </div>
 
       {/* Prompt Input */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         <Textarea
           placeholder="Describe what your influencer should do or say in the video..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="min-h-[120px] resize-none text-base"
+          className="min-h-[84px] resize-none text-sm"
           disabled={isGenerating}
         />
-        <div className="flex justify-end">
+        <div className="flex justify-end -mt-1">
           <Button
             variant="outline"
             size="sm"
@@ -280,10 +280,10 @@ const InfluencerVideoTab = ({
       </div>
 
       {/* Settings Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {/* Duration */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Duration</label>
+          <label className="text-xs font-medium">Duration</label>
           <div className="flex gap-2">
             {DURATIONS.map(d => (
               <Button
@@ -301,7 +301,7 @@ const InfluencerVideoTab = ({
 
         {/* Aspect Ratio */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Aspect Ratio</label>
+          <label className="text-xs font-medium">Aspect Ratio</label>
           <div className="flex gap-2">
             {ASPECT_RATIOS.map(ar => (
               <Button
@@ -319,7 +319,7 @@ const InfluencerVideoTab = ({
 
         {/* Quality */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Quality</label>
+          <label className="text-xs font-medium">Quality</label>
           <div className="flex gap-2">
             {QUALITIES.map(q => (
               <Button
@@ -337,7 +337,7 @@ const InfluencerVideoTab = ({
       </div>
 
       {/* Generate Button */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+      <div className="flex flex-row items-center gap-2">
         <Badge variant="secondary" className="flex items-center gap-2 justify-center py-2 px-4">
           <Zap className="w-4 h-4 text-primary" />
           <span>{creditCost} credits</span>
@@ -347,7 +347,7 @@ const InfluencerVideoTab = ({
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
-            className="flex-1 gap-2"
+            className="flex-1 gap-2 h-9"
           >
             {isGenerating ? (
               <>

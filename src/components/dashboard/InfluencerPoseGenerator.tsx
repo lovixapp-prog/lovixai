@@ -106,10 +106,10 @@ const InfluencerPoseGenerator = ({
   };
 
   return (
-    <div className="bg-muted/50 rounded-xl p-4 space-y-4">
+    <div className="influencer-mini-tool bg-muted/50 rounded-xl p-3 space-y-3">
       <div className="flex items-center gap-2">
-        <ImagePlus className="w-5 h-5 text-primary" />
-        <h3 className="font-semibold">Generate New Pose</h3>
+        <ImagePlus className="w-4 h-4 text-primary" />
+        <h3 className="font-semibold text-sm sm:text-base">Generate Pose</h3>
         {isFirstPose ? (
           <Badge variant="default" className="ml-auto gap-1 bg-primary">
             <Sparkles className="w-3 h-3" />
@@ -123,18 +123,18 @@ const InfluencerPoseGenerator = ({
         )}
       </div>
 
-      <p className="text-sm text-muted-foreground">
-        Create additional poses while maintaining {influencer.name}'s exact face and appearance.
+      <p className="text-xs text-muted-foreground">
+        Create extra poses while keeping {influencer.name}'s face consistent.
       </p>
 
       {/* Suggestions */}
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
         {POSE_SUGGESTIONS.slice(0, 4).map((suggestion, idx) => (
           <Button
             key={idx}
             variant="outline"
             size="sm"
-            className="text-xs h-7"
+            className="text-[10px] sm:text-xs h-7 px-2 justify-start overflow-hidden"
             onClick={() => handleSuggestionClick(suggestion)}
             disabled={isGenerating}
           >
@@ -148,7 +148,7 @@ const InfluencerPoseGenerator = ({
         placeholder="Describe the pose, expression, or scene... (face will remain consistent)"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        className="min-h-[80px] resize-none"
+        className="min-h-[64px] resize-none text-sm"
         disabled={isGenerating}
       />
 
@@ -157,7 +157,7 @@ const InfluencerPoseGenerator = ({
         <Button
           onClick={handleGenerate}
           disabled={isGenerating}
-          className="w-full gap-2"
+          className="w-full gap-2 h-9"
         >
           {isGenerating ? (
             <>

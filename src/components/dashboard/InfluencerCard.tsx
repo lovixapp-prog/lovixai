@@ -56,18 +56,18 @@ const InfluencerCard = ({ influencer, onSelect, onDeleted }: InfluencerCardProps
   return (
     <>
       <div 
-        className="group bg-card border border-border rounded-xl sm:rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 cursor-pointer"
+        className="influencer-card group"
         onClick={onSelect}
       >
         {/* Avatar image */}
-        <div className="aspect-[3/4] relative overflow-hidden">
+        <div className="aspect-[4/5] relative overflow-hidden">
           <img
             src={influencer.avatar_image}
             alt={influencer.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           {/* Overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/10 to-transparent opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Type badge */}
           {influencer.influencer_type && influencer.influencer_type !== "human" && (
@@ -83,13 +83,12 @@ const InfluencerCard = ({ influencer, onSelect, onDeleted }: InfluencerCardProps
           )}
 
           {/* Actions on hover - hidden on mobile, shown on tap/hover on desktop */}
-          <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-0 sm:translate-y-full group-hover:translate-y-0 transition-transform duration-300">
             <Button 
-              className="w-full gap-1.5 sm:gap-2 text-xs sm:text-sm h-8 sm:h-10"
+              className="w-full gap-1.5 text-xs h-8 rounded-xl"
             >
-              <Clapperboard className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden xs:inline">View & Create</span>
-              <span className="xs:hidden">Open</span>
+              <Clapperboard className="w-3.5 h-3.5" />
+              <span>Open Studio</span>
             </Button>
           </div>
 
@@ -100,7 +99,7 @@ const InfluencerCard = ({ influencer, onSelect, onDeleted }: InfluencerCardProps
                 <Button 
                   variant="secondary" 
                   size="icon" 
-                  className="h-6 w-6 sm:h-8 sm:w-8 opacity-70 sm:opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="h-7 w-7 rounded-full bg-black/55 text-white border-white/10 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <MoreVertical className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
@@ -122,23 +121,23 @@ const InfluencerCard = ({ influencer, onSelect, onDeleted }: InfluencerCardProps
         </div>
 
         {/* Info - more compact on mobile */}
-        <div className="p-2 sm:p-4 space-y-1 sm:space-y-2">
-          <h3 className="font-semibold text-sm sm:text-lg truncate">{influencer.name}</h3>
-          <div className="flex flex-wrap gap-0.5 sm:gap-1">
-            <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0">
+        <div className="p-2.5 sm:p-3 space-y-1.5">
+          <h3 className="font-semibold text-sm sm:text-base truncate leading-tight">{influencer.name}</h3>
+          <div className="flex flex-wrap gap-1">
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
               {influencer.gender}
             </Badge>
-            <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0">
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
               {influencer.age_range}
             </Badge>
             {influencer.fashion_style && (
-              <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0 hidden sm:inline-flex">
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 hidden md:inline-flex">
                 {influencer.fashion_style}
               </Badge>
             )}
           </div>
           {influencer.personality_tags && influencer.personality_tags.length > 0 && (
-            <div className="hidden sm:flex flex-wrap gap-1 pt-1">
+            <div className="hidden sm:flex flex-wrap gap-1">
               {influencer.personality_tags.slice(0, 2).map(tag => (
                 <span key={tag} className="text-xs text-muted-foreground">
                   #{tag.toLowerCase()}

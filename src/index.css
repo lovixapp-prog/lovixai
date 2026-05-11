@@ -1072,6 +1072,122 @@ html.light {
      OPTION GRID — photo tile selectors
   ============================================ */
 
+  /* ============================================
+     INFLUENCER TOOL - compact mobile-first
+  ============================================ */
+
+  .influencer-panel {
+    border: 1px solid hsl(var(--border) / 0.72);
+    background:
+      linear-gradient(180deg, hsl(var(--card) / 0.96), hsl(var(--card) / 0.88)),
+      radial-gradient(circle at 12% 0%, hsl(var(--primary) / 0.08), transparent 34%);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px hsl(0 0% 0% / 0.16), inset 0 1px 0 hsl(255 100% 100% / 0.06);
+  }
+
+  .influencer-card {
+    @apply cursor-pointer overflow-hidden rounded-xl transition-all duration-300;
+    border: 1px solid hsl(var(--border) / 0.72);
+    background: hsl(var(--card) / 0.92);
+    box-shadow: 0 8px 22px hsl(0 0% 0% / 0.12);
+  }
+
+  .influencer-card:hover {
+    border-color: hsl(var(--primary) / 0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px hsl(0 0% 0% / 0.18), 0 0 0 1px hsl(var(--primary) / 0.08);
+  }
+
+  .influencer-create-tile {
+    @apply flex min-h-[13rem] flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed text-center transition-all duration-300;
+    border-color: hsl(var(--primary) / 0.34);
+    background:
+      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.14), transparent 46%),
+      hsl(var(--card) / 0.75);
+  }
+
+  .influencer-create-tile:hover {
+    border-color: hsl(var(--primary) / 0.62);
+    background:
+      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.22), transparent 52%),
+      hsl(var(--card) / 0.92);
+    transform: translateY(-2px);
+  }
+
+  .influencer-create-orb {
+    @apply mb-1 flex h-11 w-11 items-center justify-center rounded-2xl text-primary;
+    background: hsl(var(--primary) / 0.13);
+    border: 1px solid hsl(var(--primary) / 0.24);
+    box-shadow: 0 8px 20px hsl(var(--primary) / 0.16);
+  }
+
+  .influencer-stat {
+    @apply flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl p-2 text-center;
+    border: 1px solid hsl(var(--border) / 0.68);
+    background: hsl(var(--card) / 0.78);
+  }
+
+  .influencer-content-tool .btn,
+  .influencer-mini-tool .btn,
+  .influencer-content-tool .grid button,
+  .influencer-mini-tool button {
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .influencer-profile-card {
+      display: grid;
+      grid-template-columns: minmax(132px, 42%) minmax(0, 1fr);
+      min-height: 210px;
+    }
+
+    .influencer-profile-preview {
+      height: 100%;
+      max-height: none;
+      aspect-ratio: auto;
+    }
+
+    .influencer-profile-preview img {
+      object-position: center 22%;
+    }
+
+    .influencer-wizard-hero {
+      min-height: 112px;
+      padding: 1rem 0.75rem;
+    }
+
+    .influencer-wizard-hero .star-icon-lg {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .influencer-create-tile {
+      min-height: 11.8rem;
+    }
+
+    .influencer-builder-form label,
+    .influencer-content-tool label {
+      font-size: 0.72rem;
+    }
+
+    .influencer-builder-form input,
+    .influencer-builder-form button,
+    .influencer-builder-form [role="combobox"] {
+      min-height: 2rem;
+      font-size: 0.78rem;
+    }
+
+    .influencer-builder-form .rounded-full,
+    .influencer-builder-form .rounded-lg {
+      border-radius: 0.65rem;
+    }
+
+    .influencer-content-tool [data-state],
+    .influencer-content-tool button {
+      font-size: 0.72rem;
+    }
+  }
+
   .option-grid {
     @apply grid gap-2;
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));

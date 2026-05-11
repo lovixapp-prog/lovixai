@@ -155,26 +155,24 @@ const InfluencerDetailPage = ({
     : influencer;
 
   return (
-    <div className="space-y-6">
+    <div className="influencer-detail space-y-4">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={onBack}>
+      <div className="influencer-panel flex items-center gap-3 p-2.5 sm:p-3">
+        <Button variant="ghost" size="icon" onClick={onBack} className="h-9 w-9 shrink-0">
           <ArrowLeft className="w-5 h-5" />
         </Button>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold">{influencer.name}</h1>
-          <p className="text-muted-foreground text-sm">
-            Influencer Profile & Content Studio
-          </p>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-lg sm:text-2xl font-bold leading-tight truncate">{influencer.name}</h1>
+          <p className="text-muted-foreground text-xs sm:text-sm">Profile & Content Studio</p>
         </div>
       </div>
 
       {/* Profile Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,300px)_1fr] gap-3 sm:gap-4">
         {/* Main Image */}
-        <div className="lg:col-span-1">
-          <div className="bg-card border border-border rounded-2xl overflow-hidden">
-            <div className="aspect-[3/4] relative">
+        <div>
+          <div className="influencer-panel influencer-profile-card overflow-hidden">
+            <div className="influencer-profile-preview aspect-[4/5] sm:aspect-[3/4] relative">
               <img
                 src={selectedPose?.image_url || influencer.avatar_image}
                 alt={influencer.name}
@@ -186,16 +184,16 @@ const InfluencerDetailPage = ({
                 </Badge>
               )}
             </div>
-            <div className="p-4 space-y-3">
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary">{influencer.gender}</Badge>
-                <Badge variant="secondary">{influencer.age_range}</Badge>
+            <div className="p-3 space-y-2">
+              <div className="flex flex-wrap gap-1.5">
+                <Badge variant="secondary" className="text-[11px]">{influencer.gender}</Badge>
+                <Badge variant="secondary" className="text-[11px]">{influencer.age_range}</Badge>
                 {influencer.ethnicity && (
-                  <Badge variant="outline">{influencer.ethnicity}</Badge>
+                  <Badge variant="outline" className="text-[11px]">{influencer.ethnicity}</Badge>
                 )}
               </div>
               {influencer.fashion_style && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Style: {influencer.fashion_style}
                 </p>
               )}
@@ -213,27 +211,27 @@ const InfluencerDetailPage = ({
         </div>
 
         {/* Info & Poses */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-3 sm:space-y-4 min-w-0">
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-card border border-border rounded-xl p-4 text-center">
-              <ImagePlus className="w-5 h-5 mx-auto mb-2 text-primary" />
-              <p className="text-2xl font-bold">{poses.length}</p>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="influencer-stat">
+              <ImagePlus className="w-4 h-4 mx-auto text-primary" />
+              <p className="text-base sm:text-xl font-bold leading-none">{poses.length}</p>
               <p className="text-xs text-muted-foreground">Poses</p>
             </div>
-            <div className="bg-card border border-border rounded-xl p-4 text-center">
-              <Video className="w-5 h-5 mx-auto mb-2 text-primary" />
-              <p className="text-2xl font-bold">{videoCount}</p>
+            <div className="influencer-stat">
+              <Video className="w-4 h-4 mx-auto text-primary" />
+              <p className="text-base sm:text-xl font-bold leading-none">{videoCount}</p>
               <p className="text-xs text-muted-foreground">Videos</p>
             </div>
-            <div className="bg-card border border-border rounded-xl p-4 text-center">
-              <User className="w-5 h-5 mx-auto mb-2 text-primary" />
-              <p className="text-2xl font-bold">{influencer.gender === 'Male' ? 'M' : 'F'}</p>
+            <div className="influencer-stat">
+              <User className="w-4 h-4 mx-auto text-primary" />
+              <p className="text-base sm:text-xl font-bold leading-none">{influencer.gender === 'Male' ? 'M' : influencer.gender === 'Female' ? 'F' : 'NB'}</p>
               <p className="text-xs text-muted-foreground">Gender</p>
             </div>
-            <div className="bg-card border border-border rounded-xl p-4 text-center">
-              <Calendar className="w-5 h-5 mx-auto mb-2 text-primary" />
-              <p className="text-sm font-bold">{createdDate}</p>
+            <div className="influencer-stat">
+              <Calendar className="w-4 h-4 mx-auto text-primary" />
+              <p className="text-[11px] sm:text-sm font-bold leading-none">{createdDate}</p>
               <p className="text-xs text-muted-foreground">Created</p>
             </div>
           </div>
@@ -249,10 +247,10 @@ const InfluencerDetailPage = ({
 
           {/* Pose Gallery */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <h3 className="font-semibold">Available Poses</h3>
-              <span className="text-sm text-muted-foreground">
-                Select a pose for content creation
+              <span className="text-xs text-muted-foreground text-right">
+                Select for content
               </span>
             </div>
             <InfluencerPoseGallery
@@ -267,12 +265,12 @@ const InfluencerDetailPage = ({
       </div>
 
       {/* Content Creation Tabs */}
-      <div className="bg-card border border-border rounded-2xl p-4 sm:p-6">
-        <div className="flex items-center gap-3 mb-4">
+      <div className="influencer-panel p-3 sm:p-4">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
           <Sparkles className="w-5 h-5 text-primary" />
-          <h2 className="text-lg font-semibold">Create Content</h2>
+          <h2 className="text-base sm:text-lg font-semibold">Create Content</h2>
           {selectedPose && (
-            <Badge variant="secondary" className="gap-1">
+            <Badge variant="secondary" className="gap-1 text-[11px]">
               <Check className="w-3 h-3" />
               Using: {selectedPose.is_original ? 'Original' : 'Pose ' + poses.findIndex(p => p.id === selectedPose.id)}
             </Badge>
@@ -280,41 +278,41 @@ const InfluencerDetailPage = ({
         </div>
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as DetailTab)}>
-          <TabsList className="grid w-full grid-cols-4 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-4 h-10 p-1 rounded-xl">
             <TabsTrigger 
               value="overview" 
-              className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="h-8 rounded-lg text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <span className="hidden sm:inline">Overview</span>
               <span className="sm:hidden">Info</span>
             </TabsTrigger>
             <TabsTrigger 
               value="video" 
-              className="flex items-center gap-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="flex items-center gap-1.5 h-8 rounded-lg text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <Video className="w-4 h-4" />
               <span className="hidden sm:inline">Video</span>
             </TabsTrigger>
             <TabsTrigger 
               value="motion" 
-              className="flex items-center gap-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="flex items-center gap-1.5 h-8 rounded-lg text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <Wand2 className="w-4 h-4" />
               <span className="hidden sm:inline">Motion</span>
             </TabsTrigger>
             <TabsTrigger 
               value="lipsync" 
-              className="flex items-center gap-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="flex items-center gap-1.5 h-8 rounded-lg text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <Mic className="w-4 h-4" />
               <span className="hidden sm:inline">Lip Sync</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="mt-6">
+          <TabsContent value="overview" className="mt-3">
             <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-muted/50 rounded-xl p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="bg-muted/50 rounded-xl p-3">
                   <h4 className="font-medium mb-2">Quick Actions</h4>
                   <div className="space-y-2">
                     <Button 
@@ -343,7 +341,7 @@ const InfluencerDetailPage = ({
                     </Button>
                   </div>
                 </div>
-                <div className="bg-muted/50 rounded-xl p-4">
+                <div className="bg-muted/50 rounded-xl p-3">
                   <h4 className="font-medium mb-2">Tips</h4>
                   <ul className="text-sm text-muted-foreground space-y-2">
                     <li>• Generate multiple poses for variety</li>
@@ -356,7 +354,7 @@ const InfluencerDetailPage = ({
             </div>
           </TabsContent>
 
-          <TabsContent value="video" className="mt-6">
+          <TabsContent value="video" className="mt-3">
             <InfluencerVideoTab
               influencer={influencerWithPose}
               selectedPose={selectedPose}
@@ -367,7 +365,7 @@ const InfluencerDetailPage = ({
             />
           </TabsContent>
 
-          <TabsContent value="motion" className="mt-6">
+          <TabsContent value="motion" className="mt-3">
             <InfluencerMotionTab
               influencer={influencerWithPose}
               onCreditsUpdate={onCreditsUpdate}
@@ -377,7 +375,7 @@ const InfluencerDetailPage = ({
             />
           </TabsContent>
 
-          <TabsContent value="lipsync" className="mt-6">
+          <TabsContent value="lipsync" className="mt-3">
             <InfluencerLipSyncTab
               influencer={influencerWithPose}
               onCreditsUpdate={onCreditsUpdate}

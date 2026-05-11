@@ -229,11 +229,11 @@ const InfluencerMotionTab = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="influencer-content-tool space-y-3">
       {/* Locked Avatar Preview */}
-      <div className="bg-muted/50 rounded-xl p-4 flex items-center gap-4">
+      <div className="bg-muted/50 rounded-xl p-2.5 flex items-center gap-3">
         <div className="relative">
-          <div className="w-20 h-28 rounded-lg overflow-hidden border-2 border-primary/50">
+          <div className="w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden border border-primary/50">
             <img
               src={influencer.avatar_image}
               alt="Reference"
@@ -254,7 +254,7 @@ const InfluencerMotionTab = ({
 
       {/* Motion Video Upload */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Motion Reference Video</label>
+        <label className="text-xs font-medium">Motion Reference Video</label>
         <input
           ref={videoInputRef}
           type="file"
@@ -286,7 +286,7 @@ const InfluencerMotionTab = ({
           <button
             onClick={() => videoInputRef.current?.click()}
             disabled={isUploading}
-            className="w-full aspect-video rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors flex flex-col items-center justify-center gap-3 bg-muted/30"
+            className="w-full min-h-[128px] sm:min-h-[180px] aspect-video rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors flex flex-col items-center justify-center gap-2 bg-muted/30"
           >
             {isUploading ? (
               <Loader2 className="w-8 h-8 text-muted-foreground animate-spin" />
@@ -308,10 +308,10 @@ const InfluencerMotionTab = ({
       </div>
 
       {/* Settings */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {/* Orientation */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Character Orientation</label>
+          <label className="text-xs font-medium">Character Orientation</label>
           <div className="flex gap-2">
             {ORIENTATIONS.map(o => (
               <Button
@@ -329,7 +329,7 @@ const InfluencerMotionTab = ({
 
         {/* Quality */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Quality</label>
+          <label className="text-xs font-medium">Quality</label>
           <div className="flex gap-2">
             {QUALITIES.map(q => (
               <Button
@@ -347,7 +347,7 @@ const InfluencerMotionTab = ({
       </div>
 
       {/* Keep Sound Toggle */}
-      <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
+      <div className="flex items-center justify-between gap-3 p-3 bg-muted/50 rounded-xl">
         <div className="space-y-0.5">
           <Label htmlFor="keep-sound" className="text-sm font-medium">Keep Original Sound</Label>
           <p className="text-xs text-muted-foreground">
@@ -362,7 +362,7 @@ const InfluencerMotionTab = ({
       </div>
 
       {/* Generate Button */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+      <div className="flex flex-row items-center gap-2">
         <Badge variant="secondary" className="flex items-center gap-2 justify-center py-2 px-4">
           <Zap className="w-4 h-4 text-primary" />
           <span>{creditCost} credits</span>
@@ -372,7 +372,7 @@ const InfluencerMotionTab = ({
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || !motionVideoUrl}
-            className="flex-1 gap-2"
+            className="flex-1 gap-2 h-9"
           >
             {isGenerating ? (
               <>

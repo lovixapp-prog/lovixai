@@ -191,11 +191,11 @@ const InfluencerLipSyncTab = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="influencer-content-tool space-y-3">
       {/* Locked Avatar Preview */}
-      <div className="bg-muted/50 rounded-xl p-4 flex items-center gap-4">
+      <div className="bg-muted/50 rounded-xl p-2.5 flex items-center gap-3">
         <div className="relative">
-          <div className="w-20 h-28 rounded-lg overflow-hidden border-2 border-primary/50">
+          <div className="w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden border border-primary/50">
             <img
               src={influencer.avatar_image}
               alt="Reference"
@@ -206,7 +206,7 @@ const InfluencerLipSyncTab = ({
             <Lock className="w-3 h-3 text-primary-foreground" />
           </div>
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-sm font-medium">Character Image (Locked)</p>
           <p className="text-xs text-muted-foreground">
             {influencer.name}'s avatar will speak with lip-synced audio
@@ -216,7 +216,7 @@ const InfluencerLipSyncTab = ({
 
       {/* Audio Upload */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Audio File</label>
+        <label className="text-xs font-medium">Audio File</label>
         <input
           ref={audioInputRef}
           type="file"
@@ -226,7 +226,7 @@ const InfluencerLipSyncTab = ({
         />
         
         {audioUrl ? (
-          <div className="relative rounded-xl overflow-hidden bg-muted p-6">
+          <div className="relative rounded-xl overflow-hidden bg-muted p-3">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Music className="w-7 h-7 text-primary" />
@@ -253,7 +253,7 @@ const InfluencerLipSyncTab = ({
           <button
             onClick={() => audioInputRef.current?.click()}
             disabled={isUploading}
-            className="w-full py-12 rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors flex flex-col items-center justify-center gap-3 bg-muted/30"
+            className="w-full py-8 rounded-xl border-2 border-dashed border-border hover:border-primary/50 transition-colors flex flex-col items-center justify-center gap-2 bg-muted/30"
           >
             {isUploading ? (
               <Loader2 className="w-8 h-8 text-muted-foreground animate-spin" />
@@ -276,7 +276,7 @@ const InfluencerLipSyncTab = ({
 
       {/* Quality */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Quality</label>
+        <label className="text-xs font-medium">Quality</label>
         <div className="flex gap-2">
           {QUALITIES.map(q => (
             <Button
@@ -293,7 +293,7 @@ const InfluencerLipSyncTab = ({
       </div>
 
       {/* Generate Button */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+      <div className="flex flex-row items-center gap-2">
         <Badge variant="secondary" className="flex items-center gap-2 justify-center py-2 px-4">
           <Zap className="w-4 h-4 text-primary" />
           <span>{creditCost} credits</span>
@@ -303,7 +303,7 @@ const InfluencerLipSyncTab = ({
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || !audioUrl}
-            className="flex-1 gap-2"
+            className="flex-1 gap-2 h-9"
           >
             {isGenerating ? (
               <>

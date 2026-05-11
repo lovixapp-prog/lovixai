@@ -126,7 +126,7 @@ const InfluencerPoseGallery = ({
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="aspect-square rounded-xl bg-muted animate-pulse" />
         ))}
@@ -151,14 +151,14 @@ const InfluencerPoseGallery = ({
           return (
             <div
               key={pose.id}
-              className={`relative group cursor-pointer rounded-xl overflow-hidden border-2 transition-all duration-200 hover:scale-[1.02] ${
+              className={`relative group cursor-pointer rounded-xl overflow-hidden border transition-all duration-200 hover:scale-[1.02] ${
                 isSelected
-                  ? 'border-primary ring-2 ring-primary/30 shadow-lg'
+                  ? 'border-primary ring-2 ring-primary/25 shadow-lg'
                   : 'border-border hover:border-primary/50'
               }`}
               onClick={() => handlePoseClick(pose)}
             >
-              <div className="aspect-square">
+              <div className="aspect-[4/5]">
                 <img
                   src={pose.image_url}
                   alt={pose.prompt || "Influencer pose"}
@@ -170,7 +170,7 @@ const InfluencerPoseGallery = ({
               {pose.is_original && (
                 <Badge 
                   variant="outline" 
-                  className="absolute top-2 left-2 text-[10px] sm:text-xs bg-background/90 shadow-md"
+                  className="absolute top-1.5 left-1.5 text-[9px] bg-background/90 shadow-md px-1.5 py-0"
                 >
                   Original
                 </Badge>
@@ -178,34 +178,34 @@ const InfluencerPoseGallery = ({
 
               {/* Selected indicator */}
               {isSelected && (
-                <div className="absolute top-2 right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-foreground" />
+                <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                  <Check className="w-3 h-3 text-primary-foreground" />
                 </div>
               )}
 
               {/* Action buttons */}
-              <div className="absolute bottom-2 left-2 right-2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute bottom-1.5 left-1.5 right-1.5 flex justify-between opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="w-9 h-9 sm:w-10 sm:h-10 bg-black/70 hover:bg-black/90 text-white border-0 shadow-lg backdrop-blur-sm"
+                  className="w-7 h-7 bg-black/70 hover:bg-black/90 text-white border-0 shadow-lg backdrop-blur-sm"
                   onClick={(e) => handleZoom(pose, e)}
                 >
-                  <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ZoomIn className="w-3.5 h-3.5" />
                 </Button>
 
                 {!pose.is_original && (
                   <Button
                     variant="destructive"
                     size="icon"
-                    className="w-9 h-9 sm:w-10 sm:h-10 shadow-lg"
+                    className="w-7 h-7 shadow-lg"
                     onClick={(e) => handleDelete(pose.id, e)}
                     disabled={deletingId === pose.id}
                   >
                     {deletingId === pose.id ? (
-                      <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     ) : (
-                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     )}
                   </Button>
                 )}
