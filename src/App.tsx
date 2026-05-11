@@ -17,6 +17,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const ChatDashboard = lazy(() => import("./pages/ChatDashboard"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Pricing = lazy(() => import("./pages/Pricing"));
+const DesktopDownload = lazy(() => import("./pages/DesktopDownload"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const VideoGuide = lazy(() => import("./pages/guides/VideoGuide"));
@@ -75,6 +76,7 @@ const App = () => (
             <Route path="/dashboard/tools" element={page(<Dashboard />)} />
             <Route path="/settings" element={page(<Settings />)} />
             <Route path="/pricing" element={page(<Pricing />)} />
+            <Route path="/download" element={page(<DesktopDownload />)} />
             <Route path="/payment-success" element={page(<PaymentSuccess />)} />
             <Route path="/guide/video" element={page(<VideoGuide />)} />
             <Route path="/guide/image" element={page(<ImageGuide />)} />

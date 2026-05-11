@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import {
   MessageSquare, Coins, LogOut,
   Menu, Crown, Settings,
-  X, Monitor, Download, Laptop, ChevronRight,
+  X, ChevronRight,
   ChevronLeft, PanelLeft, Plus, Trash2, ChevronDown, Paperclip,
   Sun, Moon,
 } from 'lucide-react';
@@ -54,6 +54,7 @@ const TOOL_ITEMS = [
     exampleTitle: 'Cinematic product launch',
     examplePrompt: 'Create a 9:16 launch video with neon product reveal, fast cuts, premium lighting, and a final CTA frame.',
     workflow: ['Prompt', 'Scene direction', 'HD render'],
+    navSample: '9:16 launch',
   },
   {
     icon: 'solar:gallery-wide-bold-duotone',
@@ -68,6 +69,7 @@ const TOOL_ITEMS = [
     exampleTitle: 'Campaign hero image',
     examplePrompt: 'Generate a colorful artistic campaign visual with sharp subject focus, rich texture, and social-ready composition.',
     workflow: ['Style', 'Reference', 'Image output'],
+    navSample: 'Ad visual',
   },
   {
     icon: 'solar:user-id-bold-duotone',
@@ -83,6 +85,7 @@ const TOOL_ITEMS = [
     exampleTitle: 'Reusable creator persona',
     examplePrompt: 'Build a fashion creator with editorial look, consistent face, pose library, and branded social content direction.',
     workflow: ['Persona', 'Pose set', 'Content'],
+    navSample: 'Persona kit',
   },
   {
     icon: 'solar:magic-stick-3-bold-duotone',
@@ -97,6 +100,7 @@ const TOOL_ITEMS = [
     exampleTitle: 'Animate a static visual',
     examplePrompt: 'Animate this portrait with subtle head movement, cinematic camera push, natural expression, and smooth motion.',
     workflow: ['Upload', 'Motion style', 'Animate'],
+    navSample: 'Image motion',
   },
   {
     icon: 'solar:shop-bold-duotone',
@@ -112,6 +116,7 @@ const TOOL_ITEMS = [
     exampleTitle: 'UGC ad from product URL',
     examplePrompt: 'Create a TikTok UGC ad from my product URL with hook, creator script, proof scene, and clear shop-now CTA.',
     workflow: ['Brief', 'Influencer', 'Ad render'],
+    navSample: 'Hook + CTA',
   },
 ];
 
@@ -335,24 +340,26 @@ const ChatDashboard = () => {
                 <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Create</span>
                 <button onClick={() => handleTabChange('home')} className="text-[10px] font-semibold text-primary/80 hover:text-primary">All</button>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 {TOOL_ITEMS.map(item => {
                   const isActive = activeTab === item.id;
                   return (
                     <button
                       key={item.id}
                       onClick={() => handleTabChange(item.id)}
-                      className={`group relative min-h-[76px] overflow-hidden rounded-2xl border px-2.5 py-2.5 text-left transition-all duration-200 ${
+                      className={`group relative h-[64px] overflow-hidden rounded-xl border p-2 text-center transition-all duration-200 ${
                         isActive
                           ? `border-primary/35 bg-gradient-to-br ${item.navAccent} text-foreground shadow-[0_0_22px_hsl(var(--primary)/0.2)]`
                           : `border-sidebar-border/70 bg-gradient-to-br ${item.navAccent} text-foreground/85 hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-[0_0_18px_hsl(var(--primary)/0.14)]`
                       }`}
                     >
                       <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                      <span className={`mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-background/35 ring-1 ring-white/10 ${item.color}`}>
-                        <AnimatedIconify icon={item.navIcon} className="w-5 h-5" />
-                      </span>
-                      <span className="block text-[11px] font-bold leading-tight">{item.label}</span>
+                      <div className="flex h-full flex-col items-center justify-center gap-1.5 min-w-0">
+                        <span className={`flex h-8 w-8 items-center justify-center rounded-lg bg-background/35 ring-1 ring-white/10 ${item.color}`}>
+                          <AnimatedIconify icon={item.navIcon} className="w-5 h-5" />
+                        </span>
+                        <span className="block w-full text-[11px] font-bold leading-tight truncate">{item.label}</span>
+                      </div>
                       {item.badge && (
                         <span className="absolute right-1.5 top-1.5 text-[8px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge}</span>
                       )}
@@ -738,20 +745,13 @@ const ChatDashboard = () => {
 
         {/* Desktop App (only expanded) */}
         {!isDesktopApp && sidebarPinned && (
-          <div className="px-3 pb-2 space-y-0.5">
-            <span className="text-[9px] font-semibold text-muted-foreground/40 uppercase tracking-widest px-2 block mb-1">Desktop App</span>
-            <a href="/api/track-download?platform=win" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors group">
-              <Monitor className="w-3 h-3 text-primary/40 group-hover:text-primary transition-colors" />
-              <span className="flex-1">Windows</span>
-              <Download className="w-2.5 h-2.5 opacity-30 group-hover:opacity-60 transition-opacity" />
-            </a>
-            <a href="/api/track-download?platform=mac" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-[11px] text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors group">
-              <Laptop className="w-3 h-3 text-primary/40 group-hover:text-primary transition-colors" />
-              <span className="flex-1">macOS</span>
-              <Download className="w-2.5 h-2.5 opacity-30 group-hover:opacity-60 transition-opacity" />
-            </a>
+          <div className="px-3 pb-2">
+            <Link to="/download"
+              className="group flex items-center gap-2 rounded-xl border border-primary/15 bg-gradient-to-r from-primary/12 to-cyan-500/8 px-2.5 py-2 text-[11px] font-semibold text-foreground transition-all duration-200 hover:border-primary/30 hover:shadow-[0_0_18px_hsl(var(--primary)/0.14)]">
+              <AnimatedIconify icon="line-md:download" className="w-3.5 h-3.5 text-primary" />
+              <span className="flex-1">Download app</span>
+              <ChevronRight className="w-3 h-3 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
+            </Link>
           </div>
         )}
 
@@ -909,22 +909,24 @@ const ChatDashboard = () => {
               <p className="text-xs font-semibold text-foreground">{mobileMenu === 'create' ? 'Create tools' : 'Workspace'}</p>
               <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
             </div>
-            <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2.5' : 'space-y-1'}`}>
+            <div className={`p-3 ${mobileMenu === 'create' ? 'grid grid-cols-2 gap-2' : 'space-y-1'}`}>
               {(mobileMenu === 'create' ? TOOL_ITEMS : WORKSPACE_ITEMS).map(item => {
                 const isActive = activeTab === item.id;
                 return (
                   <button key={item.id} onClick={() => handleTabChange(item.id)}
-                    className={`${mobileMenu === 'create' ? 'min-h-[96px] flex-col items-start justify-between rounded-2xl' : 'w-full rounded-xl'} group relative overflow-hidden flex gap-3 px-4 py-3 transition-all duration-200 text-sm font-medium ${
+                    className={`${mobileMenu === 'create' ? 'h-[76px] rounded-xl p-2' : 'w-full rounded-xl px-3 py-2.5'} group relative overflow-hidden flex gap-2.5 transition-all duration-200 text-sm font-medium ${
                       isActive
                         ? `border ${'ring' in item ? item.ring : 'border-primary/25'} bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-foreground shadow-[0_0_20px_hsl(var(--primary)/0.16)]`
                         : `border border-sidebar-border/70 bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-sidebar-foreground hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[0_0_16px_hsl(var(--primary)/0.12)]`
                     }`}>
                     {mobileMenu === 'create' && <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />}
-                    <span className={`${mobileMenu === 'create' ? 'h-10 w-10 rounded-2xl bg-background/35 ring-1 ring-white/10' : 'h-7 w-7 rounded-xl bg-background/25'} flex items-center justify-center ${'color' in item ? item.color : ''}`}>
-                      <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className={mobileMenu === 'create' ? 'w-6 h-6' : 'w-4 h-4'} />
+                    <span className={`${mobileMenu === 'create' ? 'flex h-full w-full flex-col items-center justify-center gap-1.5' : 'contents'}`}>
+                      <span className={`${mobileMenu === 'create' ? 'h-9 w-9 rounded-xl bg-background/35 ring-1 ring-white/10' : 'h-7 w-7 rounded-xl bg-background/25'} flex items-center justify-center ${'color' in item ? item.color : ''}`}>
+                        <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className={mobileMenu === 'create' ? 'w-5 h-5' : 'w-4 h-4'} />
+                      </span>
+                      <span className={`${mobileMenu === 'create' ? 'text-[12px] font-bold text-center' : ''} w-full min-w-0 truncate`}>{item.label}</span>
                     </span>
-                    <span className={mobileMenu === 'create' ? 'text-[13px] font-bold' : ''}>{item.label}</span>
-                    {'badge' in item && item.badge && <span className="ml-auto text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
+                    {'badge' in item && item.badge && <span className="absolute right-1.5 top-1.5 text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
                   </button>
                 );
               })}
