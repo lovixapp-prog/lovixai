@@ -283,11 +283,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
             <label className="tool-upload-btn cursor-pointer">
               <input type="file" accept={accept.join(',')} onChange={(e) => e.target.files?.[0] && onDrop(e.target.files[0])} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+              <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
               <span>Upload</span>
             </label>
             <button onClick={() => onPickerOpen()} className="tool-assets-btn">
-              <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5" />
+              <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
               <span>Assets</span>
             </button>
           </div>
@@ -302,11 +302,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       <div className="flex items-center justify-center gap-2">
         <label className="tool-upload-btn cursor-pointer">
           <input type="file" accept="video/*,.mp4,.webm" onChange={(e) => e.target.files?.[0] && handleVideoFileDrop(e.target.files[0])} className="hidden" />
-          <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+          <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
           Change
         </label>
         <button onClick={onPickerOpen} className="tool-assets-btn">
-          <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5" />
+          <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
           Assets
         </button>
       </div>
@@ -319,11 +319,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
       <div className="flex items-center justify-center gap-2">
         <label className="tool-upload-btn cursor-pointer">
           <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImageFileDrop(e.target.files[0])} className="hidden" />
-          <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+          <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
           Change
         </label>
         <button onClick={onPickerOpen} className="tool-assets-btn">
-          <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5" />
+          <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
           Assets
         </button>
       </div>
@@ -458,11 +458,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
                       <label className="tool-upload-btn cursor-pointer">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
-                        <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+                        <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
                         <span>Change</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn">
-                        <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5" />
+                        <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
                         <span>Assets</span>
                       </button>
                     </div>
@@ -479,11 +479,11 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
                       <label className="tool-upload-btn cursor-pointer">
                         <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
-                        <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+                        <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
                         <span>Upload</span>
                       </label>
                       <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn">
-                        <AnimatedIconify icon="solar:database-bold-duotone" className="w-3.5 h-3.5" />
+                        <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
                         <span>Assets</span>
                       </button>
                     </div>

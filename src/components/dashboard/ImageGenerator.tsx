@@ -84,6 +84,7 @@ const ToolSelect = ({
   options,
   ariaLabel,
   glyph,
+  optionGlyph,
 }: {
   icon: string;
   value: string;
@@ -91,6 +92,7 @@ const ToolSelect = ({
   options: { value: string; label: string }[];
   ariaLabel: string;
   glyph?: React.ReactNode;
+  optionGlyph?: (value: string) => React.ReactNode;
 }) => (
   <Select value={value} onValueChange={onValueChange}>
     <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
@@ -100,7 +102,10 @@ const ToolSelect = ({
     <SelectContent className="tool-select-menu">
       {options.map((option) => (
         <SelectItem key={option.value} value={option.value}>
-          {option.label}
+          <span className="tool-select-option">
+            {optionGlyph?.(option.value) || <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />}
+            <span>{option.label}</span>
+          </span>
         </SelectItem>
       ))}
     </SelectContent>
@@ -115,6 +120,17 @@ const FormatGlyph = ({ ratio }: { ratio: string }) => (
     aria-hidden="true"
   />
 );
+
+const StyleGlyph = ({ style }: { style: string }) => {
+  const icon =
+    style === "photorealistic" ? "solar:camera-bold" :
+    style === "artistic" ? "solar:magic-stick-3-bold" :
+    style === "anime" ? "solar:emoji-funny-circle-bold" :
+    style === "3d" ? "solar:cube-bold" :
+    "solar:stars-bold";
+
+  return <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />;
+};
 
 const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription = false, onUpgradeClick }: ImageGeneratorProps) => {
   const [prompt, setPrompt] = useState("");
@@ -390,16 +406,16 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
           <div className="tool-input-row">
-            <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" />
-            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" />
+            <ToolSelect icon="solar:palette-bold" value={selectedStyle} onValueChange={setSelectedStyle} options={imageSelectOptions.styles} ariaLabel="Style" optionGlyph={(value) => <StyleGlyph style={value} />} />
+            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "3:4" | "9:16" | "16:9")} options={imageSelectOptions.aspectRatio} ariaLabel="Format" optionGlyph={(value) => <FormatGlyph ratio={value} />} />
             <div className="w-px h-4 bg-border mx-0.5" />
             <label className="tool-upload-btn cursor-pointer" title="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+              <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
               <span>Upload</span>
             </label>
             <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn" title="My Assets">
-              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5" />
+              <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
               <span>Assets</span>
             </button>
           </div>

@@ -76,6 +76,7 @@ const ToolSelect = ({
   options,
   ariaLabel,
   glyph,
+  optionGlyph,
 }: {
   icon: string;
   value: string;
@@ -83,6 +84,7 @@ const ToolSelect = ({
   options: { value: string; label: string }[];
   ariaLabel: string;
   glyph?: React.ReactNode;
+  optionGlyph?: (value: string) => React.ReactNode;
 }) => (
   <Select value={value} onValueChange={onValueChange}>
     <SelectTrigger aria-label={ariaLabel} className="tool-select-control">
@@ -92,7 +94,10 @@ const ToolSelect = ({
     <SelectContent className="tool-select-menu">
       {options.map((option) => (
         <SelectItem key={option.value} value={option.value}>
-          {option.label}
+          <span className="tool-select-option">
+            {optionGlyph?.(option.value) || <AnimatedIconify icon={icon} className="h-4 w-4 shrink-0 text-muted-foreground" />}
+            <span>{option.label}</span>
+          </span>
         </SelectItem>
       ))}
     </SelectContent>
@@ -327,18 +332,18 @@ const VideoGenerator = ({
         {/* Bottom toolbar */}
         <div className="flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
           <div className="tool-input-row">
-            <ToolSelect icon="solar:clock-circle-bold" value={String(seconds)} onValueChange={(value) => setSeconds(Number(value) as 4 | 8 | 12)} options={videoSelectOptions.seconds} ariaLabel="Duration" />
-            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "16:9" | "9:16")} options={videoSelectOptions.aspectRatio} ariaLabel="Format" />
+            <ToolSelect icon="solar:clock-circle-bold" value={String(seconds)} onValueChange={(value) => setSeconds(Number(value) as 4 | 8 | 12)} options={videoSelectOptions.seconds} ariaLabel="Duration" optionGlyph={() => <AnimatedIconify icon="solar:stopwatch-bold" className="h-4 w-4 shrink-0 text-muted-foreground" />} />
+            <ToolSelect icon="solar:crop-minimalistic-bold" glyph={<FormatGlyph ratio={aspectRatio} />} value={aspectRatio} onValueChange={(value) => setAspectRatio(value as "1:1" | "16:9" | "9:16")} options={videoSelectOptions.aspectRatio} ariaLabel="Format" optionGlyph={(value) => <FormatGlyph ratio={value} />} />
             <div className="w-px h-4 bg-border mx-0.5" />
 
             <label className="tool-upload-btn cursor-pointer" title="Upload reference image">
               <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadReferenceImage(e.target.files[0])} className="hidden" />
-              <AnimatedIconify icon="solar:upload-square-bold-duotone" className="w-3.5 h-3.5" />
+              <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
               <span>Upload</span>
             </label>
 
             <button onClick={() => setShowAssetPicker(true)} className="tool-assets-btn" title="My Assets">
-              <AnimatedIconify icon="solar:folder-with-files-bold-duotone" className="w-3.5 h-3.5" />
+              <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
               <span>Assets</span>
             </button>
           </div>
