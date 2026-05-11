@@ -1,0 +1,68 @@
+# LOVIX
+
+> LOVIX is an AI-powered creative platform for generating videos, images, motion animations, and virtual AI influencers. Designed for content creators, marketers, social media managers, and brands.
+
+## What LOVIX Does
+
+LOVIX provides four core AI creative tools accessible via a credit-based subscription:
+
+- **Lovix Video** — Generate AI videos from text prompts or reference images. Supports 4s, 8s, 12s durations; 1:1, 16:9, 9:16 aspect ratios; HD and 4K quality.
+- **Lovix Image** — Generate and edit photorealistic AI images. Supports image editing with reference photos, style transfer, and upscaling.
+- **Lovix Motion** — Transfer motion from reference videos to characters, apply lip sync with audio, and animate still images.
+- **AI Influencer** — Create virtual AI influencer personas and generate branded content with consistent appearance across poses and video.
+
+## Who Uses LOVIX
+
+- Social media content creators producing short-form video for Instagram Reels, TikTok, YouTube Shorts
+- Marketing agencies creating branded AI video ads
+- E-commerce brands generating product visuals and promotional videos
+- Developers integrating AI video/image generation via API
+
+## Pricing
+
+LOVIX uses a credit-based subscription model. All plans include Video, Image, Motion, and AI Influencer tools.
+
+| Plan | Credits/mo | Price/mo |
+|------|-----------|---------|
+| Standard | 660 | $8.99 |
+| Pro | 3,000 | $31.99 |
+| Premier | 8,000 | $79.99 |
+| Ultra | 26,000 | $154.99 |
+
+Credit costs per generation:
+- Video 4s HD: 150 credits
+- Video 8s HD: 300 credits
+- Video 12s HD: 450 credits
+- Video 4K: +50% credits
+- Image generation: 10 credits
+- Motion transfer (standard): 200 credits
+- Motion transfer (pro): 250 credits
+
+Full pricing: https://lovix.app/pricing
+Machine-readable pricing: https://lovix.app/pricing.md
+
+## Key Pages
+
+- Homepage: https://lovix.app/
+- Pricing: https://lovix.app/pricing
+- Video Generation tool info: https://lovix.app/video-model
+- Image Generation tool info: https://lovix.app/image-model
+- Motion Control tool info: https://lovix.app/motion-control
+- AI Influencer tool info: https://lovix.app/ai-influencer
+- Blog: https://lovix.app/blog
+- Documentation: https://lovix.app/documentation
+- API Reference: https://lovix.app/api
+- Tutorials: https://lovix.app/tutorials
+
+## Technical
+
+- Platform: Web (browser-based, no install required)
+- API: Available on Premier and Ultra plans
+- Auth: Email/password and OAuth
+- Output formats: MP4 (video), PNG/JPG (images)
+- Max video resolution: 4K
+
+## Company
+
+LOVIX is an independent AI SaaS platform. Contact: lovixapp@gmail.com
+Website: https://lovix.app
