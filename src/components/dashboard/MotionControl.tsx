@@ -552,8 +552,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
           <Button
             onClick={canGenerate ? handleGenerate : onUpgradeClick}
             disabled={isGenerating || (canGenerate ? (motionMode === "motion-transfer" ? (!videoUrl || !imageUrl) : (!videoUrl || !audioUrl)) : false)}
-            style={{ background: "linear-gradient(135deg, hsl(var(--violet)), hsl(var(--pink)))" }}
-            className="text-white gap-2 h-10 px-6 font-medium hover:opacity-90 transition-opacity"
+            className="btn-generate gap-2 h-10 px-6 font-medium"
           >
             {isGenerating ? (
               <>

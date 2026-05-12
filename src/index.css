@@ -1473,6 +1473,32 @@ html.light {
     min-width: 7.25rem;
   }
 
+  @media (min-width: 641px) {
+    .tool-compact-toolbar {
+      flex-wrap: nowrap;
+    }
+
+    .tool-compact-toolbar .tool-input-row {
+      flex-wrap: nowrap;
+      gap: 0.45rem;
+      width: 100%;
+    }
+
+    .tool-compact-toolbar .tool-segment-group {
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tool-compact-toolbar .tool-style-segments .tool-segment-btn,
+    .tool-compact-toolbar .tool-format-segments .tool-segment-btn {
+      padding-inline: 0.5rem;
+    }
+
+    .tool-compact-toolbar .tool-generate-inline {
+      margin-left: auto;
+    }
+  }
+
   .tool-upload-btn,
   .tool-assets-btn {
     @apply inline-flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition-all duration-150;

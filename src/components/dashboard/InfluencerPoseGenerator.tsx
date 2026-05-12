@@ -157,7 +157,7 @@ const InfluencerPoseGenerator = ({
         <Button
           onClick={handleGenerate}
           disabled={isGenerating}
-          className="w-full gap-2 h-9"
+          className="btn-generate w-full gap-2 h-9 px-4"
         >
           {isGenerating ? (
             <>
@@ -172,7 +172,7 @@ const InfluencerPoseGenerator = ({
           )}
         </Button>
       ) : (
-        <Button onClick={onUpgrade} className="w-full gap-2">
+        <Button onClick={onUpgrade} className="btn-generate w-full gap-2 h-9 px-4">
           <Zap className="w-4 h-4" />
           Upgrade to Generate
         </Button>

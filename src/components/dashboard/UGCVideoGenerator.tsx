@@ -999,7 +999,7 @@ export default function UGCVideoGenerator({
             className={`h-12 px-6 font-semibold rounded-2xl transition-all ${
               stage === 'complete' ? 'bg-emerald-500 hover:bg-emerald-600 text-white' :
               stage === 'failed' ? 'bg-destructive/80 hover:bg-destructive text-white' :
-              'bg-gradient-to-r from-primary to-violet-500 text-white hover:opacity-90 shadow-lg shadow-primary/20'
+              'btn-generate'
             }`}
           >
             {isGenerating ? (

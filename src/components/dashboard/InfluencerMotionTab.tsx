@@ -372,7 +372,7 @@ const InfluencerMotionTab = ({
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || !motionVideoUrl}
-            className="flex-1 gap-2 h-9"
+            className="btn-generate flex-1 gap-2 h-9 px-4"
           >
             {isGenerating ? (
               <>
@@ -387,7 +387,7 @@ const InfluencerMotionTab = ({
             )}
           </Button>
         ) : (
-          <Button onClick={onUpgrade} className="flex-1 gap-2">
+          <Button onClick={onUpgrade} className="btn-generate flex-1 gap-2 h-9 px-4">
             <Zap className="w-4 h-4" />
             Upgrade to Generate
           </Button>
