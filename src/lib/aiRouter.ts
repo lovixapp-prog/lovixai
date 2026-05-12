@@ -296,7 +296,10 @@ function extractVideoSettings(text: string): Record<string, unknown> {
 function hasVideoProjectMarker(text: string): boolean {
   const lower = text.toLowerCase();
   return lower.includes('tipo progetto: video marketing lovix')
+    || lower.includes('project type: lovix marketing video')
+    || lower.includes('final output: video')
     || lower.includes('output finale: video')
+    || lower.includes('generate video plan')
     || lower.includes('genera piano video')
     || lower.includes('motore video')
     || lower.includes('seedance');

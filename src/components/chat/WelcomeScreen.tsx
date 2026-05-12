@@ -23,10 +23,10 @@ export function WelcomeScreen({ userName }: WelcomeScreenProps) {
       </div>
 
       <h1 className="mb-3 font-display text-3xl font-bold text-foreground sm:text-4xl">
-        {firstName ? `Crea un progetto video, ${firstName}.` : 'Crea un progetto video.'}
+        {firstName ? `Create a video project, ${firstName}.` : 'Create a video project.'}
       </h1>
       <p className="max-w-sm text-base text-muted-foreground">
-        Scrivi il brief: l'agente prepara piano, scene, CTA e prompt finale prima della generazione.
+        Write the brief: the agent prepares the plan, scenes, CTA and final prompt before generation.
       </p>
     </div>
   );

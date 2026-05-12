@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight, PenLine, X } from 'lucide-react';
 import type { ChatMessage } from '@/hooks/useChat';
-import { detectLang, type Lang, type MarketingPlan } from '@/lib/aiRouter';
+import type { Lang, MarketingPlan } from '@/lib/aiRouter';
 import AnimatedIconify from '@/components/ui/animated-iconify';
 
 interface AgentPlanCardProps {
@@ -361,8 +361,8 @@ const PLAN_COPY: Record<Lang, {
   },
 };
 
-function getPlanCopy(prompt?: string): (typeof PLAN_COPY)[Lang] {
-  return PLAN_COPY[detectLang(prompt || '')] ?? PLAN_COPY.en;
+function getPlanCopy(_prompt?: string): (typeof PLAN_COPY)[Lang] {
+  return PLAN_COPY.en;
 }
 
 function splitLines(value: string): string[] {

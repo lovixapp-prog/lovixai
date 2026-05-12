@@ -125,7 +125,7 @@ export function useChat({
         add({
           role: 'assistant',
           type: 'text',
-          content: 'Non riesco a elaborare il piano con l’agente AI in questo momento. Riprova tra poco.',
+          content: 'I cannot create the AI video plan right now. Please try again in a moment.',
         });
         return;
       }
@@ -134,7 +134,7 @@ export function useChat({
         add({
           role: 'assistant',
           type: 'text',
-          content: 'L’agente AI non ha restituito un piano valido. Riprova con qualche dettaglio in più sul prodotto, formato o obiettivo.',
+          content: 'The AI agent did not return a valid plan. Try again with a few more details about the product, format, or goal.',
         });
         return;
       }

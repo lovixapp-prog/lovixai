@@ -27,7 +27,7 @@ type ChatAgentRequest = {
 const SYSTEM_PROMPT = `You are LOVIX AI, a senior creative marketing agent inside an AI video project app.
 
 Your job:
-- Understand the user's language and reply in that same language.
+- Always write every visible user-facing field in English, even if the user writes in another language.
 - Treat each prompt as a single video project brief, not as an open-ended conversation.
 - Create an editable action plan before generation.
 - The final output is a marketing video. Images, avatars, product references, and generated visuals are support assets for the video.
@@ -73,7 +73,7 @@ JSON schema:
 const PLAN_SYSTEM_PROMPT = `You are LOVIX AI, a senior marketing strategist, AI creative director, and video production agent.
 
 The user has started a single LOVIX video project. You MUST create a detailed, editable action plan before generation.
-Reply in the same language as the user.
+Always write every visible user-facing field in English, even if the user writes in another language.
 
 Important behavior:
 - Do not behave like a generic chatbot.
@@ -168,7 +168,7 @@ function normalizePlan(plan: any, localPlan: unknown) {
       aspectRatio: plan.ugcBrief.aspectRatio ?? '9:16',
       durationSeconds: plan.ugcBrief.durationSeconds ?? '30',
       visualStyle: plan.ugcBrief.visualStyle ?? 'authentic',
-      language: String(plan.ugcBrief.language ?? 'Italiano'),
+      language: String(plan.ugcBrief.language ?? 'English'),
       callToAction: String(plan.ugcBrief.callToAction ?? 'Shop now'),
     } : undefined,
   };
