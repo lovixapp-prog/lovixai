@@ -494,21 +494,21 @@ const InfluencerWizard = ({
       </div>
 
       {/* ── Type selector ─────────────────────────────────── */}
-      <div className="grid grid-cols-3 gap-2 mb-3">
+      <div className="influencer-type-tabs">
         {TYPE_TABS.map(({ value, label, Icon, desc }) => (
           <button
             key={value}
             type="button"
             onClick={() => switchType(value)}
             className={cn(
-              "flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border transition-all text-center sm:text-left min-w-0",
+              "influencer-type-tab",
               influencerType === value
                 ? "border-primary bg-primary/8 shadow-[0_0_20px_hsl(var(--primary)/0.1)]"
                 : "border-border bg-card hover:border-primary/40"
             )}
           >
             <div className={cn(
-              "w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all shrink-0",
+              "influencer-type-icon",
               influencerType === value ? "bg-primary text-primary-foreground shadow-[0_0_12px_hsl(var(--primary)/0.4)]" : "bg-muted text-muted-foreground"
             )}>
               <Icon className="w-4 h-4" />
@@ -522,9 +522,10 @@ const InfluencerWizard = ({
       </div>
 
       {/* ── Studio Layout: canvas + builder ─────────────────── */}
-      <div className="influencer-creator-stack">
+      <div className={`influencer-creator-stack ${generatedImage || isGenerating ? '' : 'influencer-creator-stack-form-only'}`}>
 
         {/* Canvas / Preview */}
+        {(generatedImage || isGenerating) && (
         <div className="influencer-preview-panel"
           style={{ backgroundImage: 'radial-gradient(hsl(var(--border)/0.25) 1px, transparent 1px)', backgroundSize: '22px 22px' }}>
           <div className="w-full max-w-[210px] sm:max-w-[260px] aspect-[3/4] rounded-2xl overflow-hidden border border-border/60 shadow-2xl relative bg-card">
@@ -591,6 +592,7 @@ const InfluencerWizard = ({
             )}
           </div>
         </div>
+        )}
 
         {/* Builder right panel */}
         <div className={`chat-composer influencer-project-composer ${isGenerating ? 'opacity-75' : ''}`}>

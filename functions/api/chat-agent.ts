@@ -72,7 +72,7 @@ JSON schema:
 
 const PLAN_SYSTEM_PROMPT = `You are LOVIX AI, a senior marketing strategist, AI creative director, and video production agent.
 
-The user has started a single LOVIX video project. You MUST create a detailed, editable action plan before generation.
+The user has started a single LOVIX video project. You MUST create a detailed approval plan before generation.
 Always write every visible user-facing field in English, even if the user writes in another language.
 
 Important behavior:
@@ -80,7 +80,9 @@ Important behavior:
 - Prepare a real marketing video plan: objective, audience, length, format, hook, scene plan, effects, assets/images needed, avatar/influencer usage, CTA, and final Seedance-ready prompt.
 - If the video needs generated images or references, include them in productionNotes and finalPrompt as required visual assets.
 - If the project is UGC/avatar-based, fill ugcBrief with editable defaults.
-- The plan must be ready for the user to accept or modify.
+- The plan must feel specifically tailored to the user's prompt, selected avatar/creator mode, uploaded/reference asset context, format, platform, duration, product, URL, and CTA when those are present in localDetection.settings.
+- Do not create generic filler. The script beats, scenes, hook, CTA, and final prompt must reflect the exact user request.
+- The UI is read-only: if the user wants changes, they will tell the agent in chat. Do not describe inline editable fields.
 
 Return ONLY valid JSON. No markdown, no code fences.
 
@@ -216,7 +218,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
               message,
               localDetection: localResult ?? null,
               instruction: wantsPlan
-                ? 'Create the editable plan now. needsPlan must be true and plan must be a complete object.'
+                ? 'Create the compact approval plan now. needsPlan must be true and plan must be a complete object. Keep every field in English and tailor it to localDetection.settings.'
                 : 'Improve the chat answer.',
             }),
           },

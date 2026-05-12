@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { detectIntent, RouterResult } from '@/lib/aiRouter';
+import { buildMarketingPlan, detectIntent, RouterResult } from '@/lib/aiRouter';
 import type { AgentField, MarketingPlan } from '@/lib/aiRouter';
 import { callAPI } from '@/lib/api';
 import { supabase } from '@/integrations/supabase/client';
@@ -107,7 +107,7 @@ export function useChat({
           needsPlan: true,
           needsInfo: false,
           agentFields: undefined,
-          responseText: 'Preparo un piano video modificabile prima della generazione.',
+          responseText: 'I will prepare a compact video plan before generation.',
           settings: {
             ...detected.settings,
             projectMode: 'video_project',
@@ -115,22 +115,19 @@ export function useChat({
             referenceAsset: attachedFile ? attachedFile.type : undefined,
           },
         };
+    result.plan = result.plan ?? buildMarketingPlan(text, result.intent, result.settings);
     const openRouterResult = await enhanceWithOpenRouter(text, result, messages).catch((error: unknown) => ({
       error: error instanceof Error ? error.message : 'AI agent unavailable',
     }));
     setIsThinking(false);
 
     if (result.needsPlan) {
-      if ('error' in (openRouterResult ?? {})) {
-        add({
-          role: 'assistant',
-          type: 'text',
-          content: 'I cannot create the AI video plan right now. Please try again in a moment.',
-        });
-        return;
-      }
+      const fallbackPlan = result.plan;
+      const agentPlan = openRouterResult && !('error' in openRouterResult) && openRouterResult.plan
+        ? openRouterResult.plan
+        : fallbackPlan;
 
-      if (!openRouterResult?.plan) {
+      if (!agentPlan) {
         add({
           role: 'assistant',
           type: 'text',
@@ -146,8 +143,8 @@ export function useChat({
         agentPlan: {
           intent: result.intent,
           status: 'pending',
-          intro: openRouterResult.responseText || result.responseText,
-          plan: openRouterResult.plan,
+          intro: openRouterResult && !('error' in openRouterResult) ? openRouterResult.responseText || result.responseText : result.responseText,
+          plan: agentPlan,
         },
         settings: result.settings,
         prompt: text,

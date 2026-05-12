@@ -346,12 +346,15 @@ function extractAudienceIt(text: string): string {
   return 'Pubblico freddo sui social che ha bisogno di hook forte, prova rapida e una CTA chiara';
 }
 
-function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<string, unknown>): MarketingPlan {
+export function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<string, unknown>): MarketingPlan {
   const lower = text.toLowerCase();
-  const lang = detectLang(text);
-  const isIt = lang === 'it';
+  const isIt = false;
   const isUgc = intent === 'ugc' || lower.includes('ugc') || lower.includes('prodotto') || lower.includes('product');
   const isVertical = String(settings.aspectRatio ?? '').includes('9:16') || lower.includes('tiktok') || lower.includes('reel');
+  const productName = String(settings.productName ?? settings.product ?? '').trim();
+  const productUrl = String(settings.productUrl ?? settings.url ?? '').trim();
+  const creatorMode = String(settings.influencerMode ?? settings.avatarMode ?? settings.avatar ?? '').trim();
+  const requestedPlatform = String(settings.platform ?? '').trim();
   const duration = isUgc
     ? (lower.includes('lungo') || lower.includes('long')
         ? (isIt ? 'Concept UGC 45-60s, diviso in scene brevi e forti' : '45-60s UGC concept, split into punchy scenes')
@@ -369,7 +372,9 @@ function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<str
     ? (isIt ? 'Formato social verticale 9:16' : '9:16 vertical social format')
     : `${settings.aspectRatio ?? '16:9'} ${isIt ? 'formato campagna' : 'campaign format'}`;
   const hook = isUgc
-    ? (isIt ? 'Apri con un pattern interrupt: il creator mostra il problema prima di nominare il prodotto.' : 'Open with a pattern interrupt: a creator shows the problem before naming the product.')
+    ? (productName
+        ? `Open with a pattern interrupt around the specific pain point ${productName} solves, then show the creator using it naturally.`
+        : 'Open with a pattern interrupt: a creator shows the problem before naming the product.')
     : (isIt ? 'Apri con un frame impossibile o sorprendente, poi rivela il concetto in movimento.' : 'Open with one impossible or visually surprising frame, then reveal the concept in motion.');
 
   const scriptOutline = isUgc
@@ -380,8 +385,8 @@ function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<str
         '22-30s: CTA chiara con un beneficio ripetuto in parole semplici',
       ] : [
         '0-3s: scroll-stopping problem or confession hook',
-        '3-10s: product appears naturally inside the creator routine',
-        '10-22s: proof, demo, transformation, or comparison',
+        `3-10s: ${productName || 'the offer'} appears naturally inside the creator routine`,
+        '10-22s: proof, demo, transformation, or comparison tied to the user request',
         '22-30s: clear CTA with one benefit repeated in simple words',
       ])
     : (isIt ? [
@@ -404,7 +409,7 @@ function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<str
         { title: 'Frame CTA', detail: 'Chiudi con hero shot del prodotto e una frase d’azione breve.' },
       ] : [
         { title: 'Hook Shot', detail: 'Close, handheld creator framing with direct eye contact and fast caption energy.' },
-        { title: 'Product Proof', detail: 'Show the product in use, with one tactile detail viewers can instantly understand.' },
+        { title: 'Product Proof', detail: `Show ${productName || 'the offer'} in use, with one tactile detail viewers can instantly understand.` },
         { title: 'Outcome Scene', detail: 'Show the after-state, social proof, or emotional payoff in one clean visual.' },
         { title: 'CTA Frame', detail: 'End with a simple product hero shot and a short action line.' },
       ])
@@ -435,11 +440,11 @@ function buildMarketingPlan(text: string, intent: AIIntent, settings: Record<str
   ].join(' ');
 
   const ugcBrief = isUgc ? {
-    productName: '',
-    productUrl: '',
+    productName,
+    productUrl,
     offerType: lower.includes('app') ? 'app' as const : lower.includes('servizio') || lower.includes('service') ? 'service' as const : 'product' as const,
-    influencerMode: 'my_influencer' as const,
-    platform: lower.includes('youtube') ? 'youtube' as const : lower.includes('instagram') || lower.includes('reel') ? 'instagram' as const : lower.includes('facebook') || lower.includes('meta') ? 'meta' as const : lower.includes('tiktok') ? 'tiktok' as const : 'multi' as const,
+    influencerMode: creatorMode.includes('upload') ? 'upload_creator' as const : creatorMode.includes('new') ? 'generate_new' as const : creatorMode.includes('none') ? 'no_preference' as const : 'my_influencer' as const,
+    platform: requestedPlatform.includes('youtube') || lower.includes('youtube') ? 'youtube' as const : requestedPlatform.includes('instagram') || lower.includes('instagram') || lower.includes('reel') ? 'instagram' as const : requestedPlatform.includes('meta') || lower.includes('facebook') || lower.includes('meta') ? 'meta' as const : requestedPlatform.includes('tiktok') || lower.includes('tiktok') ? 'tiktok' as const : 'multi' as const,
     aspectRatio: isVertical ? '9:16' as const : '16:9' as const,
     durationSeconds: lower.includes('60') || lower.includes('lungo') || lower.includes('long') ? '60' as const : lower.includes('45') ? '45' as const : lower.includes('15') ? '15' as const : '30' as const,
     visualStyle: lower.includes('cinematic') || lower.includes('cinematograf') ? 'cinematic' as const : lower.includes('premium') || lower.includes('luxury') ? 'premium' as const : lower.includes('social') ? 'social' as const : 'authentic' as const,
@@ -619,8 +624,6 @@ export function detectIntent(message: string): RouterResult {
   if (intent === 'video') settings = extractVideoSettings(message);
   if (intent === 'image') settings = extractImageSettings(message);
 
-  const lang = detectLang(message);
-
   if (isVideoProject || isComplexCreativeRequest(message, intent)) {
     return {
       intent: intent === 'image' ? 'video' : intent,
@@ -629,11 +632,11 @@ export function detectIntent(message: string): RouterResult {
       settings,
       needsPlan: true,
       plan: buildMarketingPlan(message, intent === 'image' ? 'video' : intent, settings),
-      responseText: lang === 'it'
-        ? 'Creo un piano video modificabile prima della generazione.'
-        : 'I will create an editable video plan before generation.',
+      responseText: 'I will create a compact video plan before generation.',
     };
   }
+
+  const lang: Lang = 'en';
 
   // Intents that need info before generating
   if (intent === 'motion') {

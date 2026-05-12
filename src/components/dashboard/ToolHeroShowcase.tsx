@@ -21,7 +21,7 @@ const HERO_CONFIG: Record<ToolHeroVariant, {
   video: {
     eyebrow: "Lovix Video",
     title: "Video generator",
-    description: "Crea clip cinematiche da prompt o immagine reference, con formato social e durata controllata.",
+    description: "Create cinematic clips from a prompt or reference image, with social formats and controlled duration.",
     guideHref: "/guide/video",
     guideLabel: "Video guide",
     icon: "solar:videocamera-record-bold-duotone",
@@ -30,7 +30,7 @@ const HERO_CONFIG: Record<ToolHeroVariant, {
   image: {
     eyebrow: "Lovix Image",
     title: "Image studio",
-    description: "Genera visual, creativita adv, concept e immagini editoriali con stile coerente.",
+    description: "Generate campaign visuals, creative concepts, and editorial images with consistent style.",
     guideHref: "/guide/image",
     guideLabel: "Image guide",
     icon: "solar:gallery-wide-bold-duotone",
@@ -39,7 +39,7 @@ const HERO_CONFIG: Record<ToolHeroVariant, {
   motion: {
     eyebrow: "Lovix Motion",
     title: "Motion control",
-    description: "Trasferisci movimento, anima character e crea lip-sync con file video, immagine o audio.",
+    description: "Transfer motion, animate characters, and create lip sync from video, image, or audio files.",
     guideHref: "/guide/motion",
     guideLabel: "Motion guide",
     icon: "solar:magic-stick-3-bold-duotone",
@@ -48,14 +48,14 @@ const HERO_CONFIG: Record<ToolHeroVariant, {
   ugc: {
     eyebrow: "UGC Ads",
     title: "Product ad studio",
-    description: "Trasforma prodotto, URL e brief in contenuti UGC pronti per campagne paid social.",
+    description: "Turn a product, URL, and brief into UGC content ready for paid social campaigns.",
     icon: "solar:shop-bold-duotone",
     className: "tool-identity-ugc",
   },
   influencer: {
     eyebrow: "AI Influencer Studio",
     title: "Creator builder",
-    description: "Disegna un creator riutilizzabile per video, pose, motion e contenuti social coerenti.",
+    description: "Design a reusable creator for videos, poses, motion, and consistent social content.",
     icon: "solar:user-id-bold-duotone",
     className: "tool-identity-influencer",
   },
