@@ -98,11 +98,28 @@ export function useChat({
     setIsThinking(true);
 
     const result = detectIntent(text);
-    await new Promise(r => setTimeout(r, 350 + Math.random() * 150));
+    const openRouterResult = await enhanceWithOpenRouter(text, result, messages).catch(() => null);
     setIsThinking(false);
 
+    if (openRouterResult?.needsPlan && openRouterResult.plan && result.needsPlan) {
+      add({
+        role: 'assistant',
+        type: 'agent_plan',
+        intent: result.intent as AIIntent,
+        agentPlan: {
+          intent: result.intent,
+          status: 'pending',
+          intro: openRouterResult.responseText || result.responseText,
+          plan: openRouterResult.plan,
+        },
+        settings: result.settings,
+        prompt: text,
+      });
+      return;
+    }
+
     if (result.intent === 'chat') {
-      add({ role: 'assistant', type: 'text', content: result.responseText });
+      add({ role: 'assistant', type: 'text', content: openRouterResult?.responseText || result.responseText });
       return;
     }
 
@@ -164,7 +181,7 @@ export function useChat({
       const msg = err instanceof Error ? err.message : 'Generation failed. Please try again.';
       update(cardId, { type: 'output_error', error: msg, status: 'failed', progress: 0 });
     }
-  }, [userId, add, update, onCreditsUpdate, onNavigate]);
+  }, [userId, add, update, onCreditsUpdate, onNavigate, messages]);
 
   const confirmAgentPlan = useCallback(async (
     msgId: string,
@@ -390,6 +407,45 @@ export function useChat({
   }, [userId, update, onCreditsUpdate]);
 
   return { messages, isThinking, sendMessage, retryGeneration, confirmAgentRequest, cancelAgentRequest, confirmAgentPlan, cancelAgentPlan };
+}
+
+type ChatAgentApiResponse = {
+  success: boolean;
+  error?: string;
+  result?: {
+    responseText?: string;
+    needsPlan?: boolean;
+    plan?: MarketingPlan | null;
+    model?: string;
+  };
+};
+
+async function enhanceWithOpenRouter(
+  text: string,
+  localResult: RouterResult,
+  messages: ChatMessage[],
+): Promise<ChatAgentApiResponse['result'] | null> {
+  if (localResult.intent !== 'chat' && !localResult.needsPlan) return null;
+
+  const history = messages
+    .filter(m => (m.role === 'user' || m.role === 'assistant') && m.content)
+    .slice(-8)
+    .map(m => ({ role: m.role, content: m.content! }));
+
+  const res = await callAPI<ChatAgentApiResponse>('chat-agent', {
+    message: text,
+    history,
+    localResult: {
+      intent: localResult.intent,
+      responseText: localResult.responseText,
+      needsPlan: localResult.needsPlan,
+      settings: localResult.settings,
+      plan: localResult.plan,
+    },
+  });
+
+  if (!res.success || !res.result) return null;
+  return res.result;
 }
 
 function getNavResponse(intent: string, _text: string): string {

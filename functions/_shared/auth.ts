@@ -5,6 +5,8 @@ export interface Env {
   SUPABASE_SERVICE_ROLE_KEY: string;
   SUPABASE_ANON_KEY: string;
   OPENAI_API_KEY: string;
+  OPENROUTER_API_KEY?: string;
+  OPENROUTER_CHAT_MODEL?: string;
   GOOGLE_AI_STUDIO_API_KEY?: string;
   KLING_ACCESS_KEY: string;
   KLING_SECRET_KEY: string;
