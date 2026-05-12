@@ -168,6 +168,7 @@ const ChatDashboard = () => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
   const [hoveredChatId, setHoveredChatId] = useState<string | null>(null);
+  const contentScrollRef = useRef<HTMLDivElement | null>(null);
 
   const navigate = useNavigate();
   const { user, loading, signOut, subscription, subscriptionLoading, checkSubscription } = useAuth();
@@ -261,6 +262,7 @@ const ChatDashboard = () => {
   const handleTabChange = (id: ActiveTab) => {
     setActiveTab(id);
     setMobileMenu(null);
+    requestAnimationFrame(() => contentScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' }));
   };
 
   /* ─── Sidebar Content (shared desktop/mobile) ─ */
@@ -824,7 +826,7 @@ const ChatDashboard = () => {
         </header>
 
         {/* Content */}
-        <div className={`flex-1 min-h-0 ${activeTab === 'chat' ? 'flex flex-col overflow-hidden' : 'overflow-y-auto pb-20 lg:pb-8'}`}>
+        <div ref={contentScrollRef} className={`flex-1 min-h-0 ${activeTab === 'chat' ? 'flex flex-col overflow-hidden' : 'overflow-y-auto pb-20 lg:pb-8'}`}>
           {activeTab !== 'chat' ? (
             <div className={`mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 ${['home', 'connectors', 'influencer', 'ugc'].includes(activeTab) ? 'max-w-7xl' : 'max-w-4xl'}`}>
               {renderContent()}

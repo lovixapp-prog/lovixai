@@ -34,6 +34,7 @@ import { callAPI } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import type { Influencer } from "./AIInfluencer";
+import ToolHeroShowcase from "./ToolHeroShowcase";
 
 export type InfluencerType = "human" | "animal" | "custom";
 
@@ -476,7 +477,10 @@ const InfluencerWizard = ({
     <div className="influencer-wizard py-1 space-y-0">
 
       {/* ── Cinematic Hero ─────────────────────────────────── */}
-      <div className="tool-hero-sm influencer-wizard-hero rounded-2xl mb-3">
+      <div className="mb-3">
+        <ToolHeroShowcase variant="influencer" compact />
+      </div>
+      <div className="hidden tool-hero-sm influencer-wizard-hero rounded-2xl mb-3">
         <div className="tool-hero-bg" />
         <div className="tool-hero-grid" />
         <div className="relative z-10 flex flex-col items-center gap-2">

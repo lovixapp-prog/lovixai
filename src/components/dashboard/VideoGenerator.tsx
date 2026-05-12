@@ -11,6 +11,7 @@ import ToolCreationsGrid from "./ToolCreationsGrid";
 import AssetPicker from "./AssetPicker";
 import { resizeImageForAspectRatio } from "@/utils/imageResize";
 import AnimatedIconify from "@/components/ui/animated-iconify";
+import ToolHeroShowcase from "./ToolHeroShowcase";
 
 interface VideoGeneratorProps {
   onCreditsUpdate: () => void;
@@ -229,22 +230,7 @@ const VideoGenerator = ({
   return (
     <div className="py-4 sm:py-6 space-y-6">
 
-      {/* ── Cinematic Hero ─────────────────────────────────── */}
-      <div className="tool-hero rounded-2xl">
-        <div className="tool-hero-bg" />
-        <div className="tool-hero-grid" />
-        <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="star-icon star-icon-lg"><MagicStar className="w-7 h-7" /></div>
-            <span className="badge-violet text-xs">Lovix Video</span>
-          </div>
-          <h1 className="tool-hero-title">Bring Your Vision to Life</h1>
-          <p className="tool-hero-subtitle">Generate cinematic AI videos from text or image. Up to 12s, HD quality, sound included.</p>
-          <Link to="/guide/video" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mt-1">
-            <AnimatedIconify icon="solar:notebook-bookmark-bold-duotone" className="w-3.5 h-3.5 text-primary" /> Prompting Guide
-          </Link>
-        </div>
-      </div>
+      <ToolHeroShowcase variant="video" />
 
       {/* ── Prompt Bar ─────────────────────────────────────── */}
       <div {...dragProps} className={`chat-composer tool-agent-composer transition-all ${isDragging ? 'border-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]' : ''}`}>

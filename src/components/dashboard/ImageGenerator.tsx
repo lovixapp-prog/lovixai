@@ -18,6 +18,7 @@ import InlineGenerationCard from "./InlineGenerationCard";
 import ToolCreationsGrid from "./ToolCreationsGrid";
 import AssetPicker from "./AssetPicker";
 import AnimatedIconify from "@/components/ui/animated-iconify";
+import ToolHeroShowcase from "./ToolHeroShowcase";
 
 interface ImageGeneratorProps {
   onCreditsUpdate: () => void;
@@ -305,22 +306,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
   return (
     <div className="py-4 sm:py-6 space-y-6">
 
-      {/* ── Cinematic Hero ─────────────────────────────────── */}
-      <div className="tool-hero rounded-2xl">
-        <div className="tool-hero-bg" />
-        <div className="tool-hero-grid" />
-        <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="star-icon star-icon-lg"><MagicStar className="w-7 h-7" /></div>
-            <span className="badge-cyan text-xs">Lovix Image</span>
-          </div>
-          <h1 className="tool-hero-title">Create Stunning AI Images</h1>
-          <p className="tool-hero-subtitle">Generate or edit images with AI. Photorealistic, artistic, anime, 3D — your vision, instantly.</p>
-          <Link to="/guide/image" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mt-1">
-            <AnimatedIconify icon="solar:notebook-bookmark-bold-duotone" className="w-3.5 h-3.5 text-primary" /> Prompting Guide
-          </Link>
-        </div>
-      </div>
+      <ToolHeroShowcase variant="image" />
 
       {/* ── Prompt Bar ─────────────────────────────────────── */}
       <div

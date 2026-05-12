@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { callAPI } from "@/lib/api";
 import AnimatedIconify from "@/components/ui/animated-iconify";
+import ToolHeroShowcase from "./ToolHeroShowcase";
 
 // ── Types ────────────────────────────────────────────────────────────
 interface Product {
@@ -438,7 +439,8 @@ export default function UGCVideoGenerator({
 
   return (
     <div className="space-y-5 max-w-5xl mx-auto py-3 pb-24 lg:pb-10">
-      <div className="text-center px-2">
+      <ToolHeroShowcase variant="ugc" />
+      <div className="hidden text-center px-2">
         <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-primary">
           <MagicStar className="h-3.5 w-3.5" />
           UGC Studio

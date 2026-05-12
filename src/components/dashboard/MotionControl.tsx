@@ -18,6 +18,7 @@ import ToolCreationsGrid from "./ToolCreationsGrid";
 import AssetPicker from "./AssetPicker";
 import DropZone from "./DropZone";
 import AnimatedIconify from "@/components/ui/animated-iconify";
+import ToolHeroShowcase from "./ToolHeroShowcase";
 
 interface MotionControlProps {
   onCreditsUpdate: () => void;
@@ -360,6 +361,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
     <div className="py-4 sm:py-6 space-y-6">
 
       {/* â”€â”€ Cinematic Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      <div className="hidden">
       <div className="tool-hero rounded-2xl">
         <div className="tool-hero-bg" />
         <div className="tool-hero-grid" />
@@ -375,6 +377,9 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
           </Link>
         </div>
       </div>
+      </div>
+
+      <ToolHeroShowcase variant="motion" />
 
       <div className="chat-input-wrapper">
         <div className={`chat-composer motion-project-composer ${isGenerating ? 'opacity-75' : ''}`}>
