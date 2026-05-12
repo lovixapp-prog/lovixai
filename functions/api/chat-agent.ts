@@ -195,7 +195,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       success: true,
       result: {
         responseText: String(parsed.responseText ?? localResult?.responseText ?? ''),
-        needsPlan: Boolean(parsed.needsPlan),
+        needsPlan: Boolean(parsed.needsPlan || localResult?.needsPlan),
         plan: normalizePlan(parsed.plan, localResult?.plan),
         model: data.model ?? model,
       },
