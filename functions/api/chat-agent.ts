@@ -69,6 +69,49 @@ JSON schema:
   }
 }`;
 
+const PLAN_SYSTEM_PROMPT = `You are LOVIX AI, a senior marketing strategist and AI creative director.
+
+The user has made a complex creative request. You MUST create a detailed, editable action plan before generation.
+Reply in the same language as the user.
+
+Return ONLY valid JSON. No markdown, no code fences.
+
+Required JSON schema:
+{
+  "responseText": "short sentence introducing the plan",
+  "needsPlan": true,
+  "plan": {
+    "title": "string",
+    "summary": "string",
+    "strategy": "string",
+    "deliverable": "string",
+    "format": "string",
+    "duration": "string",
+    "audience": "string",
+    "hook": "string",
+    "scriptOutline": ["4-8 concrete beats"],
+    "shotList": [
+      { "title": "shot title", "detail": "specific visual/action detail" }
+    ],
+    "productionNotes": ["practical generation notes"],
+    "finalPrompt": "complete generation-ready prompt",
+    "riskNotes": ["missing info or quality risks"],
+    "estimatedCredits": "string",
+    "ugcBrief": null or {
+      "productName": "",
+      "productUrl": "",
+      "offerType": "product|service|app|other",
+      "influencerMode": "my_influencer|generate_new|upload_creator|no_preference",
+      "platform": "tiktok|instagram|youtube|meta|multi",
+      "aspectRatio": "9:16|1:1|16:9",
+      "durationSeconds": "15|30|45|60",
+      "visualStyle": "authentic|cinematic|social|premium",
+      "language": "string",
+      "callToAction": "string"
+    }
+  }
+}`;
+
 const FALLBACK_MODEL = 'openrouter/free';
 
 function safeJsonParse(text: string): any | null {
@@ -86,7 +129,7 @@ function safeJsonParse(text: string): any | null {
 }
 
 function normalizePlan(plan: any, localPlan: unknown) {
-  if (!plan || typeof plan !== 'object') return localPlan ?? null;
+  if (!plan || typeof plan !== 'object') return null;
   return {
     title: String(plan.title ?? ''),
     summary: String(plan.summary ?? ''),
@@ -142,6 +185,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       .filter(m => m.content?.trim())
       .map(m => ({ role: m.role, content: m.content.slice(0, 1600) }));
 
+    const wantsPlan = Boolean(localResult?.needsPlan);
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -153,19 +197,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       body: JSON.stringify({
         model,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: wantsPlan ? PLAN_SYSTEM_PROMPT : SYSTEM_PROMPT },
           ...recentHistory,
           {
             role: 'user',
             content: JSON.stringify({
               message,
               localDetection: localResult ?? null,
-              instruction: 'Improve the chat answer. If localDetection.needsPlan is true, return a stronger editable plan.',
+              instruction: wantsPlan
+                ? 'Create the editable plan now. needsPlan must be true and plan must be a complete object.'
+                : 'Improve the chat answer.',
             }),
           },
         ],
         temperature: 0.55,
-        max_tokens: localResult?.needsPlan ? 1800 : 600,
+        max_tokens: wantsPlan ? 2200 : 600,
         response_format: { type: 'json_object' },
       }),
     });
@@ -195,8 +241,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       success: true,
       result: {
         responseText: String(parsed.responseText ?? localResult?.responseText ?? ''),
-        needsPlan: Boolean(parsed.needsPlan || localResult?.needsPlan),
-        plan: normalizePlan(parsed.plan, localResult?.plan),
+        needsPlan: Boolean(parsed.needsPlan || wantsPlan),
+        plan: normalizePlan(parsed.plan, null),
         model: data.model ?? model,
       },
     });

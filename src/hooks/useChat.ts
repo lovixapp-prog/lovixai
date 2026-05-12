@@ -98,10 +98,30 @@ export function useChat({
     setIsThinking(true);
 
     const result = detectIntent(text);
-    const openRouterResult = await enhanceWithOpenRouter(text, result, messages).catch(() => null);
+    const openRouterResult = await enhanceWithOpenRouter(text, result, messages).catch((error: unknown) => ({
+      error: error instanceof Error ? error.message : 'AI agent unavailable',
+    }));
     setIsThinking(false);
 
-    if (openRouterResult?.needsPlan && openRouterResult.plan && result.needsPlan) {
+    if (result.needsPlan) {
+      if ('error' in (openRouterResult ?? {})) {
+        add({
+          role: 'assistant',
+          type: 'text',
+          content: 'Non riesco a elaborare il piano con l’agente AI in questo momento. Riprova tra poco.',
+        });
+        return;
+      }
+
+      if (!openRouterResult?.plan) {
+        add({
+          role: 'assistant',
+          type: 'text',
+          content: 'L’agente AI non ha restituito un piano valido. Riprova con qualche dettaglio in più sul prodotto, formato o obiettivo.',
+        });
+        return;
+      }
+
       add({
         role: 'assistant',
         type: 'agent_plan',
@@ -119,7 +139,8 @@ export function useChat({
     }
 
     if (result.intent === 'chat') {
-      add({ role: 'assistant', type: 'text', content: openRouterResult?.responseText || result.responseText });
+      const aiText = openRouterResult && !('error' in openRouterResult) ? openRouterResult.responseText : undefined;
+      add({ role: 'assistant', type: 'text', content: aiText || result.responseText });
       return;
     }
 
