@@ -754,7 +754,7 @@ export default function UGCVideoGenerator({
             <span className="ml-auto text-[10px] text-muted-foreground">{selectedProduct?.name} - {duration}s {aspectRatio}</span>
           </div>
           <div className={`relative bg-black flex items-center justify-center ${aspectRatio === '9:16' ? 'max-h-[70vh]' : aspectRatio === '1:1' ? 'max-h-[60vh]' : ''}`} style={{ aspectRatio: aspectRatio.replace(':', '/') }}>
-            <video src={resultUrl} controls playsInline autoPlay className="w-full h-full object-contain" />
+            <video src={`${resultUrl}#t=0.1`} controls playsInline autoPlay muted preload="auto" className="w-full h-full object-contain" />
           </div>
           <div className="p-3 flex gap-2">
             <a href={resultUrl} download className="flex-1">
@@ -787,7 +787,7 @@ export default function UGCVideoGenerator({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {history.filter(g => g.result_url && g.status === 'completed').slice(0, 8).map(g => (
               <div key={g.id} className="bg-card border border-border rounded-xl overflow-hidden group hover:border-primary/30 transition-colors">
-                <video src={g.result_url!} controls playsInline preload="metadata" className="w-full aspect-video object-cover bg-black" />
+                <video src={`${g.result_url!}#t=0.1`} controls playsInline muted preload="auto" className="ugc-history-video w-full aspect-video object-cover bg-black" />
                 <div className="p-2 flex items-center justify-between gap-1">
                   <p className="text-[10px] text-muted-foreground truncate">{(g.settings?.productName as string) || 'UGC Ad'}</p>
                   <a href={g.result_url!} download>

@@ -7,9 +7,7 @@ const MagicStar = ({ className = "w-5 h-5" }: { className?: string }) => (
   </svg>
 );
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -65,6 +63,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
   const [cfgScale, setCfgScale] = useState(0.5);
   const [keepOriginalSound, setKeepOriginalSound] = useState(true);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [openComposerPanel, setOpenComposerPanel] = useState<'mode' | 'settings' | null>(null);
 
   const [activeGeneration, setActiveGeneration] = useState<ActiveGeneration | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -267,6 +266,62 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
     </DropZone>
   );
 
+  const MotionUploadCard = ({ kind, title, subtitle, previewUrl, onDrop, accept, maxSize, onPickerOpen }: {
+    kind: 'video' | 'image' | 'audio';
+    title: string;
+    subtitle: string;
+    previewUrl?: string | null;
+    onDrop: (f: File) => void;
+    accept: string[];
+    maxSize: number;
+    onPickerOpen: () => void;
+  }) => (
+    <DropZone
+      onDrop={onDrop}
+      accept={accept}
+      maxSize={maxSize}
+      onError={(msg) => toast({ title: "Upload error", description: msg, variant: "destructive" })}
+      className="motion-upload-card"
+      dropMessage="Drop here"
+    >
+      <div className="motion-upload-preview">
+        {kind === 'video' && previewUrl ? (
+          <video src={`${previewUrl}#t=0.1`} muted playsInline preload="metadata" className="h-full w-full object-cover" />
+        ) : kind === 'image' && previewUrl ? (
+          <img src={previewUrl} alt="" className="h-full w-full object-cover" />
+        ) : kind === 'audio' && audioName ? (
+          <div className="flex h-full flex-col items-center justify-center gap-2 bg-primary/10 text-primary">
+            <AnimatedIconify icon="solar:music-note-3-bold-duotone" className="h-7 w-7" />
+            <span className="max-w-[90%] truncate text-xs font-bold">{audioName}</span>
+          </div>
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2 bg-muted/35 text-muted-foreground">
+            <AnimatedIconify
+              icon={kind === 'video' ? 'solar:videocamera-record-bold-duotone' : kind === 'image' ? 'solar:gallery-wide-bold-duotone' : 'solar:music-note-3-bold-duotone'}
+              className="h-7 w-7 text-primary"
+            />
+            <span className="text-xs font-black uppercase tracking-[0.12em]">{kind}</span>
+          </div>
+        )}
+      </div>
+      <div className="motion-upload-body">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-black text-foreground">{title}</p>
+          <p className="truncate text-xs text-muted-foreground">{subtitle}</p>
+        </div>
+        <div className="motion-upload-actions">
+          <label className="chat-icon-tool cursor-pointer" aria-label={`Upload ${kind}`} title={`Upload ${kind}`}>
+            <input type="file" accept={accept.join(',')} onChange={(e) => e.target.files?.[0] && onDrop(e.target.files[0])} className="hidden" />
+            <AnimatedIconify icon="solar:cloud-upload-bold" className="h-4 w-4" />
+          </label>
+          <button type="button" onClick={onPickerOpen} className="chat-icon-tool" aria-label={`${kind} assets`} title="Assets">
+            <AnimatedIconify icon="solar:gallery-wide-bold" className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </DropZone>
+  );
+
   const VideoPreviewContent = (previewUrl: string, onPickerOpen: () => void) => (
     <div className="p-3 space-y-3">
       <video src={previewUrl} className="w-full aspect-video rounded-xl object-cover" muted loop autoPlay playsInline />
@@ -304,7 +359,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
   return (
     <div className="py-4 sm:py-6 space-y-6">
 
-      {/* ── Cinematic Hero ─────────────────────────────────── */}
+      {/* â”€â”€ Cinematic Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="tool-hero rounded-2xl">
         <div className="tool-hero-bg" />
         <div className="tool-hero-grid" />
@@ -321,259 +376,152 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
         </div>
       </div>
 
-      {/* Mode Tabs */}
-      <Tabs value={motionMode} onValueChange={(v) => setMotionMode(v as MotionMode)} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 h-10">
-          <TabsTrigger value="motion-transfer" className="gap-2 text-sm">
-            <AnimatedIconify icon="solar:videocamera-record-bold-duotone" className="w-4 h-4" />
-            Motion Transfer
-          </TabsTrigger>
-          <TabsTrigger value="lip-sync" className="gap-2 text-sm">
-            <AnimatedIconify icon="solar:microphone-3-bold-duotone" className="w-4 h-4 text-pink-400" />
-            Lip Sync
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Motion Transfer */}
-        <TabsContent value="motion-transfer" className="space-y-4 mt-4">
-          <div className="flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20">
-            <AnimatedIconify icon="solar:bolt-bold-duotone" className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-muted-foreground">
-              <strong className="text-foreground">How it works:</strong> Upload a reference video with the motion you want to copy + your character image. The AI transfers the movements to your character while preserving its visual identity.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">1. Motion reference video</p>
-              <UploadZone
-                onDrop={handleVideoFileDrop}
-                accept={["video/*", ".mp4", ".webm"]}
-                maxSize={100 * 1024 * 1024}
-                preview={videoPreview ? VideoPreviewContent(videoPreview, () => setShowVideoPicker(true)) : undefined}
-                icon={<AnimatedIconify icon="solar:videocamera-record-bold-duotone" className="w-7 h-7 text-primary" />}
-                title="Reference video"
-                subtitle="MP4, WebM — max 100MB, 3–30 sec"
-                onPickerOpen={() => setShowVideoPicker(true)}
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">2. Character image</p>
-              <UploadZone
-                onDrop={handleImageFileDrop}
-                accept={["image/*"]}
-                maxSize={10 * 1024 * 1024}
-                preview={imagePreview ? ImagePreviewContent(imagePreview, () => setShowImagePicker(true)) : undefined}
-                icon={<AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-7 h-7 text-primary" />}
-                title="Character image"
-                subtitle="PNG, JPG, WebP — min 300px"
-                onPickerOpen={() => setShowImagePicker(true)}
-              />
-            </div>
-          </div>
-
-          {/* Prompt */}
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Prompt (optional)</label>
+      <div className="chat-input-wrapper">
+        <div className={`chat-composer motion-project-composer ${isGenerating ? 'opacity-75' : ''}`}>
+          <div className="chat-composer-main">
             <Textarea
-              placeholder="Describe the motion style... e.g. 'energetic dance, fluid and natural movements'"
+              placeholder={motionMode === "lip-sync" ? "Add notes for lip sync timing or expression..." : "Describe the motion style..."}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="min-h-[80px] resize-none text-sm"
+              className="chat-composer-textarea min-h-[72px] border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
+              rows={3}
             />
           </div>
 
-        </TabsContent>
-
-        {/* Lip Sync */}
-        <TabsContent value="lip-sync" className="space-y-4 mt-4">
-          <div className="flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20">
-            <AnimatedIconify icon="solar:microphone-3-bold-duotone" className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-muted-foreground">
-              <strong className="text-foreground">Lip Sync:</strong> The character in the video will speak with lips synced to the audio. Use a video with a clear frontal view of a face.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Video with face</p>
-              <UploadZone
-                onDrop={handleVideoFileDrop}
-                accept={["video/*", ".mp4", ".webm"]}
-                maxSize={50 * 1024 * 1024}
-                preview={videoPreview ? VideoPreviewContent(videoPreview, () => setShowVideoPicker(true)) : undefined}
-                icon={<AnimatedIconify icon="solar:videocamera-record-bold-duotone" className="w-7 h-7 text-primary" />}
-                title="Video with frontal face"
-                subtitle="MP4, WebM — max 50MB"
-                onPickerOpen={() => setShowVideoPicker(true)}
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Audio file</p>
-              <DropZone
+          <div className="motion-upload-grid">
+            <MotionUploadCard
+              kind="video"
+              title={motionMode === "lip-sync" ? "Video with face" : "Motion reference video"}
+              subtitle={motionMode === "lip-sync" ? "MP4, WebM - max 50MB" : "MP4, WebM - max 100MB"}
+              previewUrl={videoPreview}
+              onDrop={handleVideoFileDrop}
+              accept={["video/*", ".mp4", ".webm"]}
+              maxSize={(motionMode === "lip-sync" ? 50 : 100) * 1024 * 1024}
+              onPickerOpen={() => setShowVideoPicker(true)}
+            />
+            {motionMode === "lip-sync" ? (
+              <MotionUploadCard
+                kind="audio"
+                title="Audio file"
+                subtitle="MP3, WAV, M4A - max 20MB"
+                previewUrl={audioUrl}
                 onDrop={handleAudioFileDrop}
                 accept={["audio/*", ".mp3", ".wav", ".m4a"]}
                 maxSize={20 * 1024 * 1024}
-                onError={(msg) => toast({ title: "Upload error", description: msg, variant: "destructive" })}
-                className="min-h-[170px] rounded-2xl border-2 border-dashed border-border bg-card hover:border-primary/50 transition-all duration-200"
-                dropMessage="Drop audio here"
-              >
-                {audioName ? (
-                  <div className="p-3 sm:p-6 text-center space-y-3">
-                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto">
-                      <AnimatedIconify icon="solar:music-note-3-bold-duotone" className="w-7 h-7 text-primary" />
-                    </div>
-                    <p className="font-medium text-foreground text-sm truncate px-4">{audioName}</p>
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
-                      <label className="tool-upload-btn cursor-pointer">
-                        <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
-                        <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Change</span>
-                      </label>
-                      <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn">
-                        <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Assets</span>
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-3 sm:p-6 text-center space-y-3 sm:space-y-4">
-                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-                      <AnimatedIconify icon="solar:music-note-3-bold-duotone" className="w-7 h-7 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground text-sm">Audio file</p>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">MP3, WAV, M4A — max 20MB</p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
-                      <label className="tool-upload-btn cursor-pointer">
-                        <input type="file" accept="audio/*,.mp3,.wav,.m4a" onChange={(e) => e.target.files?.[0] && handleAudioFileDrop(e.target.files[0])} className="hidden" />
-                        <AnimatedIconify icon="solar:cloud-upload-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Upload</span>
-                      </label>
-                      <button onClick={() => setShowAudioPicker(true)} className="tool-assets-btn">
-                        <AnimatedIconify icon="solar:gallery-wide-bold-duotone" className="w-3.5 h-3.5" />
-                        <span>Assets</span>
-                      </button>
-                    </div>
+                onPickerOpen={() => setShowAudioPicker(true)}
+              />
+            ) : (
+              <MotionUploadCard
+                kind="image"
+                title="Character image"
+                subtitle="PNG, JPG, WebP - min 300px"
+                previewUrl={imagePreview}
+                onDrop={handleImageFileDrop}
+                accept={["image/*"]}
+                maxSize={10 * 1024 * 1024}
+                onPickerOpen={() => setShowImagePicker(true)}
+              />
+            )}
+          </div>
+
+          <div className="chat-composer-actions">
+            <div className="chat-action-group">
+              <div className="relative">
+                <button type="button" className={`chat-round-tool ${openComposerPanel === 'mode' ? 'chat-round-tool-active' : ''}`} onClick={() => setOpenComposerPanel(openComposerPanel === 'mode' ? null : 'mode')} aria-label="Mode">
+                  <AnimatedIconify icon={motionMode === "lip-sync" ? "solar:microphone-3-bold" : "solar:videocamera-record-bold"} className="h-5 w-5" />
+                </button>
+                {openComposerPanel === 'mode' && (
+                  <div className="chat-popover chat-mode-popover">
+                    <button type="button" onClick={() => { setMotionMode("motion-transfer"); setOpenComposerPanel(null); }} className="chat-popover-choice">
+                      <AnimatedIconify icon="solar:videocamera-record-bold-duotone" className="h-5 w-5" />
+                      <span><strong>Motion Transfer</strong><small>Video motion plus character image</small></span>
+                    </button>
+                    <button type="button" onClick={() => { setMotionMode("lip-sync"); setOpenComposerPanel(null); }} className="chat-popover-choice">
+                      <AnimatedIconify icon="solar:microphone-3-bold-duotone" className="h-5 w-5" />
+                      <span><strong>Lip Sync</strong><small>Video face plus audio file</small></span>
+                    </button>
                   </div>
                 )}
-              </DropZone>
+              </div>
+              <button type="button" className={`chat-icon-tool ${openComposerPanel === 'settings' ? 'chat-icon-tool-active' : ''}`} onClick={() => setOpenComposerPanel(openComposerPanel === 'settings' ? null : 'settings')} aria-label="Settings">
+                <AnimatedIconify icon="solar:tuning-2-bold" className="h-5 w-5" />
+              </button>
+              {openComposerPanel === 'settings' && (
+                <div className="chat-popover motion-settings-popover">
+                  <div className="chat-settings-head">
+                    <span>Settings</span>
+                    <button type="button" onClick={() => setOpenComposerPanel(null)} aria-label="Close settings">
+                      <AnimatedIconify icon="solar:alt-arrow-down-bold" className="h-4 w-4" />
+                    </button>
+                  </div>
+                  {motionMode === "motion-transfer" && (
+                    <>
+                      <button type="button" className="chat-settings-row">
+                        <span className="chat-settings-row-main"><AnimatedIconify icon="solar:route-bold" className="h-4 w-4" /><span>Character motion</span></span>
+                        <span className="chat-settings-current">{characterOrientation === "video" ? "Video" : "Image"}</span>
+                        <AnimatedIconify icon="solar:alt-arrow-right-bold" className="h-4 w-4" />
+                      </button>
+                      <div className="chat-settings-section">
+                        <div className="chat-option-grid">
+                          {motionSelectOptions.orientation.map(option => (
+                            <button key={option.value} type="button" onClick={() => setCharacterOrientation(option.value as "video" | "image")} className={`chat-option-pill ${characterOrientation === option.value ? 'chat-option-pill-active' : ''}`}>
+                              <AnimatedIconify icon={option.value === "video" ? "solar:route-bold" : "solar:user-hands-bold"} className="h-3.5 w-3.5" />
+                              <span>{option.value === "video" ? "Video" : "Image"}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  <button type="button" className="chat-settings-row">
+                    <span className="chat-settings-row-main"><AnimatedIconify icon="solar:medal-ribbon-star-bold" className="h-4 w-4" /><span>Quality</span></span>
+                    <span className="chat-settings-current">{quality === "pro" ? "Pro" : "Standard"}</span>
+                    <AnimatedIconify icon="solar:alt-arrow-right-bold" className="h-4 w-4" />
+                  </button>
+                  <div className="chat-settings-section">
+                    <div className="chat-option-grid">
+                      {(["standard", "pro"] as const).map(option => (
+                        <button key={option} type="button" onClick={() => setQuality(option)} className={`chat-option-pill ${quality === option ? 'chat-option-pill-active' : ''}`}>
+                          <AnimatedIconify icon={option === "pro" ? "solar:crown-star-bold" : "solar:star-bold"} className="h-3.5 w-3.5" />
+                          <span>{option === "pro" ? "Pro" : "Std"}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {motionMode === "motion-transfer" && (
+                    <label className="chat-settings-row cursor-pointer">
+                      <span className="chat-settings-row-main"><AnimatedIconify icon="solar:volume-loud-bold" className="h-4 w-4" /><span>Keep sound</span></span>
+                      <input type="checkbox" checked={keepOriginalSound} onChange={(e) => setKeepOriginalSound(e.target.checked)} className="sr-only" />
+                      <span className={`quality-switch-track ${keepOriginalSound ? 'bg-primary' : ''}`}><span className={`quality-switch-thumb ${keepOriginalSound ? 'translate-x-4' : ''}`} /></span>
+                    </label>
+                  )}
+                  {motionMode === "motion-transfer" && (
+                    <div className="chat-settings-section pt-1">
+                      <div className="mb-2 flex items-center justify-between text-xs font-bold text-muted-foreground">
+                        <span>Guidance</span>
+                        <span>{cfgScale.toFixed(2)}</span>
+                      </div>
+                      <Slider value={[cfgScale]} onValueChange={([v]) => setCfgScale(v)} min={0} max={1} step={0.05} className="w-full" />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="chat-action-group chat-action-group-right">
+              <div className="hidden rounded-full bg-muted/50 px-3 py-2 text-xs font-black text-muted-foreground sm:block">{creditsCost} credits</div>
+              <button
+                onClick={canGenerate ? handleGenerate : onUpgradeClick}
+                disabled={isGenerating || (canGenerate ? (motionMode === "motion-transfer" ? (!videoUrl || !imageUrl) : (!videoUrl || !audioUrl)) : false)}
+                className={`chat-send-btn ${canGenerate ? 'chat-send-btn-active' : ''}`}
+                type="button"
+                aria-label={motionMode === "lip-sync" ? "Generate lip sync" : "Generate motion"}
+              >
+                {isGenerating ? <AnimatedIconify icon="solar:refresh-circle-bold" className="h-5 w-5" spin /> : !canGenerate ? <AnimatedIconify icon="solar:crown-star-bold" className="h-5 w-5" /> : <AnimatedIconify icon="solar:arrow-up-bold" className="h-5 w-5" />}
+              </button>
             </div>
           </div>
-        </TabsContent>
-      </Tabs>
-
-      {/* Toolbar */}
-      <div className="rounded-2xl border border-border bg-card p-4 space-y-4">
-        <div className="tool-input-row">
-          {motionMode === "motion-transfer" && (
-            <div className="tool-segment-group" aria-label="Character direction">
-              {motionSelectOptions.orientation.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => setCharacterOrientation(option.value as "video" | "image")}
-                  className={`tool-segment-btn ${characterOrientation === option.value ? "active" : ""}`}
-                  aria-pressed={characterOrientation === option.value}
-                >
-                  <AnimatedIconify icon={option.value === "video" ? "solar:route-bold" : "solar:user-hands-bold"} className="h-3.5 w-3.5 shrink-0" />
-                  <span>{option.label}</span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={() => setQuality(quality === "pro" ? "standard" : "pro")}
-            className={`quality-switch ${quality === "pro" ? "quality-switch-on" : ""}`}
-            aria-pressed={quality === "pro"}
-          >
-            <span className="quality-switch-track">
-              <span className="quality-switch-thumb" />
-            </span>
-            <span className="font-semibold">{quality === "pro" ? "Pro" : "Std"}</span>
-          </button>
-
-          {/* Keep sound — only motion-transfer */}
-          {motionMode === "motion-transfer" && (
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={keepOriginalSound} onChange={(e) => setKeepOriginalSound(e.target.checked)} className="sr-only" />
-              <div className={`w-9 h-5 rounded-full transition-colors ${keepOriginalSound ? "bg-primary" : "bg-muted"}`}>
-                <div className={`w-4 h-4 rounded-full bg-white shadow transform transition-transform ${keepOriginalSound ? "translate-x-4" : "translate-x-0.5"} mt-0.5`} />
-              </div>
-              <AnimatedIconify icon="solar:volume-loud-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="text-[10px] text-muted-foreground">Sound</span>
-            </label>
-          )}
-
-          {/* Advanced toggle */}
-          {motionMode === "motion-transfer" && (
-            <button
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className={`flex h-6 items-center gap-1 rounded-md px-1.5 text-[10px] font-semibold transition-colors ${showAdvanced ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"}`}
-            >
-              <AnimatedIconify icon="solar:settings-minimalistic-bold-duotone" className="w-3.5 h-3.5 text-muted-foreground" />
-              More
-            </button>
-          )}
-        </div>
-
-        {/* Advanced settings */}
-        {showAdvanced && motionMode === "motion-transfer" && (
-          <div className="space-y-3 pt-3 border-t border-border">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-muted-foreground">Guidance (cfg_scale)</label>
-                <span className="text-xs text-foreground font-mono">{cfgScale.toFixed(2)}</span>
-              </div>
-              <Slider
-                value={[cfgScale]}
-                onValueChange={([v]) => setCfgScale(v)}
-                min={0}
-                max={1}
-                step={0.05}
-                className="w-full"
-              />
-              <p className="text-[11px] text-muted-foreground">Low = more creative · High = more prompt-adherent</p>
-            </div>
-          </div>
-        )}
-
-        {/* Credits + Generate */}
-        <div className="flex items-center justify-between gap-3">
-          <Badge variant="outline" className="text-primary border-primary/50 text-xs px-3">
-            {creditsCost} credits
-          </Badge>
-
-          <Button
-            onClick={canGenerate ? handleGenerate : onUpgradeClick}
-            disabled={isGenerating || (canGenerate ? (motionMode === "motion-transfer" ? (!videoUrl || !imageUrl) : (!videoUrl || !audioUrl)) : false)}
-            className="btn-generate gap-2 h-10 px-6 font-medium"
-          >
-            {isGenerating ? (
-              <>
-                <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4 text-white" spin />
-                Generating...
-              </>
-            ) : !canGenerate ? (
-              <>
-                <AnimatedIconify icon="solar:crown-star-bold-duotone" className="w-4 h-4" />
-                Upgrade
-              </>
-            ) : (
-              <>
-                <AnimatedIconify icon="solar:stars-bold-duotone" className="w-4 h-4" />
-                {motionMode === "lip-sync" ? "Generate Lip Sync" : "Generate Motion"}
-              </>
-            )}
-          </Button>
         </div>
       </div>
-
       {/* Active Generation */}
       {activeGeneration && (
         <InlineGenerationCard
