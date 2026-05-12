@@ -1127,6 +1127,28 @@ html.light {
     background: hsl(var(--card) / 0.78);
   }
 
+  .influencer-creator-stack {
+    @apply grid gap-3;
+  }
+
+  .influencer-preview-panel {
+    @apply relative flex flex-col items-center justify-center rounded-[28px] border border-border/70 p-3 sm:p-5;
+    background-color: hsl(var(--background));
+  }
+
+  .influencer-project-composer {
+    @apply mx-auto mb-5;
+    min-height: 0;
+  }
+
+  .influencer-composer-header {
+    @apply mb-3 flex items-center justify-between border-b border-border/50 pb-3;
+  }
+
+  .influencer-composer-body {
+    @apply space-y-4;
+  }
+
   .influencer-builder-form {
     @apply rounded-2xl;
   }
@@ -1188,7 +1210,7 @@ html.light {
   }
 
   .influencer-final-action {
-    @apply sticky bottom-0 z-10 mt-2 space-y-2 rounded-2xl border p-3;
+    @apply mt-2 space-y-2 rounded-2xl border p-3;
     border-color: hsl(var(--primary) / 0.22);
     background:
       linear-gradient(180deg, hsl(var(--sidebar-background) / 0.92), hsl(var(--sidebar-background) / 0.98)),
@@ -1245,6 +1267,14 @@ html.light {
 
     .influencer-create-tile {
       min-height: 11.8rem;
+    }
+
+    .influencer-preview-panel {
+      @apply rounded-[26px] p-3;
+    }
+
+    .influencer-project-composer {
+      @apply rounded-[28px] px-3 py-3;
     }
 
     .influencer-builder-form label,
@@ -2380,7 +2410,7 @@ html.light {
   }
 
   .motion-upload-card {
-    @apply min-h-[132px] overflow-hidden rounded-2xl border border-dashed transition-all duration-200;
+    @apply flex min-h-[132px] flex-col overflow-hidden rounded-2xl border border-dashed transition-all duration-200;
     background: hsl(var(--background) / 0.42);
     border-color: hsl(var(--border) / 0.72);
   }
@@ -2391,7 +2421,12 @@ html.light {
   }
 
   .motion-upload-preview {
-    @apply h-[92px] overflow-hidden rounded-t-2xl;
+    @apply flex h-[112px] w-full items-center justify-center overflow-hidden rounded-t-2xl bg-background/75;
+  }
+
+  .motion-upload-preview video,
+  .motion-upload-preview img {
+    @apply h-full w-full object-contain;
   }
 
   .motion-upload-body {
@@ -2404,6 +2439,10 @@ html.light {
 
   .motion-settings-popover {
     @apply bottom-[50px] left-[52px] w-[min(360px,calc(100vw-2rem))] p-3;
+  }
+
+  .motion-mode-popover {
+    @apply bottom-[50px] left-0 w-[min(300px,calc(100vw-2rem))];
   }
 
   @media (max-width: 640px) {
@@ -2532,7 +2571,7 @@ html.light {
     }
 
     .motion-upload-preview {
-      @apply h-[58px];
+      @apply h-[92px];
     }
 
     .motion-upload-body {
@@ -2549,6 +2588,10 @@ html.light {
 
     .motion-settings-popover {
       @apply bottom-[48px] left-0 top-auto;
+    }
+
+    .motion-mode-popover {
+      @apply bottom-[48px] left-0 right-auto w-[min(286px,calc(100vw-1.5rem))];
     }
 
     .ugc-history-video {

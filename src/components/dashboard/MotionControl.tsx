@@ -286,16 +286,16 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
     >
       <div className="motion-upload-preview">
         {kind === 'video' && previewUrl ? (
-          <video src={`${previewUrl}#t=0.1`} muted playsInline preload="metadata" className="h-full w-full object-cover" />
+          <video src={`${previewUrl}#t=0.1`} muted playsInline preload="metadata" className="h-full w-full object-contain" />
         ) : kind === 'image' && previewUrl ? (
-          <img src={previewUrl} alt="" className="h-full w-full object-cover" />
+          <img src={previewUrl} alt="" className="h-full w-full object-contain" />
         ) : kind === 'audio' && audioName ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2 bg-primary/10 text-primary">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-primary/10 text-primary">
             <AnimatedIconify icon="solar:music-note-3-bold-duotone" className="h-7 w-7" />
             <span className="max-w-[90%] truncate text-xs font-bold">{audioName}</span>
           </div>
         ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-2 bg-muted/35 text-muted-foreground">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-muted/35 text-muted-foreground">
             <AnimatedIconify
               icon={kind === 'video' ? 'solar:videocamera-record-bold-duotone' : kind === 'image' ? 'solar:gallery-wide-bold-duotone' : 'solar:music-note-3-bold-duotone'}
               className="h-7 w-7 text-primary"
@@ -431,7 +431,7 @@ const MotionControl = ({ onCreditsUpdate, availableCredits = 0, hasSubscription 
                   <AnimatedIconify icon={motionMode === "lip-sync" ? "solar:microphone-3-bold" : "solar:videocamera-record-bold"} className="h-5 w-5" />
                 </button>
                 {openComposerPanel === 'mode' && (
-                  <div className="chat-popover chat-mode-popover">
+                  <div className="chat-popover motion-mode-popover">
                     <button type="button" onClick={() => { setMotionMode("motion-transfer"); setOpenComposerPanel(null); }} className="chat-popover-choice">
                       <AnimatedIconify icon="solar:videocamera-record-bold-duotone" className="h-5 w-5" />
                       <span><strong>Motion Transfer</strong><small>Video motion plus character image</small></span>

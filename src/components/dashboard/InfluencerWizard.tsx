@@ -518,10 +518,10 @@ const InfluencerWizard = ({
       </div>
 
       {/* ── Studio Layout: canvas + builder ─────────────────── */}
-      <div className="influencer-studio-layout flex flex-col lg:flex-row gap-0 rounded-2xl overflow-hidden border border-border min-h-[420px]">
+      <div className="influencer-creator-stack">
 
         {/* Canvas / Preview */}
-        <div className="order-2 lg:order-1 flex-1 bg-[hsl(var(--background))] flex flex-col items-center justify-center p-3 sm:p-5 relative"
+        <div className="influencer-preview-panel"
           style={{ backgroundImage: 'radial-gradient(hsl(var(--border)/0.25) 1px, transparent 1px)', backgroundSize: '22px 22px' }}>
           <div className="w-full max-w-[210px] sm:max-w-[260px] aspect-[3/4] rounded-2xl overflow-hidden border border-border/60 shadow-2xl relative bg-card">
             {isGenerating ? (
@@ -589,8 +589,8 @@ const InfluencerWizard = ({
         </div>
 
         {/* Builder right panel */}
-        <div className="order-1 lg:order-2 w-full lg:w-[340px] xl:w-[360px] bg-sidebar border-t lg:border-t-0 lg:border-l border-sidebar-border overflow-y-auto flex-shrink-0">
-          <div className="px-4 py-3 border-b border-sidebar-border sticky top-0 bg-sidebar z-10 flex items-center justify-between">
+        <div className={`chat-composer influencer-project-composer ${isGenerating ? 'opacity-75' : ''}`}>
+          <div className="influencer-composer-header">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Builder</span>
             {onBack && (
               <button onClick={onBack} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
@@ -599,7 +599,7 @@ const InfluencerWizard = ({
             )}
           </div>
 
-          <div className="p-3 sm:p-4 pb-24 lg:pb-4 space-y-4">
+          <div className="influencer-composer-body">
         {/* ── Left: form ── */}
         <div className="influencer-builder-form space-y-4">
           {/* Name — always shown */}
