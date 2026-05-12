@@ -141,7 +141,7 @@ const Auth = () => {
             {/* Logo */}
             <Link to={isDesktopApp ? "/auth" : "/"} className="flex items-center gap-2 group justify-center">
               <span className="flex items-center justify-center gap-2">
-                <img src="/logo.png" alt="LOVIX AI" className="h-11 w-11 object-contain" />
+                <img src="/logo.svg" alt="LOVIX AI" className="h-11 w-11 object-contain" />
                 <span className="font-display text-2xl font-extrabold text-primary">Lovix AI</span>
               </span>
             </Link>
@@ -237,7 +237,7 @@ const Auth = () => {
         <div className="w-full max-w-md space-y-8 animate-fade-in-up">
           <Link to={isDesktopApp ? "/auth" : "/"} className="flex items-center gap-2 group">
             <span className="flex items-center justify-center gap-2">
-              <img src="/logo.png" alt="LOVIX AI" className="h-11 w-11 object-contain" />
+              <img src="/logo.svg" alt="LOVIX AI" className="h-11 w-11 object-contain" />
               <span className="font-display text-2xl font-extrabold text-primary">Lovix AI</span>
             </span>
           </Link>

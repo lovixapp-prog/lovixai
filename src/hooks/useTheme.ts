@@ -1,44 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 type Theme = 'dark' | 'light';
 
 const STORAGE_KEY = 'lovix_theme';
 
-function applyTheme(theme: Theme) {
+function applyTheme() {
   const html = document.documentElement;
-  if (theme === 'light') {
-    html.classList.add('light');
-    html.classList.remove('dark');
-  } else {
-    html.classList.remove('light');
-    html.classList.add('dark');
+  html.classList.add('light');
+  html.classList.remove('dark');
+  try {
+    localStorage.setItem(STORAGE_KEY, 'light');
+  } catch {
+    /* ignore storage failures */
   }
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    try {
-      return (localStorage.getItem(STORAGE_KEY) as Theme) ?? 'dark';
-    } catch {
-      return 'dark';
-    }
-  });
-
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
-
-  // Apply on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    if (stored) applyTheme(stored);
+    applyTheme();
   }, []);
 
-  const toggleTheme = () => {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(STORAGE_KEY, next);
-    setThemeState(next);
-  };
-
-  return { theme, toggleTheme, isDark: theme === 'dark' };
+  return { theme: 'light' as Theme, toggleTheme: applyTheme, isDark: false };
 }

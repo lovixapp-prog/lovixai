@@ -80,12 +80,12 @@ const Index = () => {
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-background/42 via-background/18 to-background/96" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/82 via-background/38 to-background/72" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/38 via-background/22 to-background/96" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/94 via-background/62 to-background/32" />
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(90deg, hsl(var(--background) / 0.94) 0%, hsl(var(--background) / 0.76) 38%, hsl(var(--background) / 0.22) 68%, transparent 100%)",
+              background: "linear-gradient(90deg, hsl(var(--background) / 0.96) 0%, hsl(var(--background) / 0.82) 40%, hsl(var(--background) / 0.34) 70%, transparent 100%)",
             }}
           />
         </div>
@@ -97,12 +97,12 @@ const Index = () => {
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-3xl space-y-7 animate-fade-in-up">
 
-            <h1 className="font-display text-5xl font-bold leading-[0.95] text-white drop-shadow-2xl sm:text-6xl lg:text-7xl">
+            <h1 className="font-display text-5xl font-bold leading-[0.95] text-foreground sm:text-6xl lg:text-7xl">
               AI content studio for videos, images and UGC ads
             </h1>
 
             {/* Sub */}
-            <p className="max-w-2xl text-base font-medium leading-7 text-white/82 drop-shadow-lg sm:text-lg">
+            <p className="max-w-2xl text-base font-medium leading-7 text-foreground/78 sm:text-lg">
               Describe the campaign. LOVIX turns it into creative assets, editable plans and production-ready outputs.
             </p>
 
@@ -120,7 +120,7 @@ const Index = () => {
 
             <div className="flex flex-wrap gap-2 pt-1">
               {["No credit card", "150 free credits", "Video + Image + UGC"].map(item => (
-                <span key={item} className="rounded-full border border-white/12 bg-background/38 px-3 py-1.5 text-xs font-semibold text-white/78 backdrop-blur">
+                <span key={item} className="rounded-full border border-border/80 bg-white/66 px-3 py-1.5 text-xs font-semibold text-foreground/78 backdrop-blur">
                   {item}
                 </span>
               ))}

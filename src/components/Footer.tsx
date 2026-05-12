@@ -72,7 +72,7 @@ const Footer = () => {
           <div className="lg:col-span-1 space-y-5">
             <Link to="/" className="flex items-center gap-2.5 group w-fit">
               <span className="flex items-center gap-2">
-                <img src="/logo.png" alt="LOVIX logo" width="34" height="34" className="h-8 w-8 flex-shrink-0 object-contain" />
+                <img src="/logo.svg" alt="LOVIX logo" width="34" height="34" className="h-8 w-8 flex-shrink-0 object-contain" />
                 <span className="font-display text-lg font-extrabold text-primary">Lovix AI</span>
               </span>
             </Link>

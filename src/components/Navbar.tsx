@@ -16,13 +16,13 @@ const navLinks = [
 const LovixLogo = () => (
   <div className="relative flex flex-shrink-0 items-center gap-2">
     <img
-      src="/logo.png"
+      src="/logo.svg"
       alt="LOVIX logo"
       width="36"
       height="36"
       className="h-8 w-8 object-contain"
     />
-    <span className="font-display text-base font-extrabold tracking-tight text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.35)]">Lovix AI</span>
+    <span className="font-display text-base font-extrabold tracking-tight gradient-text-cool">Lovix AI</span>
   </div>
 );
 
@@ -102,8 +102,8 @@ const Navbar = () => {
                   className="rounded-full font-semibold tracking-wide text-sm px-5"
                   style={{
                     background:
-                      "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.85))",
-                    boxShadow: "0 4px 20px hsl(var(--primary)/0.3)",
+                      "linear-gradient(135deg, hsl(var(--foreground)), hsl(220 24% 7%))",
+                    boxShadow: "0 12px 28px hsl(var(--foreground)/0.18)",
                   }}
                 >
                   Dashboard
@@ -124,8 +124,8 @@ const Navbar = () => {
                     className="rounded-full font-semibold tracking-wide text-sm px-5"
                     style={{
                       background:
-                        "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.85))",
-                      boxShadow: "0 4px 20px hsl(var(--primary)/0.3)",
+                        "linear-gradient(135deg, hsl(var(--foreground)), hsl(220 24% 7%))",
+                      boxShadow: "0 12px 28px hsl(var(--foreground)/0.18)",
                     }}
                   >
                     Start Free
@@ -175,7 +175,7 @@ const Navbar = () => {
             <div className="pt-3 mt-3 border-t border-border/30 flex flex-col gap-2.5">
               {user ? (
                 <Link to="/dashboard" onClick={() => setIsOpen(false)}>
-                  <Button className="w-full rounded-full font-semibold" style={{ background: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.85))" }}>
+                  <Button className="w-full rounded-full font-semibold" style={{ background: "linear-gradient(135deg, hsl(var(--foreground)), hsl(220 24% 7%))" }}>
                     Dashboard
                   </Button>
                 </Link>
@@ -187,7 +187,7 @@ const Navbar = () => {
                     </Button>
                   </Link>
                   <Link to="/auth?mode=signup" onClick={() => setIsOpen(false)}>
-                    <Button className="w-full rounded-full font-semibold" style={{ background: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.85))" }}>
+                    <Button className="w-full rounded-full font-semibold" style={{ background: "linear-gradient(135deg, hsl(var(--foreground)), hsl(220 24% 7%))" }}>
                       Start Creating Free
                     </Button>
                   </Link>

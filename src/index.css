@@ -102,6 +102,48 @@ html.light {
   --sidebar-ring: 24 96% 45%;
 }
 
+:root,
+html.light,
+html.dark {
+  --background: 204 78% 97%;
+  --foreground: 224 30% 13%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 30% 13%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 30% 13%;
+  --primary: 195 100% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 205 58% 93%;
+  --secondary-foreground: 224 30% 13%;
+  --muted: 210 48% 94%;
+  --muted-foreground: 219 18% 47%;
+  --accent: 171 86% 45%;
+  --accent-foreground: 224 30% 13%;
+  --border: 210 34% 84%;
+  --input: 210 34% 84%;
+  --ring: 195 100% 48%;
+  --glow-primary: 195 100% 48%;
+  --glow-secondary: 171 86% 45%;
+  --surface-glass: 0 0% 100%;
+  --surface-elevated: 0 0% 100%;
+  --gradient-start: 195 100% 48%;
+  --gradient-end: 171 86% 45%;
+  --violet: 247 95% 70%;
+  --violet-soft: 247 80% 62%;
+  --cyan: 195 100% 48%;
+  --cyan-soft: 197 88% 56%;
+  --pink: 292 85% 70%;
+  --star: 195 100% 48%;
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 224 30% 18%;
+  --sidebar-primary: 195 100% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 197 82% 93%;
+  --sidebar-accent-foreground: 224 30% 14%;
+  --sidebar-border: 210 28% 88%;
+  --sidebar-ring: 195 100% 48%;
+}
+
 @layer base {
   * { @apply border-border; }
 
@@ -110,13 +152,20 @@ html.light {
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+    background:
+      radial-gradient(circle at 14% 0%, hsl(190 100% 86% / 0.54), transparent 28rem),
+      radial-gradient(circle at 76% 0%, hsl(247 100% 90% / 0.50), transparent 26rem),
+      radial-gradient(circle at 100% 22%, hsl(178 100% 88% / 0.34), transparent 24rem),
+      linear-gradient(180deg, hsl(204 78% 98%), hsl(210 68% 96%));
+    color: hsl(var(--foreground));
   }
 
   html.light body {
     background:
-      radial-gradient(circle at 20% 0%, hsl(var(--primary) / 0.08), transparent 28rem),
-      radial-gradient(circle at 100% 12%, hsl(var(--cyan) / 0.08), transparent 26rem),
-      hsl(var(--background));
+      radial-gradient(circle at 14% 0%, hsl(190 100% 86% / 0.54), transparent 28rem),
+      radial-gradient(circle at 76% 0%, hsl(247 100% 90% / 0.50), transparent 26rem),
+      radial-gradient(circle at 100% 22%, hsl(178 100% 88% / 0.34), transparent 24rem),
+      linear-gradient(180deg, hsl(204 78% 98%), hsl(210 68% 96%));
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -132,21 +181,23 @@ html.light {
 
   .glass {
     backdrop-filter: blur(20px) saturate(150%);
-    background: hsl(var(--surface-glass) / 0.55);
-    @apply border border-border/40;
+    background: hsl(var(--surface-glass) / 0.74);
+    @apply border border-border/70;
+    box-shadow: 0 18px 46px hsl(210 45% 58% / 0.12), inset 0 1px 0 hsl(0 0% 100% / 0.96);
   }
 
   .glass-strong {
     backdrop-filter: blur(32px) saturate(160%);
-    background: hsl(var(--surface-glass) / 0.82);
-    @apply border border-border/55;
+    background: hsl(var(--surface-glass) / 0.90);
+    @apply border border-border/80;
+    box-shadow: 0 22px 58px hsl(210 45% 58% / 0.16), inset 0 1px 0 hsl(0 0% 100% / 0.98);
   }
 
   .glass-card {
     backdrop-filter: blur(20px) saturate(140%);
-    background: hsl(var(--card) / 0.65);
-    @apply rounded-2xl border border-border/40;
-    box-shadow: 0 0 0 1px hsl(var(--border) / 0.18), 0 8px 32px hsl(var(--background) / 0.55);
+    background: hsl(var(--card) / 0.82);
+    @apply rounded-2xl border border-border/70;
+    box-shadow: 0 18px 44px hsl(210 45% 58% / 0.13), inset 0 1px 0 hsl(0 0% 100% / 0.98);
   }
 
   html.light .glass {
@@ -181,16 +232,16 @@ html.light {
 
   .ios-glass-shell {
     position: relative;
-    border: 1px solid hsl(var(--border) / 0.42);
+    border: 1px solid hsl(var(--border) / 0.76);
     background:
-      linear-gradient(135deg, hsl(var(--card) / 0.70), hsl(var(--card) / 0.34)),
-      linear-gradient(180deg, hsl(0 0% 100% / 0.10), transparent 48%);
+      linear-gradient(135deg, hsl(0 0% 100% / 0.86), hsl(202 100% 97% / 0.66)),
+      linear-gradient(180deg, hsl(0 0% 100% / 0.98), transparent 48%);
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
     box-shadow:
-      inset 0 1px 0 hsl(0 0% 100% / 0.16),
-      0 18px 48px hsl(0 0% 0% / 0.28),
-      0 0 0 1px hsl(var(--primary) / 0.04);
+      inset 0 1px 0 hsl(0 0% 100% / 0.98),
+      0 18px 48px hsl(210 45% 58% / 0.15),
+      0 0 0 1px hsl(0 0% 100% / 0.48);
   }
 
   html.light .ios-glass-shell {
@@ -226,11 +277,11 @@ html.light {
 
   .dashboard-mobile-menu {
     background:
-      linear-gradient(135deg, hsl(var(--sidebar-background) / 0.86), hsl(var(--sidebar-accent) / 0.68)),
-      linear-gradient(180deg, hsl(0 0% 100% / 0.08), transparent 50%);
+      linear-gradient(135deg, hsl(0 0% 100% / 0.92), hsl(197 82% 94% / 0.82)),
+      linear-gradient(180deg, hsl(0 0% 100% / 0.98), transparent 50%);
     backdrop-filter: blur(28px) saturate(170%);
     -webkit-backdrop-filter: blur(28px) saturate(170%);
-    box-shadow: 0 22px 55px hsl(0 0% 0% / 0.32), inset 0 1px 0 hsl(0 0% 100% / 0.13);
+    box-shadow: 0 22px 55px hsl(210 45% 58% / 0.20), inset 0 1px 0 hsl(0 0% 100% / 0.98);
   }
 
   html.light input,
@@ -425,19 +476,19 @@ html.light {
     @apply relative inline-flex items-center justify-center px-7 py-3 text-sm font-semibold
            tracking-widest rounded-full text-primary-foreground
            transition-all duration-300 overflow-hidden uppercase select-none cursor-pointer;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.88));
-    box-shadow: 0 4px 24px hsl(var(--primary) / 0.35), 0 1px 0 hsl(var(--primary) / 0.5) inset;
+    background: linear-gradient(135deg, hsl(var(--foreground)), hsl(220 24% 7%));
+    box-shadow: 0 14px 34px hsl(var(--foreground) / 0.22), 0 1px 0 hsl(0 0% 100% / 0.18) inset;
   }
 
   .btn-hero-primary::before {
     content: '';
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, hsl(var(--primary) / 1.15), hsl(var(--primary)));
+    background: linear-gradient(135deg, hsl(220 24% 7%), hsl(var(--foreground)));
   }
 
   .btn-hero-primary:hover {
     transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 10px 36px hsl(var(--primary) / 0.5), 0 1px 0 hsl(var(--primary) / 0.5) inset;
+    box-shadow: 0 18px 44px hsl(var(--foreground) / 0.28), 0 1px 0 hsl(0 0% 100% / 0.22) inset;
   }
 
   .btn-hero-primary:hover::before { opacity: 1; }
@@ -448,7 +499,7 @@ html.light {
            tracking-widest rounded-full transition-all duration-300 uppercase select-none cursor-pointer;
     border: 1px solid hsl(var(--border) / 0.85);
     color: hsl(var(--foreground) / 0.82);
-    background: hsl(var(--card) / 0.28);
+    background: hsl(var(--card) / 0.70);
     backdrop-filter: blur(12px);
   }
 
@@ -754,8 +805,8 @@ html.light {
   .sidebar-icon { @apply transition-transform duration-200 flex-shrink-0; }
 
   .sidebar-item-active {
-    @apply bg-sidebar-accent text-sidebar-primary;
-    box-shadow: inset 0 0 24px hsl(var(--primary) / 0.12);
+    @apply bg-sidebar-accent text-foreground;
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.88), 0 10px 24px hsl(195 100% 48% / 0.12);
   }
 
   .sidebar-item-active::before {
@@ -765,7 +816,7 @@ html.light {
     bottom: 6px;
     width: 3px;
     background: hsl(var(--primary));
-    box-shadow: 0 0 8px hsl(var(--primary) / 0.5);
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.45);
   }
 
   /* Optimize button aurora style */
@@ -792,14 +843,14 @@ html.light {
     @apply fixed left-3 right-3 z-50 lg:hidden;
     bottom: max(10px, env(safe-area-inset-bottom, 0px));
     overflow: hidden;
-    border-radius: 24px;
-    border: 1px solid hsl(var(--sidebar-border) / 0.82);
+    border-radius: 26px;
+    border: 1px solid hsl(var(--sidebar-border) / 0.90);
     background:
-      linear-gradient(135deg, hsl(var(--sidebar-background) / 0.88), hsl(var(--sidebar-accent) / 0.62)),
-      linear-gradient(180deg, hsl(0 0% 100% / 0.10), transparent 50%);
+      linear-gradient(135deg, hsl(0 0% 100% / 0.94), hsl(197 82% 94% / 0.82)),
+      linear-gradient(180deg, hsl(0 0% 100% / 0.98), transparent 54%);
     backdrop-filter: blur(30px) saturate(175%);
     -webkit-backdrop-filter: blur(30px) saturate(175%);
-    box-shadow: 0 18px 52px hsl(0 0% 0% / 0.36), inset 0 1px 0 hsl(0 0% 100% / 0.14);
+    box-shadow: 0 18px 52px hsl(210 45% 58% / 0.18), inset 0 1px 0 hsl(0 0% 100% / 0.98);
     padding-bottom: 0;
   }
 
@@ -831,17 +882,18 @@ html.light {
   }
 
   .mobile-nav-item-active {
-    color: hsl(var(--primary));
+    color: hsl(var(--foreground));
   }
 
   .mobile-nav-item-active::before {
     content: '';
-    @apply absolute top-0 left-1/2 rounded-b-full pointer-events-none;
-    transform: translateX(-50%);
-    width: 32px;
-    height: 2px;
-    background: hsl(var(--primary));
-    box-shadow: 0 0 8px hsl(var(--primary) / 0.6);
+    @apply absolute left-1/2 top-1/2 rounded-2xl pointer-events-none;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 42px;
+    background: linear-gradient(135deg, hsl(195 100% 90% / 0.95), hsl(174 92% 86% / 0.78));
+    box-shadow: 0 10px 24px hsl(195 100% 48% / 0.14), inset 0 1px 0 hsl(0 0% 100% / 0.92);
+    z-index: -1;
   }
 
   html.light .mobile-nav-item-active::before {
@@ -979,19 +1031,29 @@ html.light {
     @apply relative overflow-hidden flex flex-col items-center justify-center text-center;
     padding: 3rem 1.5rem 2rem;
     min-height: 260px;
+    border: 1px solid hsl(198 100% 72% / 0.72);
+    background:
+      linear-gradient(115deg, hsl(199 100% 88% / 0.88), hsl(174 100% 94% / 0.76) 48%, hsl(292 100% 94% / 0.80)),
+      hsl(0 0% 100% / 0.82);
+    box-shadow: 0 24px 70px hsl(210 45% 58% / 0.14), inset 0 1px 0 hsl(0 0% 100% / 0.96);
   }
 
   .tool-hero-sm {
     @apply relative overflow-hidden flex flex-col items-center justify-center text-center;
     padding: 2rem 1.5rem 1.5rem;
     min-height: 180px;
+    border: 1px solid hsl(198 100% 72% / 0.64);
+    background:
+      linear-gradient(115deg, hsl(199 100% 88% / 0.86), hsl(174 100% 94% / 0.74) 48%, hsl(292 100% 94% / 0.78)),
+      hsl(0 0% 100% / 0.82);
+    box-shadow: 0 18px 54px hsl(210 45% 58% / 0.13), inset 0 1px 0 hsl(0 0% 100% / 0.96);
   }
 
   .tool-hero-bg {
     @apply absolute inset-0 pointer-events-none;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--primary) / 0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 80% 100%, hsl(var(--violet) / 0.05) 0%, transparent 60%);
+      radial-gradient(ellipse 80% 60% at 50% 0%, hsl(0 0% 100% / 0.52) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 100%, hsl(var(--violet) / 0.10) 0%, transparent 60%);
   }
 
   .tool-hero-grid {
@@ -1006,7 +1068,7 @@ html.light {
   .tool-hero-title {
     @apply font-display font-bold text-foreground leading-tight relative z-10;
     font-size: clamp(1.75rem, 4vw, 2.75rem);
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
   }
 
   .tool-hero-subtitle {
@@ -1712,16 +1774,15 @@ html.light {
   .btn-generate {
     @apply relative inline-flex items-center justify-center gap-2.5 font-semibold rounded-2xl
            transition-all duration-300 overflow-hidden select-none cursor-pointer border;
-    border-color: hsl(255 100% 100% / 0.22);
+    border-color: hsl(224 30% 13% / 0.92);
     background:
-      linear-gradient(135deg, hsl(var(--primary) / 0.95), hsl(22 95% 48% / 0.92)),
-      linear-gradient(180deg, hsl(255 100% 100% / 0.26), transparent 48%);
-    color: hsl(var(--primary-foreground));
+      linear-gradient(135deg, hsl(224 30% 13%), hsl(220 24% 7%)),
+      linear-gradient(180deg, hsl(255 100% 100% / 0.14), transparent 48%);
+    color: white;
     box-shadow:
-      0 14px 34px hsl(var(--primary) / 0.34),
-      0 4px 12px hsl(22 95% 38% / 0.24),
-      0 1px 0 hsl(255 100% 100% / 0.34) inset,
-      0 -8px 18px hsl(0 0% 0% / 0.16) inset;
+      0 14px 34px hsl(224 30% 13% / 0.24),
+      0 1px 0 hsl(255 100% 100% / 0.22) inset,
+      0 -8px 18px hsl(0 0% 0% / 0.18) inset;
     backdrop-filter: blur(16px) saturate(1.35);
     padding: 0.75rem 1.75rem;
     font-size: 0.9375rem;
@@ -1731,8 +1792,7 @@ html.light {
   .btn-generate:hover:not(:disabled) {
     transform: translateY(-2px) scale(1.012);
     box-shadow:
-      0 18px 42px hsl(var(--primary) / 0.46),
-      0 6px 16px hsl(22 95% 38% / 0.28),
+      0 18px 42px hsl(224 30% 13% / 0.30),
       0 1px 0 hsl(255 100% 100% / 0.42) inset,
       0 -8px 18px hsl(0 0% 0% / 0.14) inset;
   }
@@ -2010,40 +2070,19 @@ html.light {
     @apply relative w-full overflow-visible rounded-[30px] px-4 py-4 transition-all duration-200 sm:px-5;
     min-height: 172px;
     background:
-      radial-gradient(circle at 12% 0%, hsl(var(--primary) / 0.10), transparent 34%),
-      linear-gradient(145deg, hsl(var(--card) / 0.94), hsl(var(--background) / 0.84));
-    border: 1px solid hsl(var(--border) / 0.96);
+      linear-gradient(145deg, hsl(0 0% 100% / 0.92), hsl(201 100% 98% / 0.84)) padding-box,
+      linear-gradient(120deg, hsl(198 100% 70% / 0.96), hsl(247 100% 77% / 0.58), hsl(174 92% 57% / 0.82)) border-box;
+    border: 1.5px solid transparent;
     box-shadow:
-      0 0 0 1px hsl(var(--primary) / 0.14),
-      0 24px 70px hsl(var(--background) / 0.32),
-      0 1px 0 hsl(0 0% 100% / 0.14) inset,
-      0 -1px 0 hsl(var(--foreground) / 0.04) inset;
+      0 24px 70px hsl(210 45% 58% / 0.16),
+      0 1px 0 hsl(0 0% 100% / 0.98) inset,
+      0 -1px 0 hsl(var(--foreground) / 0.03) inset;
     backdrop-filter: blur(26px) saturate(1.25);
     isolation: isolate;
   }
 
   .chat-composer::before {
-    content: '';
-    @apply pointer-events-none absolute rounded-[31px];
-    inset: 0;
-    z-index: 0;
-    padding: 1px;
-    background: linear-gradient(
-      115deg,
-      hsl(var(--primary) / 0.82),
-      hsl(292 92% 62% / 0.72),
-      hsl(190 96% 58% / 0.76),
-      hsl(46 100% 58% / 0.68),
-      hsl(var(--primary) / 0.82)
-    );
-    background-size: 260% 260%;
-    opacity: 0.72;
-    animation: lovix-led-border-flow 18s ease-in-out infinite;
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    content: none;
   }
 
   .chat-composer > * {
@@ -2058,11 +2097,14 @@ html.light {
   }
 
   .chat-composer:focus-within {
-    border-color: hsl(var(--primary) / 0.72);
+    border-color: transparent;
+    background:
+      linear-gradient(145deg, hsl(0 0% 100% / 0.96), hsl(201 100% 98% / 0.90)) padding-box,
+      linear-gradient(120deg, hsl(198 100% 60%), hsl(247 100% 72% / 0.72), hsl(174 92% 48%)) border-box;
     box-shadow:
-      0 0 0 1px hsl(var(--primary) / 0.55),
-      0 26px 78px hsl(var(--primary) / 0.16),
-      0 1px 0 hsl(0 0% 100% / 0.18) inset;
+      0 0 0 4px hsl(195 100% 48% / 0.10),
+      0 28px 80px hsl(210 45% 58% / 0.18),
+      0 1px 0 hsl(0 0% 100% / 0.98) inset;
   }
 
   .chat-attachment-preview {
