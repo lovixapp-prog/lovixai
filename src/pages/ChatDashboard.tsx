@@ -939,9 +939,9 @@ function DashboardHome({
       <section className="hidden overflow-hidden rounded-2xl border border-border/70 bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-[0_16px_48px_hsl(var(--primary)/0.10)] xl:block">
         <div className="grid grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
           <button onClick={() => onOpen('chat')} className="relative min-h-[220px] overflow-hidden text-left">
-            <video src="/videos/hero-video.mp4" className="h-full w-full object-cover opacity-80 transition-transform duration-700 hover:scale-105" autoPlay muted loop playsInline />
-            <div className="absolute inset-0 bg-gradient-to-r from-background/15 to-card" />
-            <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-background/75 text-primary backdrop-blur">
+            <video src="/videos/hero-video.mp4" className="h-full w-full object-cover opacity-100 transition-transform duration-700 hover:scale-105" autoPlay muted loop playsInline />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/4 via-transparent to-card/18" />
+            <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/25 bg-white/78 text-primary shadow-[0_10px_28px_hsl(var(--primary)/0.18)] backdrop-blur">
               <AnimatedIconify icon="solar:chat-round-video-bold-duotone" className="h-7 w-7" pulse />
             </div>
           </button>
@@ -955,7 +955,7 @@ function DashboardHome({
             <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
               Build campaign plans, video concepts, UGC scripts, influencer briefs and production steps before opening the right creative tool.
             </p>
-            <button onClick={() => onOpen('chat')} className="mt-5 inline-flex w-fit items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-transform active:scale-[0.98]">
+            <button onClick={() => onOpen('chat')} className="mt-5 inline-flex w-fit items-center gap-2 rounded-xl bg-foreground px-4 py-2.5 text-sm font-bold text-background shadow-[0_14px_34px_hsl(var(--foreground)/0.18)] transition-transform active:scale-[0.98]">
               Open AI Agent <ChevronRight className="h-4 w-4" />
             </button>
           </div>
@@ -981,8 +981,8 @@ function DashboardHome({
                 <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-primary">Open chat <ChevronRight className="h-4 w-4" /></span>
               </div>
               <div className="relative overflow-hidden">
-                <video src="/videos/hero-video.mp4" className="h-full w-full object-cover opacity-80" autoPlay muted loop playsInline />
-                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-card/45" />
+                <video src="/videos/hero-video.mp4" className="h-full w-full object-cover opacity-100" autoPlay muted loop playsInline />
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-card/12" />
               </div>
             </div>
           </button>
@@ -1002,12 +1002,12 @@ function DashboardHome({
                 ) : (
                   <img src={tool.preview} alt="" className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105" />
                 )}
-                <div className={`absolute inset-0 bg-gradient-to-br ${tool.navAccent} opacity-65 mix-blend-multiply`} />
-                <div className="absolute inset-0 bg-gradient-to-r from-background/92 via-background/58 to-background/8" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/72 via-transparent to-transparent" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${tool.navAccent} opacity-34 mix-blend-multiply`} />
+                <div className="absolute inset-0 bg-gradient-to-r from-background/62 via-background/28 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/54 via-transparent to-transparent" />
                 <div className="relative z-10 flex h-full min-w-0 flex-col justify-end gap-2 p-3.5">
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl border border-white/12 bg-background/55 ${tool.color} shadow-[0_10px_24px_hsl(var(--background)/0.28)] backdrop-blur-md`}>
-                    <AnimatedIconify icon={tool.navIcon} className="h-5 w-5" />
+                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl border border-white/80 bg-white/86 ${tool.color} shadow-[0_12px_26px_hsl(var(--foreground)/0.18),0_0_0_1px_hsl(var(--primary)/0.12)] backdrop-blur-md`}>
+                    <AnimatedIconify icon={tool.navIcon} className="h-6 w-6 drop-shadow-[0_2px_8px_hsl(var(--primary)/0.22)]" />
                   </span>
                   <span className="max-w-[72%] truncate font-display text-base font-bold text-foreground drop-shadow sm:text-lg xl:max-w-full xl:text-base">{tool.label}</span>
                 </div>

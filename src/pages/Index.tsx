@@ -80,12 +80,12 @@ const Index = () => {
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-background/38 via-background/22 to-background/96" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/94 via-background/62 to-background/32" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/18 via-background/8 to-background/86" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/78 via-background/38 to-background/14" />
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(90deg, hsl(var(--background) / 0.96) 0%, hsl(var(--background) / 0.82) 40%, hsl(var(--background) / 0.34) 70%, transparent 100%)",
+              background: "linear-gradient(90deg, hsl(var(--background) / 0.82) 0%, hsl(var(--background) / 0.58) 38%, hsl(var(--background) / 0.18) 68%, transparent 100%)",
             }}
           />
         </div>

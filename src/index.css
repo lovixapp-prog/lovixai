@@ -1033,9 +1033,9 @@ html.dark {
     min-height: 260px;
     border: 1px solid hsl(198 100% 72% / 0.72);
     background:
-      linear-gradient(115deg, hsl(199 100% 88% / 0.88), hsl(174 100% 94% / 0.76) 48%, hsl(292 100% 94% / 0.80)),
-      hsl(0 0% 100% / 0.82);
-    box-shadow: 0 24px 70px hsl(210 45% 58% / 0.14), inset 0 1px 0 hsl(0 0% 100% / 0.96);
+      linear-gradient(115deg, hsl(199 100% 84% / 0.72), hsl(174 100% 90% / 0.50) 48%, hsl(292 100% 91% / 0.58)),
+      hsl(0 0% 100% / 0.66);
+    box-shadow: 0 24px 70px hsl(210 45% 58% / 0.17), inset 0 1px 0 hsl(0 0% 100% / 0.92);
   }
 
   .tool-hero-sm {
@@ -1044,9 +1044,9 @@ html.dark {
     min-height: 180px;
     border: 1px solid hsl(198 100% 72% / 0.64);
     background:
-      linear-gradient(115deg, hsl(199 100% 88% / 0.86), hsl(174 100% 94% / 0.74) 48%, hsl(292 100% 94% / 0.78)),
-      hsl(0 0% 100% / 0.82);
-    box-shadow: 0 18px 54px hsl(210 45% 58% / 0.13), inset 0 1px 0 hsl(0 0% 100% / 0.96);
+      linear-gradient(115deg, hsl(199 100% 84% / 0.70), hsl(174 100% 90% / 0.48) 48%, hsl(292 100% 91% / 0.56)),
+      hsl(0 0% 100% / 0.66);
+    box-shadow: 0 18px 54px hsl(210 45% 58% / 0.16), inset 0 1px 0 hsl(0 0% 100% / 0.92);
   }
 
   .tool-hero-bg {
@@ -2071,9 +2071,10 @@ html.dark {
     min-height: 172px;
     background:
       linear-gradient(145deg, hsl(0 0% 100% / 0.92), hsl(201 100% 98% / 0.84)) padding-box,
-      linear-gradient(120deg, hsl(198 100% 70% / 0.96), hsl(247 100% 77% / 0.58), hsl(174 92% 57% / 0.82)) border-box;
-    border: 1.5px solid transparent;
+      linear-gradient(120deg, hsl(198 100% 54%), hsl(247 100% 69% / 0.88), hsl(174 92% 44%)) border-box;
+    border: 2px solid transparent;
     box-shadow:
+      0 0 0 1px hsl(195 100% 48% / 0.10),
       0 24px 70px hsl(210 45% 58% / 0.16),
       0 1px 0 hsl(0 0% 100% / 0.98) inset,
       0 -1px 0 hsl(var(--foreground) / 0.03) inset;
@@ -2100,7 +2101,7 @@ html.dark {
     border-color: transparent;
     background:
       linear-gradient(145deg, hsl(0 0% 100% / 0.96), hsl(201 100% 98% / 0.90)) padding-box,
-      linear-gradient(120deg, hsl(198 100% 60%), hsl(247 100% 72% / 0.72), hsl(174 92% 48%)) border-box;
+      linear-gradient(120deg, hsl(198 100% 46%), hsl(247 100% 64% / 0.94), hsl(174 92% 38%)) border-box;
     box-shadow:
       0 0 0 4px hsl(195 100% 48% / 0.10),
       0 28px 80px hsl(210 45% 58% / 0.18),
