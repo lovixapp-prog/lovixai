@@ -2373,7 +2373,7 @@ html.light {
   @media (max-width: 640px) {
     .chat-composer {
       @apply rounded-[26px] px-3 py-3;
-      min-height: 190px;
+      min-height: 140px;
     }
 
     .chat-input-wrapper {
@@ -2381,7 +2381,7 @@ html.light {
     }
 
     .chat-composer-main {
-      @apply min-h-[58px] pr-6;
+      @apply min-h-[46px] pr-5;
     }
 
     .chat-composer-textarea {
@@ -2389,7 +2389,11 @@ html.light {
     }
 
     .chat-composer-actions {
-      @apply mt-2 items-end;
+      @apply mt-2 flex-nowrap items-center gap-2;
+    }
+
+    .chat-action-group {
+      @apply gap-1.5;
     }
 
     .chat-avatar-tool {
@@ -2405,7 +2409,7 @@ html.light {
     }
 
     .chat-action-group-right {
-      @apply ml-0;
+      @apply ml-auto shrink-0;
     }
 
     .chat-mode-pill {
@@ -2422,12 +2426,20 @@ html.light {
 
     .ugc-project-composer {
       @apply mb-5 rounded-[28px];
-      min-height: 262px;
+      min-height: 164px;
     }
 
     .tool-agent-composer {
-      @apply mb-6 rounded-[28px];
-      min-height: 242px;
+      @apply mb-5 rounded-[28px];
+      min-height: 142px;
+    }
+
+    .tool-agent-composer .chat-composer-main {
+      @apply min-h-[58px];
+    }
+
+    .tool-agent-composer .chat-composer-textarea {
+      min-height: 58px;
     }
 
     .tool-settings-popover {
@@ -2439,11 +2451,19 @@ html.light {
     }
 
     .ugc-inline-chip {
-      @apply h-9 max-w-[92px] px-1.5 pr-1.5;
+      @apply h-10 w-10 max-w-none justify-center px-0;
     }
 
     .ugc-inline-chip .chat-avatar-tool-text {
-      @apply text-[10px];
+      @apply hidden;
+    }
+
+    .ugc-inline-chip .chat-avatar-tool-media {
+      @apply h-7 w-7;
+    }
+
+    .ugc-requirements {
+      @apply hidden;
     }
 
     .ugc-composer-popover {

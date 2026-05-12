@@ -716,7 +716,7 @@ export default function UGCVideoGenerator({
 
           <input type="file" ref={avatarInputRef} className="hidden" accept="image/*" onChange={handleAvatarSelect} />
           {(!selectedProduct || !script.trim() || availableCredits < credits) && (
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-bold text-muted-foreground">
+            <div className="ugc-requirements mt-3 flex flex-wrap items-center gap-2 text-[11px] font-bold text-muted-foreground">
               {!selectedProduct && <span className="rounded-full bg-amber-500/10 px-2 py-1 text-amber-400">Add product URL</span>}
               {!script.trim() && <span className="rounded-full bg-amber-500/10 px-2 py-1 text-amber-400">Write prompt</span>}
               {availableCredits < credits && <span className="rounded-full bg-destructive/10 px-2 py-1 text-destructive">Need {credits - availableCredits} credits</span>}
