@@ -33,7 +33,7 @@ const AIInfluencerInfo = () => {
         canonicalPath="/ai-influencer"
       />
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative -mt-16 min-h-screen overflow-hidden flex items-center justify-center lg:-mt-20">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -41,13 +41,13 @@ const AIInfluencerInfo = () => {
             alt="AI Influencer"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/24 via-black/8 to-background/82" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/42 via-transparent to-black/24" />
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto space-y-8 animate-fade-in-up">
+          <div className="influencer-hero-copy max-w-4xl mx-auto space-y-8 animate-fade-in-up">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/40 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 text-primary" />

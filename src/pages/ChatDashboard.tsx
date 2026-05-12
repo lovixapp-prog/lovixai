@@ -163,7 +163,7 @@ const ChatDashboard = () => {
   const [mobileMenu, setMobileMenu] = useState<'create' | 'workspace' | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [toolsExpanded, setToolsExpanded] = useState(false);
-  const [workspaceExpanded, setWorkspaceExpanded] = useState(true);
+  const [workspaceExpanded, setWorkspaceExpanded] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -332,43 +332,39 @@ const ChatDashboard = () => {
             </section>
 
             <section>
-              <div className="flex items-center justify-between px-2 mb-2">
-                <span className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Create</span>
-                <button onClick={() => handleTabChange('home')} className="text-[10px] font-semibold text-primary/80 hover:text-primary">All</button>
-              </div>
-              <div className="grid grid-cols-2 gap-1.5">
-                {TOOL_ITEMS.map(item => {
-                  const isActive = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => handleTabChange(item.id)}
-                      className={`group relative h-[64px] overflow-hidden rounded-xl border p-2 text-center transition-all duration-200 ${
-                        isActive
-                          ? `border-primary/35 bg-gradient-to-br ${item.navAccent} text-foreground shadow-[0_0_22px_hsl(var(--primary)/0.2)]`
-                          : `border-sidebar-border/70 bg-gradient-to-br ${item.navAccent} text-foreground/85 hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-[0_0_18px_hsl(var(--primary)/0.14)]`
-                      }`}
-                    >
-                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                      <div className="flex h-full flex-col items-center justify-center gap-1.5 min-w-0">
-                        <span className={`flex h-8 w-8 items-center justify-center rounded-lg bg-background/35 ring-1 ring-white/10 ${item.color}`}>
-                          <AnimatedIconify icon={item.navIcon} className="w-5 h-5" />
-                        </span>
-                        <span className="block w-full text-[11px] font-bold leading-tight truncate">{item.label}</span>
-                      </div>
-                      {item.badge && (
-                        <span className="absolute right-1.5 top-1.5 text-[8px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge}</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+              <button
+                onClick={() => setToolsExpanded(open => !open)}
+                className="mb-1 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-muted-foreground transition-colors hover:bg-sidebar-accent/35 hover:text-foreground"
+              >
+                <span className="text-[9px] font-semibold uppercase tracking-widest">Tools</span>
+                <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${toolsExpanded ? 'rotate-180' : ''}`} />
+              </button>
+              {toolsExpanded && (
+                <nav className="space-y-1">
+                  {TOOL_ITEMS.map(item => {
+                    const isActive = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => handleTabChange(item.id)}
+                        className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors ${
+                          isActive ? 'bg-sidebar-accent/70 text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/35 hover:text-foreground'
+                        }`}
+                      >
+                        <AnimatedIconify icon={item.navIcon} className={`h-4 w-4 ${isActive ? item.color : 'text-muted-foreground'}`} />
+                        <span className="flex-1 text-left">{item.label}</span>
+                        {item.badge && <span className="text-[8px] font-bold text-primary">{item.badge}</span>}
+                      </button>
+                    );
+                  })}
+                </nav>
+              )}
             </section>
 
             <section>
               <button
                 onClick={() => setWorkspaceExpanded(open => !open)}
-                className="mb-1.5 flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-muted-foreground transition-colors hover:bg-sidebar-accent/40 hover:text-foreground"
+                className="mb-1 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-muted-foreground transition-colors hover:bg-sidebar-accent/35 hover:text-foreground"
               >
                 <span className="text-[9px] font-semibold uppercase tracking-widest">Workspace</span>
                 <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${workspaceExpanded ? 'rotate-180' : ''}`} />
@@ -398,11 +394,11 @@ const ChatDashboard = () => {
                       <button
                         key={item.id}
                         onClick={() => handleTabChange(item.id)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-xs font-medium ${
-                          isActive ? `border ${item.ring} bg-gradient-to-r ${item.accent} text-foreground` : `border border-transparent bg-gradient-to-r ${item.accent} text-foreground/80 hover:border-primary/20 hover:text-foreground`
+                        className={`w-full flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors ${
+                          isActive ? 'bg-sidebar-accent/70 text-primary' : 'text-muted-foreground hover:bg-sidebar-accent/35 hover:text-foreground'
                         }`}
                       >
-                        <AnimatedIconify icon={item.icon} className={`w-4 h-4 ${item.color}`} />
+                        <AnimatedIconify icon={item.icon} className={`w-4 h-4 ${isActive ? item.color : 'text-muted-foreground'}`} />
                         <span className="flex-1 text-left">{item.label}</span>
                         {item.id === 'credits' && (
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
@@ -851,15 +847,11 @@ const ChatDashboard = () => {
             <span className="text-[10px] font-medium">Chat</span>
           </button>
           <button onClick={() => setMobileMenu(mobileMenu === 'create' ? null : 'create')} className={`mobile-nav-item ${isToolTab(activeTab) || mobileMenu === 'create' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-            <span className={`rounded-xl p-1 transition-all duration-200 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'bg-violet-500/20 shadow-[0_0_14px_rgba(168,85,247,0.28)]' : 'bg-violet-500/10'}`}>
-              <AnimatedIconify icon="solar:widget-5-bold-duotone" className={`w-4 h-4 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'scale-110 text-violet-400' : 'text-violet-300'}`} />
-            </span>
+            <AnimatedIconify icon="solar:widget-5-bold-duotone" className={`w-5 h-5 ${isToolTab(activeTab) || mobileMenu === 'create' ? 'scale-110 text-primary' : ''}`} />
             <span className="text-[10px] font-medium">Create</span>
           </button>
           <button onClick={() => setMobileMenu(mobileMenu === 'workspace' ? null : 'workspace')} className={`mobile-nav-item ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'mobile-nav-item-active' : 'text-muted-foreground'}`}>
-            <span className={`rounded-xl p-1 transition-all duration-200 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'bg-amber-500/20 shadow-[0_0_14px_rgba(245,158,11,0.26)]' : 'bg-amber-500/10'}`}>
-              <AnimatedIconify icon="solar:case-round-minimalistic-bold-duotone" className={`w-4 h-4 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'scale-110 text-amber-400' : 'text-amber-300'}`} />
-            </span>
+            <AnimatedIconify icon="solar:case-round-minimalistic-bold-duotone" className={`w-5 h-5 ${isWorkspaceTab(activeTab) || mobileMenu === 'workspace' ? 'scale-110 text-primary' : ''}`} />
             <span className="text-[10px] font-medium">Workspace</span>
           </button>
         </div>
@@ -875,24 +867,17 @@ const ChatDashboard = () => {
               <p className="text-[11px] text-muted-foreground">{mobileMenu === 'create' ? 'Choose the generator you need.' : 'Manage assets, connectors, and credits.'}</p>
             </div>
             <div className="p-3 space-y-2">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
                 {(mobileMenu === 'create' ? TOOL_ITEMS : WORKSPACE_ITEMS).map(item => {
                 const isActive = activeTab === item.id;
                 return (
                   <button key={item.id} onClick={() => handleTabChange(item.id)}
-                    className={`group relative flex h-[76px] gap-2.5 overflow-hidden rounded-xl p-2 transition-all duration-200 text-sm font-medium ${
-                      isActive
-                        ? `border ${'ring' in item ? item.ring : 'border-primary/25'} bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-foreground shadow-[0_0_20px_hsl(var(--primary)/0.16)]`
-                        : `border border-sidebar-border/70 bg-gradient-to-br ${'navAccent' in item ? item.navAccent : item.accent} text-sidebar-foreground hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[0_0_16px_hsl(var(--primary)/0.12)]`
+                    className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                      isActive ? 'bg-sidebar-accent/70 text-primary' : 'text-sidebar-foreground hover:bg-sidebar-accent/40'
                     }`}>
-                    <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                    <span className="flex h-full w-full flex-col items-center justify-center gap-1.5">
-                      <span className={`flex h-9 w-9 items-center justify-center rounded-xl bg-background/35 ring-1 ring-white/10 ${'color' in item ? item.color : ''}`}>
-                        <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className="h-5 w-5" />
-                      </span>
-                      <span className="w-full min-w-0 truncate text-center text-[12px] font-bold">{item.label}</span>
-                    </span>
-                    {'badge' in item && item.badge && <span className="absolute right-1.5 top-1.5 text-[9px] font-bold bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">{item.badge as string}</span>}
+                    <AnimatedIconify icon={'navIcon' in item ? item.navIcon : item.icon} className={`h-5 w-5 ${isActive && 'color' in item ? item.color : 'text-muted-foreground'}`} />
+                    <span className="min-w-0 flex-1 truncate text-left">{item.label}</span>
+                    {'badge' in item && item.badge && <span className="text-[9px] font-bold text-primary">{item.badge as string}</span>}
                   </button>
                 );
                 })}

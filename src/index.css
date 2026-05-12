@@ -1147,6 +1147,31 @@ html.dark {
     box-shadow: 0 10px 30px hsl(0 0% 0% / 0.16), inset 0 1px 0 hsl(255 100% 100% / 0.06);
   }
 
+  .influencer-hero-copy {
+    @apply relative px-5 py-6 sm:px-8 sm:py-7;
+    z-index: 0;
+    text-shadow: 0 2px 18px hsl(0 0% 0% / 0.42);
+  }
+
+  .influencer-hero-copy::before {
+    content: "";
+    position: absolute;
+    inset: -0.75rem;
+    z-index: -1;
+    border-radius: 2rem;
+    background:
+      radial-gradient(ellipse at center, hsl(0 0% 0% / 0.40) 0%, hsl(0 0% 0% / 0.24) 42%, transparent 74%);
+    backdrop-filter: blur(1.5px);
+  }
+
+  @media (min-width: 768px) {
+    .influencer-hero-copy::before {
+      inset: -1.25rem -2rem;
+      background:
+        radial-gradient(ellipse at center, hsl(0 0% 0% / 0.34) 0%, hsl(0 0% 0% / 0.18) 48%, transparent 76%);
+    }
+  }
+
   .influencer-card {
     @apply cursor-pointer overflow-hidden rounded-xl transition-all duration-300;
     border: 1px solid hsl(var(--border) / 0.72);
@@ -2070,15 +2095,27 @@ html.dark {
     @apply relative w-full overflow-visible rounded-[30px] px-4 py-4 transition-all duration-200 sm:px-5;
     min-height: 172px;
     background:
-      linear-gradient(145deg, hsl(0 0% 100% / 0.92), hsl(201 100% 98% / 0.84)) padding-box,
-      linear-gradient(120deg, hsl(198 100% 54%), hsl(247 100% 69% / 0.88), hsl(174 92% 44%)) border-box;
-    border: 2px solid transparent;
+      linear-gradient(145deg, hsl(0 0% 100%), hsl(201 100% 98%)) padding-box,
+      linear-gradient(90deg,
+        hsl(350 100% 58% / 0.82),
+        hsl(28 100% 55% / 0.82),
+        hsl(52 100% 55% / 0.82),
+        hsl(151 96% 43% / 0.82),
+        hsl(193 100% 50% / 0.82),
+        hsl(244 100% 64% / 0.82),
+        hsl(310 100% 58% / 0.82),
+        hsl(350 100% 58% / 0.82)
+      ) border-box;
+    background-size: 100% 100%, 340% 340%;
+    background-position: 0 0, 0% 50%;
+    border: 1px solid transparent;
     box-shadow:
-      0 0 0 1px hsl(195 100% 48% / 0.10),
-      0 24px 70px hsl(210 45% 58% / 0.16),
+      0 0 0 1px hsl(var(--foreground) / 0.05),
+      0 24px 70px hsl(210 28% 56% / 0.14),
       0 1px 0 hsl(0 0% 100% / 0.98) inset,
       0 -1px 0 hsl(var(--foreground) / 0.03) inset;
     backdrop-filter: blur(26px) saturate(1.25);
+    animation: lovix-rgb-border-flow 14s linear infinite;
     isolation: isolate;
   }
 
@@ -2097,14 +2134,30 @@ html.dark {
     70% { background-position: 50% 100%; opacity: 0.68; }
   }
 
+  @keyframes lovix-rgb-border-flow {
+    0% { background-position: 0 0, 0% 50%; }
+    50% { background-position: 0 0, 100% 50%; }
+    100% { background-position: 0 0, 0% 50%; }
+  }
+
   .chat-composer:focus-within {
     border-color: transparent;
     background:
-      linear-gradient(145deg, hsl(0 0% 100% / 0.96), hsl(201 100% 98% / 0.90)) padding-box,
-      linear-gradient(120deg, hsl(198 100% 46%), hsl(247 100% 64% / 0.94), hsl(174 92% 38%)) border-box;
+      linear-gradient(145deg, hsl(0 0% 100%), hsl(201 100% 98%)) padding-box,
+      linear-gradient(90deg,
+        hsl(350 100% 54% / 0.9),
+        hsl(28 100% 52% / 0.9),
+        hsl(52 100% 52% / 0.9),
+        hsl(151 96% 39% / 0.9),
+        hsl(193 100% 45% / 0.9),
+        hsl(244 100% 60% / 0.9),
+        hsl(310 100% 54% / 0.9),
+        hsl(350 100% 54% / 0.9)
+      ) border-box;
+    background-size: 100% 100%, 340% 340%;
     box-shadow:
-      0 0 0 4px hsl(195 100% 48% / 0.10),
-      0 28px 80px hsl(210 45% 58% / 0.18),
+      0 0 0 3px hsl(var(--foreground) / 0.04),
+      0 28px 80px hsl(210 28% 56% / 0.16),
       0 1px 0 hsl(0 0% 100% / 0.98) inset;
   }
 
@@ -2215,10 +2268,11 @@ html.dark {
 
   .chat-popover {
     @apply absolute z-50 rounded-2xl border p-2;
-    background: hsl(var(--popover) / 0.98);
-    border-color: hsl(var(--border) / 0.7);
-    box-shadow: 0 22px 55px hsl(var(--background) / 0.34), 0 1px 0 hsl(0 0% 100% / 0.14) inset;
-    backdrop-filter: blur(20px);
+    background: linear-gradient(145deg, hsl(0 0% 100%), hsl(202 100% 98%));
+    border-color: hsl(210 45% 78% / 0.82);
+    box-shadow: 0 22px 58px hsl(var(--foreground) / 0.16), 0 1px 0 hsl(0 0% 100% / 0.96) inset;
+    backdrop-filter: blur(24px) saturate(1.12);
+    isolation: isolate;
   }
 
   .chat-add-popover {
@@ -2405,7 +2459,15 @@ html.dark {
   }
 
   .tool-settings-popover {
-    @apply bottom-[48px] left-[68px] w-[286px] p-3;
+    @apply left-[68px] w-[286px] p-3;
+    top: calc(100% + 8px);
+    bottom: auto;
+    z-index: 200;
+    background: hsl(0 0% 100%) !important;
+    background-image: none !important;
+    border-color: hsl(207 60% 76% / 0.86);
+    box-shadow: 0 26px 70px hsl(var(--foreground) / 0.20), 0 0 0 1px hsl(var(--foreground) / 0.04);
+    backdrop-filter: none;
   }
 
   .ugc-top-chip {
@@ -2561,7 +2623,9 @@ html.dark {
     }
 
     .tool-settings-popover {
-      @apply bottom-[46px] left-0 w-[286px];
+      @apply left-0 w-[286px];
+      top: calc(100% + 8px);
+      bottom: auto;
     }
 
     .ugc-top-chip {
