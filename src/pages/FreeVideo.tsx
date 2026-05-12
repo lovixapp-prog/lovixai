@@ -1,33 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, Upload, Sparkles, Download, Zap, Clock, CreditCard, ChevronDown } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import SEOHead from "@/components/SEOHead";
 
 const FreeVideo = () => {
-  // Set SEO meta tags on mount
-  useEffect(() => {
-    document.title = "Free AI Video Generator - Create Your First Video Free | LOVIX";
-    
-    const setMetaTag = (name: string, content: string, isProperty = false) => {
-      const attr = isProperty ? "property" : "name";
-      let element = document.querySelector(`meta[${attr}="${name}"]`);
-      if (!element) {
-        element = document.createElement("meta");
-        element.setAttribute(attr, name);
-        document.head.appendChild(element);
-      }
-      element.setAttribute("content", content);
-    };
-
-    const description = "Create your first AI video completely free. No credit card required. Generate viral videos for TikTok, YouTube Shorts & Instagram Reels in minutes. Start now!";
-    const keywords = "free AI video, AI video generator free, free text to video, create video free, AI video no credit card, free video maker AI, TikTok video free, viral video creator free";
-    
-    setMetaTag("description", description);
-    setMetaTag("keywords", keywords);
-    setMetaTag("og:title", "Free AI Video Generator - Create Your First Video Free | LOVIX", true);
-    setMetaTag("og:description", description, true);
-    setMetaTag("twitter:title", "Free AI Video Generator - Create Your First Video Free | LOVIX");
-    setMetaTag("twitter:description", description);
-  }, []);
+  const description = "Create your first AI video completely free. No credit card required. Generate viral videos for TikTok, YouTube Shorts and Instagram Reels in minutes.";
+  const keywords = "free AI video, AI video generator free, free text to video, create video free, AI video no credit card, free video maker AI, TikTok video free, viral video creator free";
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const faqs = [
@@ -47,6 +25,12 @@ const FreeVideo = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Free AI Video Generator - Create Your First Video Free | LOVIX"
+        description={description}
+        keywords={keywords}
+        canonicalPath="/free-video"
+      />
       {/* Minimal Header with Glass Effect */}
       <header className="fixed top-0 left-0 right-0 z-[60] py-4 px-6 glass-strong">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

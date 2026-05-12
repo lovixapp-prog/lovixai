@@ -11,7 +11,6 @@ const Terms = () => {
         description="Terms of Service for LOVIX AI platform. Read our terms and conditions for using AI video generation, image creation, and motion control services."
         keywords="LOVIX terms of service, AI platform terms, video generation terms, AI service agreement"
         canonicalPath="/terms"
-        noIndex={true}
       />
       <div className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
         {/* Back Link */}

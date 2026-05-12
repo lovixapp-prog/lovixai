@@ -61,7 +61,7 @@ const Documentation = () => {
         title="LOVIX Documentation - Guides for AI Video, Image & Motion Creation"
         description="Comprehensive documentation for LOVIX AI platform. Learn video generation, image creation, motion control, and AI influencer features. Step-by-step guides for all skill levels."
         keywords="LOVIX documentation, AI video guide, AI image documentation, motion control docs, AI platform help, video generation help, AI tutorial docs, LOVIX help center"
-        canonicalPath="/docs"
+        canonicalPath="/documentation"
       />
       <div className="container mx-auto px-4 py-8 sm:py-12">
         {/* Back Link */}

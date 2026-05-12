@@ -11,7 +11,6 @@ const Privacy = () => {
         description="Privacy Policy for LOVIX AI platform. Learn how we collect, use, and protect your data when using our AI video and image generation services."
         keywords="LOVIX privacy policy, AI platform privacy, data protection AI, video generation privacy"
         canonicalPath="/privacy"
-        noIndex={true}
       />
       <div className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
         {/* Back Link */}

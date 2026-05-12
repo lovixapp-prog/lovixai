@@ -1,1 +1,6 @@
+http://lovix.app/* https://lovix.app/:splat 301!
+http://www.lovix.app/* https://lovix.app/:splat 301!
+https://www.lovix.app/* https://lovix.app/:splat 301!
+https://lovix-vision-lab.lovable.app/* https://lovix.app/:splat 301!
+
 /* /index.html 200

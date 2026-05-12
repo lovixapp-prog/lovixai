@@ -128,6 +128,13 @@ const Auth = () => {
   // ── Check email screen ─────────────────────────────────────────
   if (pendingEmail) {
     return (
+      <>
+      <SEOHead
+        title="Check your email | LOVIX"
+        description="Confirm your LOVIX account email to access your AI creative workspace."
+        canonicalPath="/auth"
+        noIndex
+      />
       <div className="min-h-screen flex bg-background">
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="w-full max-w-md space-y-8 animate-fade-in-up text-center">
@@ -212,11 +219,19 @@ const Auth = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/80" />
         </div>
       </div>
+      </>
     );
   }
 
   // ── Normal login/signup form ───────────────────────────────────
   return (
+    <>
+    <SEOHead
+      title={isLogin ? "Sign in to LOVIX" : "Create your LOVIX account"}
+      description="Access LOVIX to create AI videos, images, UGC ads, motion content and AI influencers."
+      canonicalPath="/auth"
+      noIndex
+    />
     <div className="min-h-screen flex bg-background">
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8 animate-fade-in-up">
@@ -336,6 +351,7 @@ const Auth = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

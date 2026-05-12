@@ -1,0 +1,18 @@
+/*
+  X-Robots-Tag: index, follow
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/dashboard*
+  X-Robots-Tag: noindex, nofollow
+
+/auth*
+  X-Robots-Tag: noindex, nofollow
+
+/settings*
+  X-Robots-Tag: noindex, nofollow
+
+/payment-success*
+  X-Robots-Tag: noindex, nofollow
+
+/tiktok/*
+  X-Robots-Tag: noindex, nofollow

@@ -61,7 +61,7 @@ const SEOHead = ({
     if (noIndex) {
       setMetaTag("robots", "noindex, nofollow");
     } else {
-      setMetaTag("robots", "index, follow");
+      setMetaTag("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
     }
 
     // Open Graph tags
@@ -71,6 +71,7 @@ const SEOHead = ({
     setMetaTag("og:url", fullUrl, true);
     setMetaTag("og:image", ogImage, true);
     setMetaTag("og:site_name", "LOVIX", true);
+    setMetaTag("og:locale", "en_US", true);
 
     // Twitter Card tags
     setMetaTag("twitter:card", "summary_large_image");
