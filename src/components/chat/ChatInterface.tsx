@@ -87,8 +87,8 @@ export function ChatInterface({
         )}
       </div>
 
-      {/* Input — pb-[72px] clears the mobile bottom nav (56px + gap), lg resets to normal */}
-      <div className="flex-shrink-0 px-3 sm:px-6 pb-[72px] lg:pb-6 pt-2 max-w-5xl mx-auto w-full">
+      {/* Input — extra mobile clearance keeps the composer away from the bottom nav */}
+      <div className="flex-shrink-0 px-3 sm:px-6 pb-[112px] lg:pb-6 pt-2 max-w-5xl mx-auto w-full">
         <ChatInput onSend={onSend} disabled={isThinking} />
       </div>
     </div>

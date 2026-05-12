@@ -104,6 +104,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
   const [refreshKey, setRefreshKey] = useState(0);
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [showAssetPicker, setShowAssetPicker] = useState(false);
+  const [openComposerPanel, setOpenComposerPanel] = useState<'add' | 'settings' | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -324,7 +325,7 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
       {/* ── Prompt Bar ─────────────────────────────────────── */}
       <div
         {...dragProps}
-        className={`prompt-bar transition-all ${isDragging ? 'border-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]' : ''}`}
+        className={`chat-composer tool-agent-composer transition-all ${isDragging ? 'border-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]' : ''}`}
       >
         {isDragging && (
           <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-primary/8 backdrop-blur-sm">
@@ -355,29 +356,94 @@ const ImageGenerator = ({ onCreditsUpdate, availableCredits = 0, hasSubscription
         )}
 
         {/* Textarea */}
-        <div className="relative">
+        <div className="chat-composer-main">
         <textarea
           placeholder={referenceImage ? "Describe how to edit this image…" : "Describe your image… (or drag & drop to edit)"}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="w-full min-h-[78px] sm:min-h-[92px] p-4 pr-16 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
+          className="chat-composer-textarea min-h-[76px]"
           onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleGenerate(); }}
         />
-          {canOptimizePrompt && (
-            <button
-              type="button"
-              onClick={handleOptimizePrompt}
-              disabled={isOptimizing}
-              className="btn-optimize absolute bottom-3 right-3 h-8 w-8 rounded-xl p-0 flex items-center justify-center disabled:opacity-40"
-              aria-label="Enhance prompt"
-            >
-              {isOptimizing ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /> : <AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className="w-4 h-4" />}
+        </div>
+
+        {/* Agent-style toolbar */}
+        <div className="chat-composer-actions">
+          <div className="chat-action-group">
+            <div className="relative">
+              <button type="button" className={`chat-round-tool ${openComposerPanel === 'add' ? 'chat-round-tool-active' : ''}`} onClick={() => setOpenComposerPanel(openComposerPanel === 'add' ? null : 'add')} aria-label="Add">
+                <AnimatedIconify icon={openComposerPanel === 'add' ? 'solar:close-circle-bold' : 'solar:add-circle-bold'} className="h-5 w-5" />
+              </button>
+              {openComposerPanel === 'add' && (
+                <div className="chat-popover chat-add-popover">
+                  <label className="chat-popover-row cursor-pointer">
+                    <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                    <AnimatedIconify icon="solar:cloud-upload-bold" className="h-4 w-4" />
+                    <span>Upload image</span>
+                  </label>
+                  <button type="button" onClick={() => { setShowAssetPicker(true); setOpenComposerPanel(null); }} className="chat-popover-row">
+                    <AnimatedIconify icon="solar:gallery-wide-bold" className="h-4 w-4" />
+                    <span>Assets</span>
+                  </button>
+                </div>
+              )}
+            </div>
+            <button type="button" className={`chat-icon-tool ${canOptimizePrompt ? 'chat-icon-tool-active' : ''}`} onClick={handleOptimizePrompt} disabled={!canOptimizePrompt || isOptimizing} aria-label="Enhance prompt">
+              {isOptimizing ? <AnimatedIconify icon="solar:stars-line-duotone" className="h-5 w-5" spin /> : <AnimatedIconify icon="solar:lightbulb-bolt-bold" className="h-5 w-5" />}
             </button>
-          )}
+            <button type="button" className={`chat-icon-tool ${openComposerPanel === 'settings' ? 'chat-icon-tool-active' : ''}`} onClick={() => setOpenComposerPanel(openComposerPanel === 'settings' ? null : 'settings')} aria-label="Settings">
+              <AnimatedIconify icon="solar:tuning-2-bold" className="h-5 w-5" />
+            </button>
+            {openComposerPanel === 'settings' && (
+              <div className="chat-popover tool-settings-popover">
+                <div className="chat-settings-head">
+                  <span>Settings</span>
+                  <button type="button" onClick={() => setOpenComposerPanel(null)} aria-label="Close settings">
+                    <AnimatedIconify icon="solar:alt-arrow-down-bold" className="h-4 w-4" />
+                  </button>
+                </div>
+                <button type="button" className="chat-settings-row">
+                  <span className="chat-settings-row-main"><StyleGlyph style={selectedStyle} /><span>Style</span></span>
+                  <span className="chat-settings-current">{imageSelectOptions.styles.find(s => s.value === selectedStyle)?.label}</span>
+                  <AnimatedIconify icon="solar:alt-arrow-right-bold" className="h-4 w-4" />
+                </button>
+                <div className="chat-settings-section">
+                  <div className="chat-option-grid">
+                    {imageSelectOptions.styles.slice(0, 3).map(option => (
+                      <button key={option.value} type="button" onClick={() => setSelectedStyle(option.value)} className={`chat-option-pill ${selectedStyle === option.value ? 'chat-option-pill-active' : ''}`}>
+                        <StyleGlyph style={option.value} />
+                        <span>{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button type="button" className="chat-settings-row">
+                  <span className="chat-settings-row-main"><FormatGlyph ratio={aspectRatio} /><span>Format</span></span>
+                  <span className="chat-settings-current">{aspectRatio}</span>
+                  <AnimatedIconify icon="solar:alt-arrow-right-bold" className="h-4 w-4" />
+                </button>
+                <div className="chat-settings-section">
+                  <div className="chat-option-grid">
+                    {imageSelectOptions.aspectRatio.map(option => (
+                      <button key={option.value} type="button" onClick={() => setAspectRatio(option.value as "1:1" | "3:4" | "9:16" | "16:9")} className={`chat-option-pill ${aspectRatio === option.value ? 'chat-option-pill-active' : ''}`}>
+                        <FormatGlyph ratio={option.value} />
+                        <span>{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="chat-action-group chat-action-group-right">
+            <div className="hidden rounded-full bg-muted/50 px-3 py-2 text-xs font-black text-muted-foreground sm:block">{creditsCost} credits</div>
+            <button onClick={canGenerate ? handleGenerate : onUpgradeClick} disabled={isGenerating || (canGenerate && !prompt.trim())} className={`chat-send-btn ${(!canGenerate || prompt.trim()) ? 'chat-send-btn-active' : ''}`} aria-label={referenceImage ? "Edit image" : "Generate image"}>
+              {isGenerating ? <AnimatedIconify icon="solar:refresh-circle-bold" className="h-5 w-5" spin /> : !canGenerate ? <AnimatedIconify icon="solar:crown-star-bold" className="h-5 w-5" /> : <AnimatedIconify icon="solar:arrow-up-bold" className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Toolbar */}
-        <div className="tool-compact-toolbar flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
+        <div className="hidden">
           <div className="tool-input-row">
             <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload image" aria-label="Upload image">
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />

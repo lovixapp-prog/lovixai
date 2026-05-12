@@ -1982,12 +1982,49 @@ html.light {
     background:
       radial-gradient(circle at 12% 0%, hsl(var(--primary) / 0.10), transparent 34%),
       linear-gradient(145deg, hsl(var(--card) / 0.94), hsl(var(--background) / 0.84));
-    border: 1px solid hsl(var(--border) / 0.72);
+    border: 1px solid hsl(var(--border) / 0.96);
     box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.14),
       0 24px 70px hsl(var(--background) / 0.32),
       0 1px 0 hsl(0 0% 100% / 0.14) inset,
       0 -1px 0 hsl(var(--foreground) / 0.04) inset;
     backdrop-filter: blur(26px) saturate(1.25);
+    isolation: isolate;
+  }
+
+  .chat-composer::before {
+    content: '';
+    @apply pointer-events-none absolute rounded-[31px];
+    inset: 0;
+    z-index: 0;
+    padding: 1px;
+    background: linear-gradient(
+      115deg,
+      hsl(var(--primary) / 0.82),
+      hsl(292 92% 62% / 0.72),
+      hsl(190 96% 58% / 0.76),
+      hsl(46 100% 58% / 0.68),
+      hsl(var(--primary) / 0.82)
+    );
+    background-size: 260% 260%;
+    opacity: 0.72;
+    animation: lovix-led-border-flow 18s ease-in-out infinite;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .chat-composer > * {
+    @apply relative;
+    z-index: 1;
+  }
+
+  @keyframes lovix-led-border-flow {
+    0%, 100% { background-position: 0% 50%; opacity: 0.58; }
+    45% { background-position: 100% 50%; opacity: 0.78; }
+    70% { background-position: 50% 100%; opacity: 0.68; }
   }
 
   .chat-composer:focus-within {
@@ -2284,10 +2321,63 @@ html.light {
     backdrop-filter: blur(10px);
   }
 
+  .ugc-project-composer {
+    @apply mx-auto overflow-visible;
+    min-height: 236px;
+  }
+
+  .tool-agent-composer {
+    @apply mx-auto mb-5;
+    min-height: 218px;
+  }
+
+  .tool-settings-popover {
+    @apply bottom-[48px] left-[68px] w-[286px] p-3;
+  }
+
+  .ugc-top-chip {
+    @apply max-w-[220px];
+    border: 1px solid hsl(var(--border) / 0.55);
+    box-shadow: 0 10px 22px hsl(var(--background) / 0.18), 0 1px 0 hsl(0 0% 100% / 0.12) inset;
+  }
+
+  .ugc-inline-chip {
+    @apply h-9 max-w-[132px] px-1.5 pr-2;
+    border: 1px solid hsl(var(--border) / 0.55);
+  }
+
+  .ugc-inline-chip .chat-avatar-tool-media {
+    @apply h-6 w-6;
+  }
+
+  .ugc-inline-chip .chat-avatar-tool-text {
+    @apply text-[11px];
+  }
+
+  .ugc-composer-popover {
+    @apply left-4 top-[62px] w-[min(420px,calc(100vw-2rem))] p-3;
+  }
+
+  .ugc-product-popover {
+    @apply sm:left-[180px];
+  }
+
+  .ugc-avatar-popover {
+    @apply sm:left-4;
+  }
+
+  .ugc-settings-popover {
+    @apply bottom-[50px] left-[68px] top-auto w-[min(360px,calc(100vw-2rem))];
+  }
+
   @media (max-width: 640px) {
     .chat-composer {
       @apply rounded-[26px] px-3 py-3;
       min-height: 190px;
+    }
+
+    .chat-input-wrapper {
+      @apply pb-2;
     }
 
     .chat-composer-main {
@@ -2328,6 +2418,40 @@ html.light {
 
     .chat-settings-popover {
       @apply bottom-[46px] left-[-14px] w-[286px];
+    }
+
+    .ugc-project-composer {
+      @apply mb-5 rounded-[28px];
+      min-height: 262px;
+    }
+
+    .tool-agent-composer {
+      @apply mb-6 rounded-[28px];
+      min-height: 242px;
+    }
+
+    .tool-settings-popover {
+      @apply bottom-[46px] left-0 w-[286px];
+    }
+
+    .ugc-top-chip {
+      @apply h-9 max-w-[calc(50%-0.25rem)] flex-1 px-1.5 pr-2;
+    }
+
+    .ugc-inline-chip {
+      @apply h-9 max-w-[92px] px-1.5 pr-1.5;
+    }
+
+    .ugc-inline-chip .chat-avatar-tool-text {
+      @apply text-[10px];
+    }
+
+    .ugc-composer-popover {
+      @apply left-0 top-[88px] w-full;
+    }
+
+    .ugc-settings-popover {
+      @apply bottom-[48px] left-0 top-auto;
     }
   }
 

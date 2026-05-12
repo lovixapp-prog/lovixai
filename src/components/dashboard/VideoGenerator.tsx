@@ -103,6 +103,7 @@ const VideoGenerator = ({
   const [activeGeneration, setActiveGeneration] = useState<ActiveGeneration | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showAssetPicker, setShowAssetPicker] = useState(false);
+  const [openComposerPanel, setOpenComposerPanel] = useState<'add' | 'settings' | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -246,7 +247,7 @@ const VideoGenerator = ({
       </div>
 
       {/* ── Prompt Bar ─────────────────────────────────────── */}
-      <div {...dragProps} className={`prompt-bar transition-all ${isDragging ? 'border-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]' : ''}`}>
+      <div {...dragProps} className={`chat-composer tool-agent-composer transition-all ${isDragging ? 'border-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]' : ''}`}>
 
         {/* Drag overlay */}
         {isDragging && (
@@ -283,31 +284,96 @@ const VideoGenerator = ({
         )}
 
         {/* Textarea */}
-        <div className="relative">
+        <div className="chat-composer-main">
         <textarea
           placeholder={referenceImage ? "Describe the motion and scene…" : "Describe the video you want to create… (or drag & drop a reference image)"}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="w-full min-h-[78px] sm:min-h-[92px] p-4 pr-16 text-sm sm:text-base bg-transparent border-0 resize-none outline-none text-foreground placeholder:text-muted-foreground/60 leading-relaxed"
+          className="chat-composer-textarea min-h-[76px]"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleGenerate();
           }}
         />
-          {canOptimizePrompt && (
-            <button
-              type="button"
-              onClick={handleOptimizePrompt}
-              disabled={isOptimizing}
-              className="btn-optimize absolute bottom-3 right-3 h-8 w-8 rounded-xl p-0 flex items-center justify-center disabled:opacity-40"
-              aria-label="Enhance prompt"
-            >
-              {isOptimizing ? <AnimatedIconify icon="solar:refresh-circle-bold-duotone" className="w-4 h-4" spin /> : <AnimatedIconify icon="solar:magic-stick-3-bold-duotone" className="w-4 h-4" />}
+        </div>
+
+        {/* Agent-style toolbar */}
+        <div className="chat-composer-actions">
+          <div className="chat-action-group">
+            <div className="relative">
+              <button type="button" className={`chat-round-tool ${openComposerPanel === 'add' ? 'chat-round-tool-active' : ''}`} onClick={() => setOpenComposerPanel(openComposerPanel === 'add' ? null : 'add')} aria-label="Add">
+                <AnimatedIconify icon={openComposerPanel === 'add' ? 'solar:close-circle-bold' : 'solar:add-circle-bold'} className="h-5 w-5" />
+              </button>
+              {openComposerPanel === 'add' && (
+                <div className="chat-popover chat-add-popover">
+                  <label className="chat-popover-row cursor-pointer">
+                    <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadReferenceImage(e.target.files[0])} className="hidden" />
+                    <AnimatedIconify icon="solar:cloud-upload-bold" className="h-4 w-4" />
+                    <span>Upload reference</span>
+                  </label>
+                  <button type="button" onClick={() => { setShowAssetPicker(true); setOpenComposerPanel(null); }} className="chat-popover-row">
+                    <AnimatedIconify icon="solar:gallery-wide-bold" className="h-4 w-4" />
+                    <span>Assets</span>
+                  </button>
+                </div>
+              )}
+            </div>
+            <button type="button" className={`chat-icon-tool ${canOptimizePrompt ? 'chat-icon-tool-active' : ''}`} onClick={handleOptimizePrompt} disabled={!canOptimizePrompt || isOptimizing} aria-label="Enhance prompt">
+              {isOptimizing ? <AnimatedIconify icon="solar:stars-line-duotone" className="h-5 w-5" spin /> : <AnimatedIconify icon="solar:lightbulb-bolt-bold" className="h-5 w-5" />}
             </button>
-          )}
+            <button type="button" className={`chat-icon-tool ${openComposerPanel === 'settings' ? 'chat-icon-tool-active' : ''}`} onClick={() => setOpenComposerPanel(openComposerPanel === 'settings' ? null : 'settings')} aria-label="Settings">
+              <AnimatedIconify icon="solar:tuning-2-bold" className="h-5 w-5" />
+            </button>
+            {openComposerPanel === 'settings' && (
+              <div className="chat-popover tool-settings-popover">
+                <div className="chat-settings-head">
+                  <span>Settings</span>
+                  <button type="button" onClick={() => setOpenComposerPanel(null)} aria-label="Close settings">
+                    <AnimatedIconify icon="solar:alt-arrow-down-bold" className="h-4 w-4" />
+                  </button>
+                </div>
+                <button type="button" className="chat-settings-row">
+                  <span className="chat-settings-row-main"><AnimatedIconify icon="solar:clock-circle-bold" className="h-4 w-4" /><span>Duration</span></span>
+                  <span className="chat-settings-current">{seconds}s</span>
+                  <AnimatedIconify icon="solar:alt-arrow-right-bold" className="h-4 w-4" />
+                </button>
+                <div className="chat-settings-section">
+                  <div className="chat-option-grid">
+                    {videoSelectOptions.seconds.map(option => (
+                      <button key={option.value} type="button" onClick={() => setSeconds(Number(option.value) as 4 | 8 | 12)} className={`chat-option-pill ${seconds === Number(option.value) ? 'chat-option-pill-active' : ''}`}>
+                        <AnimatedIconify icon="solar:stopwatch-bold" className="h-3.5 w-3.5" />
+                        <span>{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button type="button" className="chat-settings-row">
+                  <span className="chat-settings-row-main"><FormatGlyph ratio={aspectRatio} /><span>Orientation</span></span>
+                  <span className="chat-settings-current">{aspectRatio}</span>
+                  <AnimatedIconify icon="solar:alt-arrow-right-bold" className="h-4 w-4" />
+                </button>
+                <div className="chat-settings-section">
+                  <div className="chat-option-grid">
+                    {videoSelectOptions.aspectRatio.map(option => (
+                      <button key={option.value} type="button" onClick={() => setAspectRatio(option.value as "1:1" | "16:9" | "9:16")} className={`chat-option-pill ${aspectRatio === option.value ? 'chat-option-pill-active' : ''}`}>
+                        <FormatGlyph ratio={option.value} />
+                        <span>{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="chat-action-group chat-action-group-right">
+            <div className="hidden rounded-full bg-muted/50 px-3 py-2 text-xs font-black text-muted-foreground sm:block">{creditsCost} credits</div>
+            <button onClick={handleGenerate} disabled={!prompt.trim() || isGenerating || isResizing || !canGenerate} className={`chat-send-btn ${prompt.trim() && canGenerate ? 'chat-send-btn-active' : ''}`} aria-label="Generate video">
+              {isResizing || isGenerating ? <AnimatedIconify icon="solar:refresh-circle-bold" className="h-5 w-5" spin /> : <AnimatedIconify icon="solar:arrow-up-bold" className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Bottom toolbar */}
-        <div className="tool-compact-toolbar flex items-center justify-between gap-2 px-3 pb-3 pt-1 flex-wrap gap-y-2">
+        <div className="hidden">
           <div className="tool-input-row">
             <label className="tool-upload-btn w-8 justify-center cursor-pointer" title="Upload reference image" aria-label="Upload reference image">
               <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadReferenceImage(e.target.files[0])} className="hidden" />
