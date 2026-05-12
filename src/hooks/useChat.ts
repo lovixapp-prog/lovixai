@@ -97,7 +97,24 @@ export function useChat({
     add({ role: 'user', type: 'text', content: text });
     setIsThinking(true);
 
-    const result = detectIntent(text);
+    const detected = detectIntent(text);
+    const isWorkspaceRequest = ['creations', 'assets', 'credits'].includes(detected.intent);
+    const result: RouterResult = isWorkspaceRequest
+      ? detected
+      : {
+          ...detected,
+          intent: detected.intent === 'ugc' ? 'ugc' : 'video',
+          needsPlan: true,
+          needsInfo: false,
+          agentFields: undefined,
+          responseText: 'Preparo un piano video modificabile prima della generazione.',
+          settings: {
+            ...detected.settings,
+            projectMode: 'video_project',
+            generationEngine: 'seedance2',
+            referenceAsset: attachedFile ? attachedFile.type : undefined,
+          },
+        };
     const openRouterResult = await enhanceWithOpenRouter(text, result, messages).catch((error: unknown) => ({
       error: error instanceof Error ? error.message : 'AI agent unavailable',
     }));
@@ -242,80 +259,6 @@ export function useChat({
         callToAction: plan.ugcBrief.callToAction,
       } : {}),
     };
-
-    if (intent === 'ugc') {
-      add({
-        role: 'assistant',
-        type: 'agent_request',
-        intent: 'ugc',
-        agentRequest: {
-          intent: 'ugc',
-          fields: [
-            {
-              id: 'productName',
-              type: 'text',
-              label: 'Product / Service / App Name',
-              subtitle: 'Which offer should this plan sell?',
-              placeholder: 'Product or brand name',
-              required: true,
-            },
-            {
-              id: 'productUrl',
-              type: 'text',
-              label: 'Product / Service / App URL',
-              subtitle: 'Optional, but useful to extract positioning and proof.',
-              placeholder: 'https://...',
-              required: false,
-            },
-            {
-              id: 'script',
-              type: 'textarea',
-              label: 'Script Direction',
-              subtitle: 'You can keep this outline or refine the exact words.',
-              placeholder: plan.scriptOutline.join('\n'),
-              required: true,
-            },
-            {
-              id: 'influencerMode',
-              type: 'select',
-              label: 'Influencer Source',
-              subtitle: 'Choose how LOVIX should handle the presenter.',
-              required: false,
-              options: [
-                { value: 'my_influencer', label: 'Use my influencer' },
-                { value: 'generate_new', label: 'Generate new influencer' },
-                { value: 'upload_creator', label: 'Upload creator photo' },
-                { value: 'no_preference', label: 'No preference' },
-              ],
-            },
-            {
-              id: 'aspectRatio',
-              type: 'select',
-              label: 'Format',
-              required: false,
-              options: [
-                { value: '9:16', label: '9:16 Vertical' },
-                { value: '1:1', label: '1:1 Square' },
-                { value: '16:9', label: '16:9 Horizontal' },
-              ],
-            },
-            {
-              id: 'influencer_image',
-              type: 'file_upload',
-              label: 'Creator Image',
-              subtitle: 'Optional. Upload a creator/influencer image if you want a specific presenter.',
-              required: false,
-              accept: 'image/jpeg,image/png,image/webp',
-            },
-          ],
-          status: 'pending',
-          intro: 'Piano approvato. Prima di generare il video UGC, confermiamo prodotto, script e creator.',
-        },
-        settings: mergedSettings,
-        prompt: finalPrompt,
-      });
-      return;
-    }
 
     const cardId = add({
       role: 'assistant',

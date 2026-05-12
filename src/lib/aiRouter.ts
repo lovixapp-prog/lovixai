@@ -293,6 +293,15 @@ function extractVideoSettings(text: string): Record<string, unknown> {
   return settings;
 }
 
+function hasVideoProjectMarker(text: string): boolean {
+  const lower = text.toLowerCase();
+  return lower.includes('tipo progetto: video marketing lovix')
+    || lower.includes('output finale: video')
+    || lower.includes('genera piano video')
+    || lower.includes('motore video')
+    || lower.includes('seedance');
+}
+
 function extractImageSettings(text: string): Record<string, unknown> {
   const lower = text.toLowerCase();
   if (lower.includes('artistic') || lower.includes('painting') || lower.includes('art style')) return { style: 'artistic' };
@@ -590,8 +599,9 @@ function getChatResponse(message: string): string {
 export function detectIntent(message: string): RouterResult {
   const scores = INTENTS.map(({ id, keywords }) => ({ id, s: score(message, keywords) }));
   const top = scores.sort((a, b) => b.s - a.s)[0];
+  const isVideoProject = hasVideoProjectMarker(message);
 
-  if (!top || top.s === 0) {
+  if ((!top || top.s === 0) && !isVideoProject) {
     return {
       intent: 'chat',
       confidence: 1,
@@ -601,24 +611,24 @@ export function detectIntent(message: string): RouterResult {
     };
   }
 
-  const intent = top.id;
+  const intent = isVideoProject && (!top || top.s === 0 || ['chat', 'image'].includes(top.id)) ? 'video' : top.id;
   let settings: Record<string, unknown> = {};
   if (intent === 'video') settings = extractVideoSettings(message);
   if (intent === 'image') settings = extractImageSettings(message);
 
   const lang = detectLang(message);
 
-  if (isComplexCreativeRequest(message, intent)) {
+  if (isVideoProject || isComplexCreativeRequest(message, intent)) {
     return {
-      intent,
+      intent: intent === 'image' ? 'video' : intent,
       confidence: Math.min(top.s / 2, 1),
       prompt: message,
       settings,
       needsPlan: true,
-      plan: buildMarketingPlan(message, intent, settings),
+      plan: buildMarketingPlan(message, intent === 'image' ? 'video' : intent, settings),
       responseText: lang === 'it'
-        ? 'Questa richiesta merita un piano prima di generare. Ti preparo una strategia creativa modificabile.'
-        : 'This request deserves a plan before generating. I will prepare an editable creative strategy.',
+        ? 'Creo un piano video modificabile prima della generazione.'
+        : 'I will create an editable video plan before generation.',
     };
   }
 

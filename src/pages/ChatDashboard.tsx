@@ -136,7 +136,7 @@ const CONNECTOR_ITEMS = [
 
 const MAIN_NAV_ITEMS = [
   { icon: 'solar:home-smile-angle-bold-duotone', label: 'Home', id: 'home' as ActiveTab },
-  { icon: 'solar:chat-round-dots-bold-duotone', label: 'Chat', id: 'chat' as ActiveTab },
+  { icon: 'solar:chat-round-dots-bold-duotone', label: 'Agent', id: 'chat' as ActiveTab },
 ];
 
 const WORKSPACE_ITEMS = [

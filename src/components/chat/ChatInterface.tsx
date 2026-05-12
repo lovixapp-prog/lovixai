@@ -61,7 +61,7 @@ export function ChatInterface({
         {isEmpty ? (
           <WelcomeScreen userName={userName} />
         ) : (
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
             {/* Background blobs */}
             <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
               <div className="aurora-blob-xl w-[600px] h-[600px] bg-primary/80 -top-48 -left-48" />
@@ -88,7 +88,7 @@ export function ChatInterface({
       </div>
 
       {/* Input — pb-[72px] clears the mobile bottom nav (56px + gap), lg resets to normal */}
-      <div className="flex-shrink-0 px-4 sm:px-6 pb-[72px] lg:pb-6 pt-2 max-w-3xl mx-auto w-full">
+      <div className="flex-shrink-0 px-3 sm:px-6 pb-[72px] lg:pb-6 pt-2 max-w-5xl mx-auto w-full">
         <ChatInput onSend={onSend} disabled={isThinking} />
       </div>
     </div>
