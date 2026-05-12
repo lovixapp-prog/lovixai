@@ -2079,10 +2079,6 @@ html.light {
     @apply truncate text-xs font-bold;
   }
 
-  .chat-optimize-tool:not(.chat-icon-tool-active) {
-    @apply hidden;
-  }
-
   .chat-model-pill,
   .chat-mode-pill,
   .chat-setting-pill {
@@ -2127,6 +2123,12 @@ html.light {
     @apply bottom-[48px] left-0 w-[286px] p-3;
   }
 
+  .chat-settings-popover::after {
+    @apply absolute -bottom-2 left-16 h-4 w-4 rotate-45 rounded-[4px] border-b border-r content-[''];
+    background: hsl(var(--popover) / 0.98);
+    border-color: hsl(var(--border) / 0.7);
+  }
+
   .chat-popover-row,
   .chat-select-row {
     @apply flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-foreground transition-colors;
@@ -2144,6 +2146,14 @@ html.light {
 
   .chat-popover-choice strong { @apply block text-sm font-bold text-foreground; }
   .chat-popover-choice small { @apply mt-0.5 block text-xs leading-snug text-muted-foreground; }
+
+  .chat-settings-head {
+    @apply mb-2 flex items-center justify-between rounded-xl px-1 py-1 text-xs font-black uppercase tracking-[0.12em] text-muted-foreground;
+  }
+
+  .chat-settings-head button {
+    @apply flex h-7 w-7 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted;
+  }
 
   .chat-settings-row {
     @apply flex w-full items-center gap-2 rounded-xl px-1 py-1.5 text-left text-sm font-bold text-foreground;

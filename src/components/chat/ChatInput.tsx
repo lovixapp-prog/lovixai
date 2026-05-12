@@ -219,6 +219,12 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
             </button>
             {openMenu === 'settings' && (
               <div className="chat-popover chat-settings-popover">
+                <div className="chat-settings-head">
+                  <span>Settings</span>
+                  <button type="button" onClick={() => setOpenMenu(null)} aria-label="Close settings">
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
                 <button type="button" className="chat-settings-row">
                   <span className="chat-settings-row-main">
                     <Clock3 className="h-4 w-4" />
@@ -264,13 +270,6 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
                       </button>
                     ))}
                   </div>
-                </div>
-                <div className="chat-settings-row">
-                  <span className="chat-settings-row-main">
-                    <WandSparkles className="h-4 w-4" />
-                    <span>Mode</span>
-                  </span>
-                  <span className="chat-settings-current">{mode === 'generate' ? 'Generate' : 'Plan'}</span>
                 </div>
               </div>
             )}
