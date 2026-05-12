@@ -7,7 +7,6 @@ import {
   Lightbulb,
   MessageSquareText,
   Monitor,
-  Play,
   Plus,
   SlidersHorizontal,
   Smartphone,
@@ -134,34 +133,6 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   return (
     <div className="chat-input-wrapper">
       <div className={`chat-composer ${isSending ? 'opacity-75' : ''}`}>
-        <div className="chat-composer-top">
-          <button type="button" className="chat-context-chip chat-context-chip-wide" onClick={() => setShowAvatarModal(true)}>
-            <span className="chat-context-avatar">
-              {selectedAvatar.image ? <img src={selectedAvatar.image} alt="" /> : <UserRound className="h-5 w-5" />}
-            </span>
-            <span className="min-w-0 text-left">
-              <span className="chat-context-title">{selectedAvatar.name}</span>
-              <span className="chat-context-subtitle">{selectedAvatar.subtitle}</span>
-            </span>
-          </button>
-
-          <button type="button" className="chat-context-chip">
-            <span className="chat-context-icon chat-context-icon-accent"><Play className="h-4 w-4 fill-current" /></span>
-            <span className="min-w-0 text-left">
-              <span className="chat-context-title">Automatic</span>
-              <span className="chat-context-subtitle">Voice</span>
-            </span>
-          </button>
-
-          <button type="button" className="chat-context-chip">
-            <span className="chat-context-icon"><FileArchive className="h-4 w-4" /></span>
-            <span className="min-w-0 text-left">
-              <span className="chat-context-title">Automatic</span>
-              <span className="chat-context-subtitle">Style/Brand</span>
-            </span>
-          </button>
-        </div>
-
         {filePreview && file && (
           <div className="chat-attachment-preview">
             <div className="relative">
@@ -239,6 +210,12 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
               onClick={() => setOpenMenu(openMenu === 'settings' ? null : 'settings')}
             >
               <SlidersHorizontal className="h-5 w-5" />
+            </button>
+            <button type="button" className="chat-avatar-tool" onClick={() => setShowAvatarModal(true)} aria-label="Choose avatar" title="Avatar">
+              <span className="chat-avatar-tool-media">
+                {selectedAvatar.image ? <img src={selectedAvatar.image} alt="" /> : <UserRound className="h-4 w-4" />}
+              </span>
+              <span className="chat-avatar-tool-text">{selectedAvatar.name}</span>
             </button>
             {openMenu === 'settings' && (
               <div className="chat-popover chat-settings-popover">
