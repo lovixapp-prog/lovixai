@@ -2456,6 +2456,7 @@ html.dark {
   .tool-agent-composer {
     @apply mx-auto mb-5;
     min-height: 218px;
+    z-index: 40;
   }
 
   .tool-settings-popover {
