@@ -7,6 +7,7 @@ export interface Env {
   OPENAI_API_KEY: string;
   OPENROUTER_API_KEY?: string;
   OPENROUTER_CHAT_MODEL?: string;
+  OPENROUTER_PLAN_MODEL?: string;
   GOOGLE_AI_STUDIO_API_KEY?: string;
   KLING_ACCESS_KEY: string;
   KLING_SECRET_KEY: string;

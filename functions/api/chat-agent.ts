@@ -113,6 +113,7 @@ Required JSON schema:
 }`;
 
 const FALLBACK_MODEL = 'openrouter/free';
+const FALLBACK_PLAN_MODEL = 'google/gemini-2.5-flash-lite';
 
 function safeJsonParse(text: string): any | null {
   try {
@@ -179,13 +180,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       }, 400);
     }
 
-    const model = env.OPENROUTER_CHAT_MODEL || FALLBACK_MODEL;
+    const wantsPlan = Boolean(localResult?.needsPlan);
+    const model = wantsPlan
+      ? (env.OPENROUTER_PLAN_MODEL || env.OPENROUTER_CHAT_MODEL || FALLBACK_PLAN_MODEL)
+      : (env.OPENROUTER_CHAT_MODEL || FALLBACK_MODEL);
     const recentHistory = history
       .slice(-8)
       .filter(m => m.content?.trim())
       .map(m => ({ role: m.role, content: m.content.slice(0, 1600) }));
 
-    const wantsPlan = Boolean(localResult?.needsPlan);
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -226,6 +229,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const parsed = safeJsonParse(content);
 
     if (!parsed) {
+      if (wantsPlan) {
+        return jsonResponse({
+          success: false,
+          error: 'The AI agent did not return valid JSON for the plan.',
+          model: data.model ?? model,
+        }, 502);
+      }
+
       return jsonResponse({
         success: true,
         result: {
@@ -237,12 +248,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       });
     }
 
+    const normalizedPlan = normalizePlan(parsed.plan, null);
+    if (wantsPlan && !normalizedPlan) {
+      return jsonResponse({
+        success: false,
+        error: 'The AI agent did not return a valid editable plan.',
+        model: data.model ?? model,
+      }, 502);
+    }
+
     return jsonResponse({
       success: true,
       result: {
         responseText: String(parsed.responseText ?? localResult?.responseText ?? ''),
         needsPlan: Boolean(parsed.needsPlan || wantsPlan),
-        plan: normalizePlan(parsed.plan, null),
+        plan: normalizedPlan,
         model: data.model ?? model,
       },
     });
