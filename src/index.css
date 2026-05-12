@@ -3318,6 +3318,170 @@ html.dark {
     transform: scale(2);
   }
 
+  .agent-chat-welcome {
+    @apply flex min-h-[60vh] select-none flex-col justify-center px-4 py-8 pb-[72px] lg:pb-12;
+  }
+
+  .agent-chat-hero {
+    @apply relative isolate mx-auto grid w-full max-w-5xl overflow-hidden rounded-[28px] border p-4 sm:p-5;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    min-height: 330px;
+    border-color: transparent;
+    background:
+      linear-gradient(135deg, hsl(0 0% 100% / 0.96), hsl(202 100% 98% / 0.92)) padding-box,
+      linear-gradient(100deg, hsl(350 100% 58% / 0.72), hsl(48 100% 56% / 0.68), hsl(187 100% 50% / 0.76), hsl(306 100% 58% / 0.70)) border-box;
+    box-shadow: 0 24px 68px hsl(210 38% 56% / 0.15), inset 0 1px 0 hsl(0 0% 100% / 0.96);
+  }
+
+  .agent-chat-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 16% 12%, hsl(190 100% 82% / 0.88), transparent 36%),
+      radial-gradient(circle at 76% 20%, hsl(265 100% 90% / 0.78), transparent 38%),
+      linear-gradient(128deg, hsl(199 100% 89% / 0.58), hsl(0 0% 100% / 0.72) 46%, hsl(292 100% 93% / 0.58));
+  }
+
+  .agent-chat-hero-copy {
+    @apply relative z-10 flex flex-col justify-center text-left;
+  }
+
+  .agent-chat-hero-badge {
+    @apply mb-3 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-primary;
+    border-color: hsl(var(--foreground) / 0.10);
+    background: hsl(0 0% 100% / 0.66);
+    backdrop-filter: blur(14px);
+  }
+
+  .agent-chat-badge-icon {
+    @apply flex h-4 w-4 text-primary;
+  }
+
+  .agent-chat-hero h1 {
+    @apply font-display text-3xl font-black leading-tight text-foreground sm:text-4xl lg:text-5xl;
+    letter-spacing: 0;
+  }
+
+  .agent-chat-hero-copy > p {
+    @apply mt-3 max-w-xl text-sm font-semibold leading-6 text-muted-foreground sm:text-base;
+  }
+
+  .agent-chat-capabilities {
+    @apply mt-4 grid grid-cols-3 gap-2;
+  }
+
+  .agent-chat-capabilities div {
+    @apply rounded-2xl border px-3 py-2;
+    background: hsl(0 0% 100% / 0.58);
+    border-color: hsl(var(--border) / 0.58);
+  }
+
+  .agent-chat-capabilities strong {
+    @apply block text-xs font-black text-foreground;
+  }
+
+  .agent-chat-capabilities span {
+    @apply mt-0.5 block text-[10px] font-bold leading-4 text-muted-foreground;
+  }
+
+  .agent-chat-hero-media {
+    @apply relative z-10 min-h-[190px] overflow-hidden rounded-2xl border border-white/70 bg-white/45;
+    box-shadow: 0 18px 48px hsl(var(--foreground) / 0.14);
+  }
+
+  .agent-chat-video {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  .agent-chat-hero-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 44%, hsl(210 50% 12% / 0.30));
+  }
+
+  .agent-chat-media-card {
+    @apply absolute z-10 h-16 w-14 rounded-xl border border-white/70 object-cover shadow-xl sm:h-20 sm:w-16;
+  }
+
+  .agent-chat-media-card-left {
+    @apply left-3 top-3;
+  }
+
+  .agent-chat-media-card-right {
+    @apply right-3 top-4;
+  }
+
+  .agent-chat-plan-preview {
+    @apply absolute bottom-3 left-3 right-3 z-10 rounded-2xl border px-3 py-2 text-white;
+    background: hsl(224 34% 12% / 0.76);
+    border-color: hsl(0 0% 100% / 0.24);
+    backdrop-filter: blur(18px);
+  }
+
+  .agent-chat-plan-preview div {
+    @apply flex items-center gap-2 text-xs font-black;
+  }
+
+  .agent-chat-plan-preview p {
+    @apply mt-1 text-[11px] font-semibold;
+    color: hsl(0 0% 100% / 0.72);
+  }
+
+  @media (min-width: 900px) {
+    .agent-chat-hero {
+      grid-template-columns: minmax(0, 0.9fr) minmax(330px, 0.7fr);
+      align-items: stretch;
+      padding: 1.5rem;
+      min-height: 300px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .agent-chat-welcome {
+      @apply px-4 pt-4;
+      padding-bottom: 10.75rem;
+      min-height: auto;
+    }
+
+    .agent-chat-hero {
+      @apply p-4;
+      min-height: 0;
+      gap: 0.85rem;
+    }
+
+    .agent-chat-hero h1 {
+      @apply text-3xl;
+    }
+
+    .agent-chat-hero-copy > p {
+      @apply text-sm leading-5;
+    }
+
+    .agent-chat-capabilities {
+      @apply gap-1.5;
+    }
+
+    .agent-chat-capabilities div {
+      @apply px-2 py-1.5;
+    }
+
+    .agent-chat-capabilities span {
+      @apply hidden;
+    }
+
+    .agent-chat-hero-media {
+      min-height: 176px;
+    }
+
+    .agent-chat-plan-preview {
+      bottom: 4rem;
+    }
+  }
+
   .welcome-cap-card {
     @apply flex flex-col items-center text-center p-3 rounded-xl border transition-all duration-200 cursor-pointer;
     background: hsl(var(--card) / 0.5);

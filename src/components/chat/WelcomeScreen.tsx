@@ -1,3 +1,7 @@
+import AnimatedIconify from '@/components/ui/animated-iconify';
+import styleCinematic from '@/assets/style-cinematic.jpg';
+import influencerSelfie from '@/assets/ai-influencer-selfie.jpg';
+
 const MagicStar = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="h-full w-full" aria-hidden="true">
     <path d="M12 2C12.4 6.5 13.8 10.2 17.5 12C13.8 13.8 12.4 17.5 12 22C11.6 17.5 10.2 13.8 6.5 12C10.2 10.2 11.6 6.5 12 2Z" />
@@ -12,22 +16,50 @@ export function WelcomeScreen({ userName }: WelcomeScreenProps) {
   const firstName = userName?.split(' ')[0];
 
   return (
-    <div className="flex min-h-[60vh] select-none flex-col items-center justify-center px-4 py-12 pb-[72px] text-center animate-slide-up lg:pb-12">
-      <div className="relative mb-6">
-        <div className="welcome-logo-glow" />
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/25 bg-primary/15 shadow-[0_0_40px_hsl(var(--primary)/0.2)]">
-          <div className="star-icon h-8 w-8">
-            <MagicStar />
+    <div className="agent-chat-welcome animate-slide-up">
+      <section className="agent-chat-hero">
+        <div className="agent-chat-hero-copy">
+          <div className="agent-chat-hero-badge">
+            <span className="agent-chat-badge-icon">
+              <MagicStar />
+            </span>
+            <span>Lovix AI Agent</span>
+          </div>
+
+          <h1>
+            {firstName ? `Build a video project, ${firstName}.` : 'Build a video project.'}
+          </h1>
+          <p>
+            Describe the goal once. The agent turns it into a compact production plan with hook, format, scenes, script beats, CTA, and a generation-ready prompt.
+          </p>
+
+          <div className="agent-chat-capabilities">
+            {[
+              ['Plan', 'Strategy and format'],
+              ['Script', 'Hook and CTA'],
+              ['Scenes', 'Shot-by-shot direction'],
+            ].map(([label, text]) => (
+              <div key={label}>
+                <strong>{label}</strong>
+                <span>{text}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
 
-      <h1 className="mb-3 font-display text-3xl font-bold text-foreground sm:text-4xl">
-        {firstName ? `Create a video project, ${firstName}.` : 'Create a video project.'}
-      </h1>
-      <p className="max-w-sm text-base text-muted-foreground">
-        Write the brief: the agent prepares the plan, scenes, CTA and final prompt before generation.
-      </p>
+        <div className="agent-chat-hero-media" aria-hidden="true">
+          <img src={styleCinematic} alt="" className="agent-chat-video" />
+          <img src={styleCinematic} alt="" className="agent-chat-media-card agent-chat-media-card-left" />
+          <img src={influencerSelfie} alt="" className="agent-chat-media-card agent-chat-media-card-right" />
+          <div className="agent-chat-plan-preview">
+            <div>
+              <AnimatedIconify icon="solar:checklist-minimalistic-bold-duotone" className="h-4 w-4 text-primary" />
+              <span>Ready plan</span>
+            </div>
+            <p>9:16 UGC ad | 30s | Shop now</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
