@@ -61,17 +61,17 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1 rounded-full border border-white/12 bg-background/32 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                  className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                     isActive
                       ? "text-foreground bg-primary/14 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_0_18px_hsl(var(--primary)/0.12)]"
-                      : "text-foreground/78 hover:text-foreground hover:bg-white/10"
+                      : "text-foreground/78 hover:text-foreground hover:bg-white/8"
                   }`}
                 >
                   {link.name}
